@@ -196,6 +196,11 @@ workflows:
           include: true
 
     scripts:
+      - name: 🔍 Diagnostic iOS
+        script: |
+          ls -la
+          ls -la ios
+          ls -la ios/Runner.xcodeproj
       - *get_dependencies
       - *run_code_gen
       - *analyze
