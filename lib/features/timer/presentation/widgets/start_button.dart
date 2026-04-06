@@ -1,7 +1,7 @@
 // lib/features/timer/presentation/widgets/start_button.dart
 
 import 'package:flutter/material.dart';
-import 'package:haptic_feedback/haptic_feedback.dart';
+import 'package:flutter/services.dart';
 import '../../../../core/constants/app_constants.dart';
 
 /// Gros bouton rond "Démarrer" avec animation scale + haptic.
