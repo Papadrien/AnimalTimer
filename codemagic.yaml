@@ -79,6 +79,8 @@ workflows:
       branch_patterns:
         - pattern: develop
           include: true
+        - pattern: master
+          include: true
         - pattern: feature/*
           include: true
 
@@ -96,7 +98,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - dev@animaltimer.app
+          - ivorydu13@gmail.com
         notify:
           success: true
           failure: true
@@ -159,7 +161,7 @@ workflows:
         submit_as_draft: true
       email:
         recipients:
-          - dev@animaltimer.app
+          - ivorydu13@gmail.com
         notify:
           success: true
           failure: true
@@ -270,7 +272,7 @@ workflows:
           - Internal Testers
       email:
         recipients:
-          - dev@animaltimer.app
+          - ivorydu13@gmail.com
         notify:
           success: true
           failure: true
@@ -358,7 +360,7 @@ workflows:
         submit_to_testflight: true
       email:
         recipients:
-          - dev@animaltimer.app
+          - ivorydu13@gmail.com
         notify:
           success: true
           failure: true
