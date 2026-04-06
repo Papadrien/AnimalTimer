@@ -1,0 +1,32 @@
+[
+  {
+    "id": "duck",
+    "name": "Canard",
+    "emoji": "🦆",
+    "lottiePath": "assets/animations/duck_idle.json",
+    "imagePath": "assets/images/duck.png",
+    "audioPath": "assets/audio/duck_ambient.mp3",
+    "primaryColor": 4294948405,
+    "secondaryColor": 4294941440,
+    "theme": {
+      "gradientStart": "#FDD835",
+      "gradientEnd": "#FF8F00",
+      "background": "#FFF8F0"
+    }
+  },
+  {
+    "id": "dog",
+    "name": "Chien",
+    "emoji": "🐶",
+    "lottiePath": "assets/animations/dog_idle.json",
+    "imagePath": "assets/images/dog.png",
+    "audioPath": "assets/audio/dog_ambient.mp3",
+    "primaryColor": 4284049225,
+    "secondaryColor": 4294948405,
+    "theme": {
+      "gradientStart": "#8BC34A",
+      "gradientEnd": "#FDD835",
+      "background": "#F9FBF2"
+    }
+  }
+]

@@ -1,18 +1,37 @@
+// lib/main.dart
+
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'app.dart';
 
-void main() {
-  runApp(const AnimalTimerApp());
-}
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-class AnimalTimerApp extends StatelessWidget {
-  const AnimalTimerApp({super.key});
+  // ── Orientation portrait uniquement ──────────────────────────────────────
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const HomeScreen(),
-    );
-  }
+  // ── Status bar transparente ───────────────────────────────────────────────
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
+
+  // ── Navigation bar transparente (Android) ─────────────────────────────────
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+  runApp(
+    // ProviderScope est le conteneur Riverpod — obligatoire à la racine
+    const ProviderScope(
+      child: AnimalTimerApp(),
+    ),
+  );
 }

@@ -1,14 +1,69 @@
-name: animal_timer
-description: Premium kid-friendly animal timer
-version: 1.0.0
+name: animaltimer
+description: A beautiful visual timer app for children aged 3-8, with animal companions.
+version: 1.0.0+1
+publish_to: none
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_riverpod: ^2.5.0
+
+  # State management
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+  # Storage
+  shared_preferences: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Audio
+  just_audio: ^0.9.40
+  audio_session: ^0.1.21
+
+  # Animations
+  lottie: ^3.1.2
+  flutter_animate: ^4.5.0
+
+  # Background / Foreground service
+  flutter_foreground_task: ^8.4.0
+
+  # Haptics
+  haptic_feedback: ^0.5.1+1
+
+  # Utils
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.9.0
+  collection: ^1.18.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  build_runner: ^2.4.9
+  freezed: ^2.5.2
+  json_serializable: ^6.8.0
+  riverpod_generator: ^2.4.0
 
 flutter:
   uses-material-design: true
+
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Nunito-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Nunito-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Nunito-ExtraBold.ttf
+          weight: 800
+
+  assets:
+    - assets/animations/
+    - assets/audio/
+    - assets/images/
+    - assets/config/
+    - assets/fonts/

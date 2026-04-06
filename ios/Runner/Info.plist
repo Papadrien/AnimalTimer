@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- ios/Runner/Info.plist -->
+<plist version="1.0">
+<dict>
+    <!-- ── Identité de l'app ───────────────────────────────────────────────── -->
+    <key>CFBundleName</key>
+    <string>AnimalTimer</string>
+
+    <key>CFBundleDisplayName</key>
+    <string>AnimalTimer</string>
+
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+
+    <key>CFBundleVersion</key>
+    <string>$(FLUTTER_BUILD_NUMBER)</string>
+
+    <key>CFBundleShortVersionString</key>
+    <string>$(FLUTTER_BUILD_NAME)</string>
+
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+
+    <key>CFBundleSignature</key>
+    <string>????</string>
+
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+
+    <!-- ── Orientation ─────────────────────────────────────────────────────── -->
+    <!-- Portrait uniquement (app enfant) -->
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+    </array>
+
+    <!-- ── Background modes ────────────────────────────────────────────────── -->
+    <!-- Audio : permet la lecture sonore en arrière-plan -->
+    <!-- fetch : permet les mises à jour en background -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>audio</string>
+        <string>fetch</string>
+    </array>
+
+    <!-- ── Lancement ───────────────────────────────────────────────────────── -->
+    <key>UILaunchStoryboardName</key>
+    <string>LaunchScreen</string>
+
+    <key>UIMainStoryboardFile</key>
+    <string>Main</string>
+
+    <!-- ── Statut bar ──────────────────────────────────────────────────────── -->
+    <key>UIStatusBarStyle</key>
+    <string>UIStatusBarStyleDarkContent</string>
+
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <false/>
+
+    <!-- ── Flutter ─────────────────────────────────────────────────────────── -->
+    <key>NSPrincipalClass</key>
+    <string>FlutterApplication</string>
+
+    <key>CADisableMinimumFrameDurationOnPhone</key>
+    <true/>
+
+    <key>UIApplicationSupportsIndirectInputEvents</key>
+    <true/>
+
+    <!-- ── Permissions (descriptions obligatoires pour App Store Review) ───── -->
+
+    <!-- Notifications locales (alerte de fin de timer) -->
+    <key>NSUserNotificationUsageDescription</key>
+    <string>AnimalTimer vous avertit quand votre minuteur est terminé.</string>
+
+    <!-- Microphone (si futur : enregistrement sons personnalisés) -->
+    <!-- <key>NSMicrophoneUsageDescription</key>
+    <string>AnimalTimer utilise le micro pour enregistrer des sons personnalisés.</string> -->
+
+    <!-- ── App Transport Security ──────────────────────────────────────────── -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <false/>
+    </dict>
+
+    <!-- ── Icône de l'app ──────────────────────────────────────────────────── -->
+    <key>CFBundleIcons</key>
+    <dict>
+        <key>CFBundlePrimaryIcon</key>
+        <dict>
+            <key>CFBundleIconFiles</key>
+            <array>
+                <string>AppIcon</string>
+            </array>
+            <key>UIPrerenderedIcon</key>
+            <false/>
+        </dict>
+    </dict>
+</dict>
+</plist>
