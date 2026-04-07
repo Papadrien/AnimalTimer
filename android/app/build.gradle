@@ -1,8 +1,3 @@
-// android/app/build.gradle
-//
-// Nouveau DSL plugins {} — compatible avec settings.gradle + includeBuild.
-// Kotlin est résolu via le plugin Flutter; ne pas déclarer $kotlin_version ici.
-
 plugins {
     id "com.android.application"
     id "kotlin-android"
@@ -100,8 +95,8 @@ flutter {
 }
 
 dependencies {
-    // kotlin-stdlib est automatiquement ajouté par le plugin Kotlin.
-    // La déclaration explicite ci-dessous est optionnelle mais inoffensive.
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.22"
     implementation 'androidx.multidex:multidex:2.0.1'
+    // flutter_foreground_task
     implementation 'androidx.core:core:1.9.0'
 }

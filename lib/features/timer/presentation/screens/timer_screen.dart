@@ -141,7 +141,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                     AnimalWidget(
                       animal: widget.animal,
                       size: ringSize * 0.30,
-                      animate: state.isRunning,
+                      enableBreathing: state.isRunning,
                     ),
 
                   SizedBox(height: settings.showAnimal ? 10 : 0),

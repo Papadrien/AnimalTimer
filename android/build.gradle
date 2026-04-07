@@ -1,17 +1,9 @@
 // android/build.gradle
-//
-// FIX: Ce fichier utilise le nouveau DSL Gradle (plugins {}) introduit avec
-// Flutter >= 3.16 + dev.flutter.flutter-gradle-plugin.
-//
-// ⚠️  Ne PAS redéclarer "org.jetbrains.kotlin.android" avec une version ici.
-//     Le plugin Flutter (via settings.gradle → includeBuild) l'embarque déjà
-//     en interne. Une double déclaration avec version explicite provoque :
-//     "plugin already on the classpath with an unknown version"
 
 plugins {
     id "com.android.application" version "8.2.1" apply false
-    // Kotlin est géré par dev.flutter.flutter-gradle-plugin — ne pas redéclarer
-    // id "org.jetbrains.kotlin.android" version "1.9.22" apply false  ← SUPPRIMÉ
+    // On réintroduit la version car AGP 8.2.1 nécessite une version de Kotlin compatible (1.9.22+)
+    id "org.jetbrains.kotlin.android" version "1.9.22" apply false 
     id "dev.flutter.flutter-gradle-plugin" version "1.0.0" apply false
 }
 

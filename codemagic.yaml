@@ -31,6 +31,15 @@ definitions:
 
   # ── Scripts partagés ─────────────────────────────────────────────────────
   scripts:
+    - &remove_v1_registrant
+      name: 🧹 Remove legacy v1 plugin registrant
+      script: |
+        rm -rf android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+        rm -rf android/app/src/main/java/io/flutter/plugins
+        rm -rf android/app/src/main/java/io/flutter
+        rm -rf android/app/src/main/java/io
+        echo "v1 registrant removed (if it existed)"
+
     - &get_dependencies
       name: 📦 Get Flutter dependencies
       script: flutter pub get
@@ -79,10 +88,13 @@ workflows:
       branch_patterns:
         - pattern: develop
           include: true
+        - pattern: master
+          include: true
         - pattern: feature/*
           include: true
 
     scripts:
+      - *remove_v1_registrant
       - *get_dependencies
       - *run_code_gen
       - *analyze
@@ -96,7 +108,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - dev@animaltimer.app
+          - ivorydu13@gmail.com
         notify:
           success: true
           failure: true
@@ -124,6 +136,7 @@ workflows:
           include: true
 
     scripts:
+      - *remove_v1_registrant
       - *get_dependencies
       - *run_code_gen
       - *analyze
@@ -159,7 +172,7 @@ workflows:
         submit_as_draft: true
       email:
         recipients:
-          - dev@animaltimer.app
+          - ivorydu13@gmail.com
         notify:
           success: true
           failure: true
@@ -183,6 +196,11 @@ workflows:
           include: true
 
     scripts:
+      - name: 🔍 Diagnostic iOS
+        script: |
+          ls -la
+          ls -la ios
+          ls -la ios/Runner.xcodeproj
       - *get_dependencies
       - *run_code_gen
       - *analyze
@@ -270,7 +288,7 @@ workflows:
           - Internal Testers
       email:
         recipients:
-          - dev@animaltimer.app
+          - ivorydu13@gmail.com
         notify:
           success: true
           failure: true
@@ -302,6 +320,7 @@ workflows:
           include: true
 
     scripts:
+      - *remove_v1_registrant
       - *get_dependencies
       - *run_code_gen
       - *analyze
@@ -358,7 +377,7 @@ workflows:
         submit_to_testflight: true
       email:
         recipients:
-          - dev@animaltimer.app
+          - ivorydu13@gmail.com
         notify:
           success: true
           failure: true

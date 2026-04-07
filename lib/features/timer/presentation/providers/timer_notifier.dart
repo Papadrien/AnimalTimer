@@ -5,9 +5,9 @@
 
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:haptic_feedback/haptic_feedback.dart';
 import '../../domain/models/models.dart';
 import 'settings_provider.dart';
 import '../../../../core/constants/app_constants.dart';
