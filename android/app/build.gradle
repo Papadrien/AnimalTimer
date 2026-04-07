@@ -5,15 +5,23 @@ plugins {
 }
 android {
     namespace "com.animaltimer.app"
-    compileSdk flutter.compileSdkVersion
+    compileSdk 34
     ndkVersion flutter.ndkVersion
-    compileOptions { sourceCompatibility JavaVersion.VERSION_1_8; targetCompatibility JavaVersion.VERSION_1_8 }
-    kotlinOptions { jvmTarget = '1.8' }
-    sourceSets { main.java.srcDirs += 'src/main/kotlin' }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
     defaultConfig {
         applicationId "com.animaltimer.app"
         minSdk 21
-        targetSdk flutter.targetSdkVersion
+        targetSdk 34
         versionCode 1
         versionName "1.0.0"
     }
