@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import 'sketchy_painter.dart';
 
+/// Bouton rond avec contour "dessiné à la main" et couleur crayon.
 class AnimatedButton extends StatefulWidget {
   final String label;
   final IconData? icon;
   final VoidCallback onPressed;
   final double size;
+  final Color? fillColor;
+  final int seed;
 
   const AnimatedButton({
     super.key,
@@ -15,6 +19,8 @@ class AnimatedButton extends StatefulWidget {
     this.icon,
     required this.onPressed,
     this.size = 100,
+    this.fillColor,
+    this.seed = 42,
   });
 
   @override
@@ -29,7 +35,8 @@ class _AnimatedButtonState extends State<AnimatedButton>
   @override
   void initState() {
     super.initState();
-    _ctrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 120));
+    _ctrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 120));
     _scale = Tween<double>(begin: 1.0, end: 0.92)
         .animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
   }
@@ -49,24 +56,27 @@ class _AnimatedButtonState extends State<AnimatedButton>
       onTapCancel: _onTapCancel,
       child: ScaleTransition(
         scale: _scale,
-        child: Container(
-          width: widget.size, height: widget.size,
-          decoration: BoxDecoration(
-            color: AppColors.buttonWhite, shape: BoxShape.circle,
-            boxShadow: [BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 20, offset: const Offset(0, 6))],
+        child: CustomPaint(
+          painter: SketchyCirclePainter(
+            strokeColor: AppColors.pencilDark,
+            fillColor: widget.fillColor ?? AppColors.buttonFill,
+            strokeWidth: 2.5,
+            seed: widget.seed,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(widget.label, style: AppTextStyles.buttonLabel),
-              if (widget.icon != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 2),
-                  child: Icon(widget.icon, color: AppColors.accentYellow, size: 28),
-                ),
-            ],
+          child: SizedBox(
+            width: widget.size,
+            height: widget.size,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(widget.label, style: AppTextStyles.buttonLabel),
+                if (widget.icon != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Icon(widget.icon, color: AppColors.crayonOrange, size: 28),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

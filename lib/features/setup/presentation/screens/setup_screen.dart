@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/gradient_background.dart';
 import '../../../timer/presentation/screens/timer_screen.dart';
 import '../../../settings/presentation/screens/settings_sheet.dart';
@@ -16,13 +17,22 @@ class SetupScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final setup = ref.watch(setupProvider);
+    final bottomPad = MediaQuery.of(context).padding.bottom;
+
     return Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBody: true,
+      extendBodyBehindAppBar: true,
       body: GradientBackground(
         gradient: setup.selectedAnimal.setupGradient,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.only(
+            left: 24, right: 24,
+            bottom: bottomPad + 24,
+          ),
           child: Column(children: [
             const SizedBox(height: 16),
+            // Settings button — petit engrenage style crayon
             Align(
               alignment: Alignment.topRight,
               child: GestureDetector(
@@ -30,8 +40,15 @@ class SetupScreen extends ConsumerWidget {
                 child: Container(
                   width: 48, height: 48,
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.15), shape: BoxShape.circle),
-                  child: const Icon(Icons.settings, color: Colors.white70, size: 24),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColors.pencilDark.withOpacity(0.4),
+                      width: 2,
+                    ),
+                    color: AppColors.paperLight.withOpacity(0.5),
+                  ),
+                  child: Icon(Icons.settings,
+                    color: AppColors.pencilDark.withOpacity(0.5), size: 24),
                 ),
               ),
             ),
@@ -56,7 +73,7 @@ class SetupScreen extends ConsumerWidget {
             }),
             const SizedBox(height: 40),
             const RecentsSection(),
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
           ]),
         ),
       ),
@@ -67,6 +84,7 @@ class SetupScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context, isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => const SettingsSheet());
+      builder: (_) => const SettingsSheet(),
+    );
   }
 }

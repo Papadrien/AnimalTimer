@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../shared/widgets/animal_display.dart';
+import '../../../../shared/widgets/sketchy_painter.dart';
 import '../../providers/setup_provider.dart';
 
 class AnimalSelector extends ConsumerWidget {
@@ -21,29 +23,42 @@ class AnimalSelector extends ConsumerWidget {
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 400),
             transitionBuilder: (child, anim) => ScaleTransition(
-              scale: anim, child: FadeTransition(opacity: anim, child: child)),
-            child: Container(
+              scale: anim,
+              child: FadeTransition(opacity: anim, child: child),
+            ),
+            child: SizedBox(
               key: ValueKey(animal.id),
-              width: 140, height: 140,
-              decoration: BoxDecoration(
-                color: animal.primaryColor, shape: BoxShape.circle,
-                boxShadow: [BoxShadow(
-                  color: animal.primaryColor.withOpacity(0.4),
-                  blurRadius: 20, offset: const Offset(0, 8))],
-              ),
-              child: ClipOval(
-                child: Lottie.asset(animal.idleLottiePath, fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Center(
-                    child: Text(animal.emoji, style: const TextStyle(fontSize: 60)))),
+              width: 170,
+              height: 170,
+              child: CustomPaint(
+                painter: SketchyCirclePainter(
+                  strokeColor: AppColors.pencilDark,
+                  fillColor: animal.primaryColor.withOpacity(0.35),
+                  strokeWidth: 2.5,
+                  seed: animal.id.hashCode,
+                ),
+                child: Center(
+                  child: AnimalDisplay(
+                    animal: animal,
+                    size: 120,
+                    animate: true,
+                  ),
+                ),
               ),
             ),
           ),
-          Container(
-            width: 36, height: 36,
-            decoration: BoxDecoration(
-              color: animal.secondaryColor, shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 2)),
-            child: const Icon(Icons.sync, color: Colors.white, size: 18),
+          // Swap button — petit cercle crayon
+          CustomPaint(
+            painter: SketchyCirclePainter(
+              strokeColor: AppColors.pencilDark,
+              fillColor: animal.secondaryColor.withOpacity(0.5),
+              strokeWidth: 2.0,
+              seed: 999,
+            ),
+            child: const SizedBox(
+              width: 42, height: 42,
+              child: Icon(Icons.sync, color: AppColors.pencilDark, size: 20),
+            ),
           ),
         ],
       ),

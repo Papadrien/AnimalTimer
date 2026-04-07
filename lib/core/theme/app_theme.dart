@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'app_colors.dart';
 
 class AppTheme {
   AppTheme._();
   static ThemeData get light => ThemeData(
     useMaterial3: true,
-    // Uses Nunito if fonts are installed, falls back to system default
     fontFamily: 'Nunito',
-    colorSchemeSeed: const Color(0xFFFFC838),
+    scaffoldBackgroundColor: AppColors.paper,
+    colorSchemeSeed: AppColors.crayonYellow,
     brightness: Brightness.light,
     appBarTheme: const AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle(

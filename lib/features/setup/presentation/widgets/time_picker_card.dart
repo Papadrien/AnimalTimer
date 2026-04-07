@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../shared/widgets/glassmorphic_card.dart';
+import '../../../../shared/widgets/sketchy_card.dart';
 import '../../providers/setup_provider.dart';
 
 class TimePickerCard extends ConsumerWidget {
@@ -10,8 +11,9 @@ class TimePickerCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final setup = ref.watch(setupProvider);
-    return GlassmorphicCard(
+    return SketchyCard(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      seed: 101,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -85,7 +87,9 @@ class _TimeColumnState extends State<_TimeColumn> {
                     duration: const Duration(milliseconds: 200),
                     style: AppTextStyles.timePickerLarge.copyWith(
                       fontSize: selected ? 72 : 48,
-                      color: selected ? Colors.white : Colors.white.withOpacity(0.3)),
+                      color: selected
+                          ? AppColors.pencilDark
+                          : AppColors.pencilFaint),
                     child: Text('$index'),
                   ),
                 );

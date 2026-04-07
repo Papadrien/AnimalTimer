@@ -16,18 +16,24 @@ class SettingsSheet extends ConsumerWidget {
       maxChildSize: 0.8,
       builder: (_, controller) {
         return Container(
-          decoration: const BoxDecoration(
-            color: AppColors.sheetBackground,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          decoration: BoxDecoration(
+            color: AppColors.sheetBg,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            border: Border(
+              top: BorderSide(color: AppColors.pencilDark.withOpacity(0.3), width: 2),
+              left: BorderSide(color: AppColors.pencilDark.withOpacity(0.2), width: 1.5),
+              right: BorderSide(color: AppColors.pencilDark.withOpacity(0.2), width: 1.5),
+            ),
           ),
           child: ListView(
             controller: controller,
             padding: const EdgeInsets.all(24),
             children: [
+              // Drag handle — petit trait de crayon
               Center(child: Container(
-                width: 40, height: 4,
+                width: 40, height: 3,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
+                  color: AppColors.pencilFaint,
                   borderRadius: BorderRadius.circular(2)),
               )),
               const SizedBox(height: 24),
@@ -36,6 +42,12 @@ class SettingsSheet extends ConsumerWidget {
               _NavItem(label: 'Privacy Policy', onTap: () {}),
               _NavItem(label: 'Help & FAQ', onTap: () {}),
               const SizedBox(height: 24),
+              // Ligne de séparation "crayon"
+              Container(
+                height: 1.5,
+                color: AppColors.pencilFaint.withOpacity(0.3),
+              ),
+              const SizedBox(height: 16),
               Text('TIMER', style: AppTextStyles.settingSectionTitle),
               const SizedBox(height: 16),
               _Toggle(label: 'Show Numbers', value: settings.showNumbers,
@@ -81,9 +93,11 @@ class _Toggle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: AppTextStyles.settingItem),
-          Switch(value: value, onChanged: onChanged,
+          Switch(
+            value: value, onChanged: onChanged,
             activeColor: AppColors.toggleActive,
-            activeTrackColor: AppColors.toggleActive.withOpacity(0.4)),
+            activeTrackColor: AppColors.toggleActive.withOpacity(0.3),
+          ),
         ],
       ),
     );
