@@ -1,0 +1,22 @@
+<svg width="200" height="200" viewBox="8 3 87 92" xmlns="http://www.w3.org/2000/svg">
+  <!-- Corps fond blanc -->
+  <path d="M20,60 Q20,45,35,40 Q50,35,65,40 Q80,45,80,60 Q80,75,65,80 Q50,85,35,80 Q20,75,20,60 Z" fill="white"/>
+  <path d="M35,40 Q30,30,45,25 Q60,20,75,25 Q90,30,85,40" fill="white"/>
+  <!-- Corps contour -->
+  <path d="M20,60 Q20,45,35,40 Q50,35,65,40 Q80,45,80,60 Q80,75,65,80 Q50,85,35,80 Q20,75,20,60 Z" fill="none" stroke="black" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M35,40 Q30,30,45,25 Q60,20,75,25 Q90,30,85,40" fill="none" stroke="black" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- Oreilles -->
+  <path d="M45,25 Q40,15,50,10 Q60,5,70,10 Q80,15,75,25" fill="white" stroke="black" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- Yeux -->
+  <circle cx="55" cy="30" r="1.5" fill="black"/>
+  <circle cx="65" cy="30" r="1.5" fill="black"/>
+  <!-- Museau -->
+  <path d="M60,38 Q60,42,63,42" fill="none" stroke="black" stroke-width="1.5"/>
+  <!-- Pattes -->
+  <path d="M25,82 L20,87" stroke="black" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M45,87 L50,92" stroke="black" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M65,87 L60,92" stroke="black" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M85,82 L90,87" stroke="black" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Queue -->
+  <path d="M20,60 Q10,50,15,40 Q20,30,30,30 Q40,30,45,35" fill="none" stroke="black" stroke-width="1.5"/>
+</svg>

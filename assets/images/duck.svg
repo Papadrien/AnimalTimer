@@ -1,0 +1,15 @@
+<svg width="200" height="200" viewBox="25 15 75 82" xmlns="http://www.w3.org/2000/svg">
+  <!-- Corps -->
+  <path d="M35 55 C 30 55 30 50 35 48 C 40 45 45 55 45 55 C 45 40 55 20 70 20 C 85 20 85 35 85 40 C 85 60 85 80 60 80 C 40 80 35 70 35 55" fill="white"/>
+  <!-- Sourire -->
+  <path d="M55 58 Q 65 52 75 58" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Bec -->
+  <path d="M85 32 L 95 35 L 85 38" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Yeux -->
+  <circle cx="78" cy="30" r="1.5" fill="black"/>
+  <circle cx="82" cy="30" r="1.5" fill="black"/>
+  <!-- Patte gauche -->
+  <path d="M50 80 L 45 92 L 38 92" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Patte droite -->
+  <path d="M65 80 L 70 92 L 77 92" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
