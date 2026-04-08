@@ -41,21 +41,27 @@ class _ConfettiOverlayState extends State<ConfettiOverlay>
 
 class _Confetti {
   final double x;
-  final double startDelay;
-  final double fallSpeed;
+  final double delay;
+  final double duration;
   final double size;
-  final double drift;
+  final double driftAmp;
+  final double driftFreq;
+  final double wobbleFreq;
+  final double wobbleAmp;
   final double rotSpeed;
   final Color color;
   final int shape;
 
   _Confetti(Random rng)
       : x = rng.nextDouble(),
-        startDelay = rng.nextDouble() * 0.3,
-        fallSpeed = 0.5 + rng.nextDouble() * 0.5,
+        delay = rng.nextDouble() * 0.35,
+        duration = 0.45 + rng.nextDouble() * 0.4,
         size = 6 + rng.nextDouble() * 10,
-        drift = (rng.nextDouble() - 0.5) * 0.15,
-        rotSpeed = rng.nextDouble() * 6,
+        driftAmp = 0.03 + rng.nextDouble() * 0.08,
+        driftFreq = 2 + rng.nextDouble() * 4,
+        wobbleFreq = 3 + rng.nextDouble() * 5,
+        wobbleAmp = 0.01 + rng.nextDouble() * 0.03,
+        rotSpeed = 2 + rng.nextDouble() * 6,
         shape = rng.nextInt(3),
         color = [
           const Color(0xFFFF6B6B),
@@ -76,11 +82,20 @@ class _ConfettiPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     for (final c in pieces) {
-      final adjusted = ((t - c.startDelay) / (1.0 - c.startDelay)).clamp(0.0, 1.0);
-      final progress = adjusted * c.fallSpeed + adjusted * (1.0 - c.fallSpeed);
-      final y = -c.size + progress * (size.height + c.size * 2);
-      if (y > size.height + c.size) continue;
-      final x = c.x * size.width + sin(t * c.rotSpeed * pi) * c.drift * size.width;
+      if (t < c.delay) continue;
+      final local = ((t - c.delay) / c.duration).clamp(0.0, 1.0);
+      if (local >= 1.0) continue;
+
+      // Ease-in curve: starts slow, accelerates like real gravity
+      final gravity = local * local * 0.4 + local * 0.6;
+
+      final y = -c.size + gravity * (size.height + c.size * 2);
+
+      // Organic horizontal sway: two overlapping sine waves
+      final sway1 = sin(local * c.driftFreq * pi * 2) * c.driftAmp;
+      final sway2 = sin(local * c.wobbleFreq * pi * 2) * c.wobbleAmp;
+      final x = (c.x + sway1 + sway2) * size.width;
+
       final paint = Paint()..color = c.color.withOpacity(0.9);
       final rot = t * c.rotSpeed * pi;
 

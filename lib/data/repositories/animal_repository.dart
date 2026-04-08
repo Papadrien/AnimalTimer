@@ -10,7 +10,7 @@ class AnimalRepository {
       name: 'Canard',
       emoji: '\u{1F986}',
       svgAsset: 'assets/images/duck.svg',
-      ambientAudioPath: 'audio/ambient_water.wav',
+      ambientAudioPath: 'audio/ambient_duck.mp3',
       endSoundPath: 'audio/end_duck.wav',
       setupGradient: AppGradients.duckSetup,
       timerGradient: AppGradients.duckTimer,
