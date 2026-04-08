@@ -24,9 +24,9 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
   void initState() {
     super.initState();
     _bounceCtrl = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 600))
+      vsync: this, duration: const Duration(milliseconds: 300))
       ..repeat(reverse: true);
-    _bounce = Tween<double>(begin: 0, end: -20).animate(
+    _bounce = Tween<double>(begin: 0, end: -35).animate(
       CurvedAnimation(parent: _bounceCtrl, curve: Curves.easeInOut));
 
     // Play end sound
@@ -89,21 +89,12 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
                           color: AppColors.accentGreen.withOpacity(0.3),
                           blurRadius: 12, offset: const Offset(0, 4))],
                       ),
-                      child: const Center(child: Text('OK',
+                      child: const Center(child: Text('Arrêter',
                         style: TextStyle(fontFamily: 'Nunito', fontSize: 24,
                           fontWeight: FontWeight.w900, color: Colors.white))),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  // "Arrêter" text button
-                  GestureDetector(
-                    onTap: _goHome,
-                    child: Text('Arrêter', style: TextStyle(
-                      fontFamily: 'Nunito', fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.pencilLight,
-                      decoration: TextDecoration.underline)),
-                  ),
+
                 ],
               ),
             ),
