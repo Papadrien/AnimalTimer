@@ -25,6 +25,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/images/buttons/
     - assets/audio/
   # Uncomment when you add Nunito .ttf files to assets/fonts/
   # fonts:

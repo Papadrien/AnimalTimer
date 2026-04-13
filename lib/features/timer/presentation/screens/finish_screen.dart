@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/services/audio_service.dart';
 import '../../../../shared/widgets/gradient_background.dart';
 import '../../../../shared/widgets/animal_display.dart';
+import '../../../../shared/widgets/image_button.dart';
 import '../../../setup/providers/setup_provider.dart';
 import '../../../settings/providers/settings_provider.dart';
 import '../widgets/confetti_overlay.dart';
@@ -77,24 +77,16 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
                     fontWeight: FontWeight.w900,
                     color: AppColors.pencilDark)),
                   const SizedBox(height: 32),
-                  // OK button
-                  GestureDetector(
-                    onTap: _goHome,
-                    child: Container(
-                      width: 160, height: 56,
-                      decoration: BoxDecoration(
-                        color: AppColors.accentGreen,
-                        borderRadius: BorderRadius.circular(28),
-                        boxShadow: [BoxShadow(
-                          color: AppColors.accentGreen.withOpacity(0.3),
-                          blurRadius: 12, offset: const Offset(0, 4))],
-                      ),
-                      child: const Center(child: Text('Arrêter',
-                        style: TextStyle(fontFamily: 'Nunito', fontSize: 24,
-                          fontWeight: FontWeight.w900, color: Colors.white))),
+                  // Bouton Arrêter avec fond PNG Procreate
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 60),
+                    child: ImageButton(
+                      text: 'Arrêter',
+                      backgroundAsset: ImageButton.greenBg,
+                      onPressed: _goHome,
+                      height: 56,
                     ),
                   ),
-
                 ],
               ),
             ),
