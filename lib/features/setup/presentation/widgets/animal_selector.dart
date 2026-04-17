@@ -8,6 +8,7 @@ import 'animal_picker_sheet.dart';
 
 /// Grand animal centré avec un badge "changer" en bas à droite.
 /// Tap = ouvre la bottom sheet de sélection d'animal.
+/// Pour le chat : animation multi-layer jouée une seule fois (2s).
 class AnimalSelector extends ConsumerWidget {
   const AnimalSelector({super.key});
 
@@ -38,6 +39,7 @@ class AnimalSelector extends ConsumerWidget {
                   animal: animal,
                   size: 180,
                   animate: true,
+                  playOnce: true,
                 ),
               ),
             ),

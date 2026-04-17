@@ -3,6 +3,14 @@ plugins {
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
+
+// ✅ Signing : charger key.properties si présent (CI ou local)
+def keystorePropertiesFile = rootProject.file("key.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace "com.animaltimer.app"
     compileSdk 36
@@ -23,13 +31,28 @@ android {
         applicationId "com.animaltimer.app"
         minSdk 21
         targetSdk 36
-        versionCode 1
-        versionName "1.0.0"
+        versionCode flutter.versionCode
+        versionName flutter.versionName
         multiDexEnabled true
     }
+
+    // ✅ Signing config conditionnel
+    signingConfigs {
+        if (keystorePropertiesFile.exists()) {
+            release {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+            }
+        }
+    }
+
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            signingConfig keystorePropertiesFile.exists()
+                ? signingConfigs.release
+                : signingConfigs.debug
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

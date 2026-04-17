@@ -95,13 +95,17 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Bouncing animal
+                  // Bouncing animal — always use static image (cat.png, not layers)
                   AnimatedBuilder(
                     animation: _bounce,
                     builder: (_, __) => Transform.translate(
                       offset: Offset(0, _bounce.value),
                       child: AnimalDisplay(
-                        animal: animal, size: 180, animate: true),
+                        animal: animal,
+                        size: 180,
+                        animate: false,
+                        useStaticImage: true,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 32),

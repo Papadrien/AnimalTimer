@@ -1,7 +1,7 @@
 name: animal_timer
 description: "AnimalTimer - A premium visual timer for kids (3-8 years old)"
 publish_to: 'none'
-version: 1.0.2604151249+2604151249
+version: 1.0.2604171037+2604171037
 
 environment:
   sdk: '>=3.6.0 <4.0.0'

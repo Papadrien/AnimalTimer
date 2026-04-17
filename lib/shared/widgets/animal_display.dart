@@ -3,17 +3,27 @@ import '../../data/models/animal_model.dart';
 import 'cat_animated_display.dart';
 
 /// Displays an animal image (PNG) with a gentle breathing + sway animation.
-/// For the cat, uses a special multi-layer animation (head + tail).
+///
+/// For the cat, two modes :
+/// - [useStaticImage] = false (default) → multi-layer animation (head + tail)
+/// - [useStaticImage] = true → single cat.png image (for finish screen bounce, timer breathing)
+///
+/// [playOnce] : if true and cat multi-layer mode, plays exactly 1 cycle (2s) then stops.
+///              Used on the setup screen.
 class AnimalDisplay extends StatefulWidget {
   final AnimalModel animal;
   final double size;
   final bool animate;
+  final bool useStaticImage;
+  final bool playOnce;
 
   const AnimalDisplay({
     super.key,
     required this.animal,
     this.size = 120,
     this.animate = true,
+    this.useStaticImage = false,
+    this.playOnce = false,
   });
 
   @override
@@ -25,6 +35,9 @@ class _AnimalDisplayState extends State<AnimalDisplay>
   late AnimationController _ctrl;
   late Animation<double> _breathe;
   late Animation<double> _sway;
+
+  bool get _useCatLayers =>
+      widget.animal.id == 'cat' && !widget.useStaticImage;
 
   @override
   void initState() {
@@ -39,16 +52,16 @@ class _AnimalDisplayState extends State<AnimalDisplay>
     _sway = Tween<double>(begin: -0.02, end: 0.02).animate(
       CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut),
     );
-    if (widget.animate && !_isCat) _ctrl.repeat(reverse: true);
+    if (widget.animate && !_useCatLayers) {
+      _ctrl.repeat(reverse: true);
+    }
   }
-
-  bool get _isCat => widget.animal.id == 'cat';
 
   @override
   void didUpdateWidget(AnimalDisplay old) {
     super.didUpdateWidget(old);
-    if (_isCat) {
-      // Cat uses its own animation controller — stop the generic one
+    if (_useCatLayers) {
+      // Cat multi-layer mode — stop the generic breathing controller
       if (_ctrl.isAnimating) _ctrl.stop();
     } else if (widget.animate && !_ctrl.isAnimating) {
       _ctrl.repeat(reverse: true);
@@ -65,15 +78,16 @@ class _AnimalDisplayState extends State<AnimalDisplay>
 
   @override
   Widget build(BuildContext context) {
-    // Special animated display for the cat
-    if (_isCat) {
+    // Cat multi-layer animation (head + tail)
+    if (_useCatLayers) {
       return CatAnimatedDisplay(
         size: widget.size,
         animate: widget.animate,
+        playOnce: widget.playOnce,
       );
     }
 
-    // Default display for other animals
+    // Default: single image (all animals + cat when useStaticImage=true)
     final imageWidget = Image.asset(
       widget.animal.imageAsset,
       width: widget.size,

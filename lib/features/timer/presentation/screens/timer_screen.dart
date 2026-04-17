@@ -165,6 +165,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                         animal: animal,
                         size: circleSize * 0.48,
                         animate: ts.status == TimerStatus.running,
+                        useStaticImage: true,
                       ),
                     ),
                 ],

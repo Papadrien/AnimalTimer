@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 /// La tête tourne de gauche à droite et la queue de haut en bas,
 /// synchronisées dans une boucle de 2 secondes.
 ///
+/// [playOnce] : si true, joue exactement 1 cycle puis s'arrête.
+///              si false, boucle indéfiniment.
+///
 /// Timing (boucle 2s, fractions du controller 0→1) :
 ///   0.0 → 0.4  : repos position A (tête centrée, queue haute)
 ///   0.4 → 0.5  : rotation vers position B (tête à gauche, queue en bas)
@@ -13,11 +16,13 @@ import 'package:flutter/material.dart';
 class CatAnimatedDisplay extends StatefulWidget {
   final double size;
   final bool animate;
+  final bool playOnce;
 
   const CatAnimatedDisplay({
     super.key,
     this.size = 180,
     this.animate = true,
+    this.playOnce = false,
   });
 
   @override
@@ -48,17 +53,28 @@ class _CatAnimatedDisplayState extends State<CatAnimatedDisplay>
       vsync: this,
       duration: const Duration(milliseconds: 2000),
     );
-    if (widget.animate) _ctrl.repeat();
+    _startAnimation();
+  }
+
+  void _startAnimation() {
+    if (!widget.animate) return;
+    if (widget.playOnce) {
+      _ctrl.forward(from: 0.0);
+    } else {
+      _ctrl.repeat();
+    }
   }
 
   @override
   void didUpdateWidget(CatAnimatedDisplay old) {
     super.didUpdateWidget(old);
-    if (widget.animate && !_ctrl.isAnimating) {
-      _ctrl.repeat();
-    } else if (!widget.animate && _ctrl.isAnimating) {
+    if (widget.animate && !old.animate) {
+      // Réactiver l'animation (ex: changement d'animal vers le chat)
+      _startAnimation();
+    } else if (!widget.animate && old.animate) {
       _ctrl.stop();
     }
+    // Si la key change (via AnimatedSwitcher), initState gère tout
   }
 
   @override
@@ -71,21 +87,15 @@ class _CatAnimatedDisplayState extends State<CatAnimatedDisplay>
   /// Position A = angle positif, Position B = angle négatif.
   /// Repos entre les rotations.
   double _computeAngle(double t, double maxAngle) {
-    // 0.0 → 0.4 : repos en position A (+maxAngle)
-    // 0.4 → 0.5 : rotation A→B (+maxAngle → -maxAngle)
-    // 0.5 → 0.9 : repos en position B (-maxAngle)
-    // 0.9 → 1.0 : rotation B→A (-maxAngle → +maxAngle)
     if (t <= 0.4) {
       return maxAngle;
     } else if (t <= 0.5) {
-      // Interpolation A→B avec easing
       final progress = (t - 0.4) / 0.1;
       final eased = _easeInOut(progress);
       return maxAngle - 2 * maxAngle * eased;
     } else if (t <= 0.9) {
       return -maxAngle;
     } else {
-      // Interpolation B→A avec easing
       final progress = (t - 0.9) / 0.1;
       final eased = _easeInOut(progress);
       return -maxAngle + 2 * maxAngle * eased;
@@ -93,7 +103,6 @@ class _CatAnimatedDisplayState extends State<CatAnimatedDisplay>
   }
 
   double _easeInOut(double t) {
-    // Smooth ease-in-out
     return t < 0.5
         ? 2 * t * t
         : 1 - (-2 * t + 2) * (-2 * t + 2) / 2;
@@ -103,28 +112,15 @@ class _CatAnimatedDisplayState extends State<CatAnimatedDisplay>
   Widget build(BuildContext context) {
     final size = widget.size;
 
-    if (!widget.animate) {
-      return SizedBox(
-        width: size,
-        height: size,
-        child: Stack(
-          children: [
-            _buildLayer('assets/images/cat/cat_tail.png', size),
-            _buildLayer('assets/images/cat/cat_body.png', size),
-            _buildLayer('assets/images/cat/cat_head.png', size),
-          ],
-        ),
-      );
-    }
-
     return AnimatedBuilder(
       animation: _ctrl,
       builder: (_, __) {
         final t = _ctrl.value;
 
-        final headAngle = _computeAngle(t, _headAngle);
-        // Queue : mouvement inverse de la tête
-        final tailAngle = _computeAngle(t, -_tailAngle);
+        // Si animation terminée (playOnce) ou pas animé → angles à 0
+        final bool isAnimating = _ctrl.isAnimating || t > 0.0;
+        final headAngle = isAnimating ? _computeAngle(t, _headAngle) : 0.0;
+        final tailAngle = isAnimating ? _computeAngle(t, -_tailAngle) : 0.0;
 
         return SizedBox(
           width: size,
