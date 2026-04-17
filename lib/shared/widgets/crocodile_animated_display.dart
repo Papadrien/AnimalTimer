@@ -95,6 +95,29 @@ class _CrocodileAnimatedDisplayState extends State<CrocodileAnimatedDisplay>
         : 1 - (-2 * t + 2) * (-2 * t + 2) / 2;
   }
 
+  /// Comme _computeAngle mais commence et finit à 0 (position neutre).
+  /// Utilisé pour playOnce afin d'avoir une transition douce au début et à la fin.
+  double _computeAngleOnce(double t, double maxAngle) {
+    if (t <= 0.15) {
+      // Ease from 0 to +maxAngle
+      final progress = t / 0.15;
+      return maxAngle * _easeInOut(progress);
+    } else if (t <= 0.35) {
+      return maxAngle;
+    } else if (t <= 0.65) {
+      // Ease from +maxAngle to -maxAngle
+      final progress = (t - 0.35) / 0.30;
+      return maxAngle - 2 * maxAngle * _easeInOut(progress);
+    } else if (t <= 0.85) {
+      return -maxAngle;
+    } else {
+      // Ease from -maxAngle back to 0
+      final progress = (t - 0.85) / 0.15;
+      return -maxAngle * (1 - _easeInOut(progress));
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final size = widget.size;
@@ -103,8 +126,15 @@ class _CrocodileAnimatedDisplayState extends State<CrocodileAnimatedDisplay>
       animation: _ctrl,
       builder: (_, __) {
         final t = _ctrl.value;
-        final bool isAnimating = _ctrl.isAnimating || t > 0.0;
-        final headAngle = isAnimating ? _computeAngle(t, _headAngle) : 0.0;
+
+        final double headAngle;
+        if (!_ctrl.isAnimating && !(_ctrl.status == AnimationStatus.forward)) {
+          headAngle = 0.0;
+        } else if (widget.playOnce) {
+          headAngle = _computeAngleOnce(t, _headAngle);
+        } else {
+          headAngle = _computeAngle(t, _headAngle);
+        }
 
         return SizedBox(
           width: size,

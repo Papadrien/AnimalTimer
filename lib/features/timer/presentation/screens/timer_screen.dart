@@ -35,7 +35,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
         body: "C'est fini ! Le ${setup.selectedAnimal.name} a terminé \u{1F389}",
       );
       // Only start ambient music if sound is enabled
-      if (settings.soundEnabled) {
+      if (settings.ambientSoundEnabled) {
         ref.read(audioServiceProvider).playAmbient(
           setup.selectedAnimal.ambientAudioPath,
           volume: settings.volume * 0.5,
@@ -101,8 +101,8 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                     onTap: () {
                       HapticFeedback.selectionClick();
                       final audio = ref.read(audioServiceProvider);
-                      final wasOn = settings.soundEnabled;
-                      ref.read(settingsProvider.notifier).toggleSound();
+                      final wasOn = settings.ambientSoundEnabled;
+                      ref.read(settingsProvider.notifier).toggleAmbientSound();
 
                       if (wasOn) {
                         // Turning OFF — stop ambient music
@@ -126,10 +126,10 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                         ),
                       ),
                       child: Icon(
-                        settings.soundEnabled
+                        settings.ambientSoundEnabled
                             ? Icons.volume_up_rounded
                             : Icons.volume_off_rounded,
-                        color: settings.soundEnabled
+                        color: settings.ambientSoundEnabled
                             ? AppColors.pencilDark.withValues(alpha: 0.6)
                             : AppColors.accentRed.withValues(alpha: 0.7),
                         size: 22,
@@ -158,8 +158,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                       top: circleSize * 0.18,
                       child: TimerDisplay(remaining: ts.remaining),
                     ),
-                  if (settings.showAnimal)
-                    Positioned(
+                  Positioned(
                       bottom: circleSize * 0.12,
                       child: AnimalDisplay(
                         animal: animal,
@@ -208,7 +207,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                           // === PAUSE ===
                           notifier.pause();
                           notifications.cancelAll();
-                          if (settings.soundEnabled) {
+                          if (settings.ambientSoundEnabled) {
                             audio.pauseAmbient();
                           }
                         } else if (ts.status == TimerStatus.paused) {
@@ -218,7 +217,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                             duration: ts.remaining,
                             body: "C'est fini ! Le ${animal.name} a terminé \u{1F389}",
                           );
-                          if (settings.soundEnabled) {
+                          if (settings.ambientSoundEnabled) {
                             audio.resumeAmbient();
                           }
                         }

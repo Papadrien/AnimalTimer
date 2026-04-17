@@ -37,8 +37,10 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final animal = ref.read(setupProvider).selectedAnimal;
       final settings = ref.read(settingsProvider);
-      ref.read(audioServiceProvider)
-          .playEndSound(animal.endSoundPath, volume: settings.volume);
+      if (settings.endSoundEnabled) {
+        ref.read(audioServiceProvider)
+            .playEndSound(animal.endSoundPath, volume: settings.volume);
+      }
     });
   }
 

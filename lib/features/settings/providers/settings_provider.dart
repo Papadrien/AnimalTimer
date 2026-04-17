@@ -6,7 +6,6 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
   final StorageService _storage;
 
   SettingsNotifier(this._storage) : super(const AppSettings()) {
-    // Load saved settings on init
     state = _storage.getSettings();
   }
 
@@ -15,13 +14,13 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
     _storage.saveSettings(state);
   }
 
-  void toggleShowAnimal() {
-    state = state.copyWith(showAnimal: !state.showAnimal);
+  void toggleAmbientSound() {
+    state = state.copyWith(ambientSoundEnabled: !state.ambientSoundEnabled);
     _storage.saveSettings(state);
   }
 
-  void toggleSound() {
-    state = state.copyWith(soundEnabled: !state.soundEnabled);
+  void toggleEndSound() {
+    state = state.copyWith(endSoundEnabled: !state.endSoundEnabled);
     _storage.saveSettings(state);
   }
 

@@ -107,6 +107,29 @@ class _CatAnimatedDisplayState extends State<CatAnimatedDisplay>
         : 1 - (-2 * t + 2) * (-2 * t + 2) / 2;
   }
 
+  /// Comme _computeAngle mais commence et finit à 0 (position neutre).
+  /// Utilisé pour playOnce afin d'avoir une transition douce au début et à la fin.
+  double _computeAngleOnce(double t, double maxAngle) {
+    if (t <= 0.15) {
+      // Ease from 0 to +maxAngle
+      final progress = t / 0.15;
+      return maxAngle * _easeInOut(progress);
+    } else if (t <= 0.35) {
+      return maxAngle;
+    } else if (t <= 0.65) {
+      // Ease from +maxAngle to -maxAngle
+      final progress = (t - 0.35) / 0.30;
+      return maxAngle - 2 * maxAngle * _easeInOut(progress);
+    } else if (t <= 0.85) {
+      return -maxAngle;
+    } else {
+      // Ease from -maxAngle back to 0
+      final progress = (t - 0.85) / 0.15;
+      return -maxAngle * (1 - _easeInOut(progress));
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final size = widget.size;
@@ -116,10 +139,21 @@ class _CatAnimatedDisplayState extends State<CatAnimatedDisplay>
       builder: (_, __) {
         final t = _ctrl.value;
 
-        // Si animation terminée (playOnce) ou pas animé → angles à 0
-        final bool isAnimating = _ctrl.isAnimating || t > 0.0;
-        final headAngle = isAnimating ? _computeAngle(t, _headAngle) : 0.0;
-        final tailAngle = isAnimating ? _computeAngle(t, -_tailAngle) : 0.0;
+        final double headAngle;
+        final double tailAngle;
+        if (!_ctrl.isAnimating && !(_ctrl.status == AnimationStatus.forward)) {
+          // Pas d'animation → position neutre
+          headAngle = 0.0;
+          tailAngle = 0.0;
+        } else if (widget.playOnce) {
+          // playOnce → transition douce depuis et vers 0
+          headAngle = _computeAngleOnce(t, _headAngle);
+          tailAngle = _computeAngleOnce(t, -_tailAngle);
+        } else {
+          // Boucle infinie → comportement original
+          headAngle = _computeAngle(t, _headAngle);
+          tailAngle = _computeAngle(t, -_tailAngle);
+        }
 
         return SizedBox(
           width: size,

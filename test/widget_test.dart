@@ -24,15 +24,15 @@ void main() {
     test('default values', () {
       const s = AppSettings();
       expect(s.showNumbers, true);
-      expect(s.showAnimal, true);
-      expect(s.tickTockSound, true);
+      expect(s.ambientSoundEnabled, true);
+      expect(s.endSoundEnabled, true);
       expect(s.volume, 0.7);
     });
     test('copyWith works', () {
       const s = AppSettings();
       final s2 = s.copyWith(showNumbers: false);
       expect(s2.showNumbers, false);
-      expect(s2.showAnimal, true);
+      expect(s2.ambientSoundEnabled, true);
     });
     test('json round-trip', () {
       const s = AppSettings(showNumbers: false, volume: 0.5);

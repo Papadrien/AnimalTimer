@@ -101,6 +101,26 @@ class _ChickenAnimatedDisplayState extends State<ChickenAnimatedDisplay>
         : 1 - (-2 * t + 2) * (-2 * t + 2) / 2;
   }
 
+  /// Comme _computeValue mais commence et finit à 0 (position neutre).
+  /// Utilisé pour playOnce afin d'avoir une transition douce au début et à la fin.
+  double _computeValueOnce(double t, double maxVal) {
+    if (t <= 0.15) {
+      final progress = t / 0.15;
+      return maxVal * _easeInOut(progress);
+    } else if (t <= 0.35) {
+      return maxVal;
+    } else if (t <= 0.65) {
+      final progress = (t - 0.35) / 0.30;
+      return maxVal - 2 * maxVal * _easeInOut(progress);
+    } else if (t <= 0.85) {
+      return -maxVal;
+    } else {
+      final progress = (t - 0.85) / 0.15;
+      return -maxVal * (1 - _easeInOut(progress));
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final size = widget.size;
@@ -109,14 +129,19 @@ class _ChickenAnimatedDisplayState extends State<ChickenAnimatedDisplay>
       animation: _ctrl,
       builder: (_, __) {
         final t = _ctrl.value;
-        final bool isAnimating = _ctrl.isAnimating || t > 0.0;
 
-        // Head: rotation left/right
-        final headAngle = isAnimating ? _computeValue(t, _headAngle) : 0.0;
-        // Tail: horizontal translation (opposite direction to head)
-        final tailShift = isAnimating
-            ? _computeValue(t, -_tailShiftFraction) * size
-            : 0.0;
+        final double headAngle;
+        final double tailShift;
+        if (!_ctrl.isAnimating && !(_ctrl.status == AnimationStatus.forward)) {
+          headAngle = 0.0;
+          tailShift = 0.0;
+        } else if (widget.playOnce) {
+          headAngle = _computeValueOnce(t, _headAngle);
+          tailShift = _computeValueOnce(t, -_tailShiftFraction) * size;
+        } else {
+          headAngle = _computeValue(t, _headAngle);
+          tailShift = _computeValue(t, -_tailShiftFraction) * size;
+        }
 
         return SizedBox(
           width: size,
