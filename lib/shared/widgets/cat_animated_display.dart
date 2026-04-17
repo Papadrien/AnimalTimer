@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 /// Affichage animé du chat avec 3 layers (body, tail, head).

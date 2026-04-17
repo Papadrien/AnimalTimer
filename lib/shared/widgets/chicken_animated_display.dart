@@ -36,8 +36,8 @@ class _ChickenAnimatedDisplayState extends State<ChickenAnimatedDisplay>
   static const double _headAngle = 0.12;
 
   // Tail horizontal translation amplitude (fraction of widget size)
-  // ~10px on a 180px widget → 0.055
-  static const double _tailShiftFraction = 0.055;
+  // ~5px on a 180px widget → 0.028
+  static const double _tailShiftFraction = 0.028;
 
   // Head pivot: bottom-center of head (246, 271) / 512
   static const double _headPivotX = 0.480;
