@@ -138,51 +138,51 @@ jobs:
           path: dist/*
           retention-days: 30
 
-  build-ios:
-    name: Build iOS
-    needs: analyze
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v5
+#  build-ios:
+#    name: Build iOS
+#    needs: analyze
+#    runs-on: macos-latest
+#    steps:
+#      - uses: actions/checkout@v5
 
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: stable
-          cache: true
+#      - uses: subosito/flutter-action@v2
+#        with:
+#          flutter-version: ${{ env.FLUTTER_VERSION }}
+#          channel: stable
+#          cache: true
 
-      - name: Cache pub dependencies
-        uses: actions/cache@v5
-        with:
-          path: |
-            ~/.pub-cache
-            .dart_tool
-          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
-          restore-keys: pub-${{ runner.os }}-
+#      - name: Cache pub dependencies
+#        uses: actions/cache@v5
+#        with:
+#          path: |
+#            ~/.pub-cache
+#            .dart_tool
+#          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+#          restore-keys: pub-${{ runner.os }}-
 
-      - name: Cache CocoaPods
-        uses: actions/cache@v5
-        with:
-          path: ios/Pods
-          key: pods-${{ runner.os }}-${{ hashFiles('ios/Podfile.lock') }}
-          restore-keys: pods-${{ runner.os }}-
+#      - name: Cache CocoaPods
+#        uses: actions/cache@v5
+#        with:
+#          path: ios/Pods
+#          key: pods-${{ runner.os }}-${{ hashFiles('ios/Podfile.lock') }}
+#          restore-keys: pods-${{ runner.os }}-
 
-      - run: flutter pub get
-      - run: flutter gen-l10n
+#      - run: flutter pub get
+#      - run: flutter gen-l10n
 
-      - name: Build iOS
-        run: flutter build ios --release --no-codesign --no-pub --build-name=${{ needs.analyze.outputs.app_version }} --build-number=${{ needs.analyze.outputs.app_build }}
+#      - name: Build iOS
+#        run: flutter build ios --release --no-codesign --no-pub --build-name=${{ needs.analyze.outputs.app_version }} --build-number=${{ needs.analyze.outputs.app_build }}
 
-      - uses: actions/upload-artifact@v5
-        with:
-          name: ios-build
-          path: build/ios/iphoneos/Runner.app
-          retention-days: 30
+#      - uses: actions/upload-artifact@v5
+#        with:
+#          name: ios-build
+#          path: build/ios/iphoneos/Runner.app
+#          retention-days: 30
 
   release:
     name: Create GitHub Release
     if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && github.event.inputs.create_release == 'true')
-    needs: [analyze, build-android, build-ios]
+    needs: [analyze, build-android]
     runs-on: ubuntu-latest
     permissions:
       contents: write
