@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import '../models/animal_model.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_gradients.dart';

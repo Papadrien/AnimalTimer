@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/services/audio_service.dart';
 import '../../../../core/services/gamification_service.dart';
-import '../../../../data/repositories/animal_repository.dart';
 import '../../../../shared/widgets/gradient_background.dart';
 import '../../../../shared/widgets/animal_display.dart';
 import '../../../../shared/widgets/image_button.dart';

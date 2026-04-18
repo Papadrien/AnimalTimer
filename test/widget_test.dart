@@ -1,25 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:animal_timer/core/utils/time_formatter.dart';
 import 'package:animal_timer/data/models/app_settings.dart';
 import 'package:animal_timer/data/models/timer_preset.dart';
 
 void main() {
-  group('TimeFormatter', () {
-    test('formats hours and minutes', () {
-      expect(TimeFormatter.formatDuration(const Duration(hours: 1, minutes: 30)), '1h 30m');
-    });
-    test('formats minutes and seconds', () {
-      expect(TimeFormatter.formatDuration(const Duration(minutes: 2, seconds: 10)), '2m 10s');
-    });
-    test('formats seconds only', () {
-      expect(TimeFormatter.formatDuration(const Duration(seconds: 45)), '45s');
-    });
-    test('pad2 pads single digit', () {
-      expect(TimeFormatter.pad2(5), '05');
-      expect(TimeFormatter.pad2(12), '12');
-    });
-  });
-
   group('AppSettings', () {
     test('default values', () {
       const s = AppSettings();
@@ -44,11 +27,23 @@ void main() {
   });
 
   group('TimerPreset', () {
-    test('formatted duration', () {
+    test('formatted duration with minutes and seconds', () {
       final p = TimerPreset(
         id: '1', name: 'Test', duration: const Duration(minutes: 2, seconds: 10),
-        animalId: 'duck', createdAt: DateTime.now());
+        animalId: 'dog', createdAt: DateTime.now());
       expect(p.formattedDuration, '2m 10s');
+    });
+    test('formatted duration hours', () {
+      final p = TimerPreset(
+        id: '2', name: 'Test', duration: const Duration(hours: 1, minutes: 30),
+        animalId: 'cat', createdAt: DateTime.now());
+      expect(p.formattedDuration, '1h 30m');
+    });
+    test('formatted duration seconds only', () {
+      final p = TimerPreset(
+        id: '3', name: 'Test', duration: const Duration(seconds: 45),
+        animalId: 'dog', createdAt: DateTime.now());
+      expect(p.formattedDuration, '45s');
     });
     test('json round-trip', () {
       final p = TimerPreset(
