@@ -3,14 +3,18 @@ import 'package:flutter/services.dart';
 
 /// Bouton coloré avec forme pill, icône seule (pas de texte),
 /// adapté pour les enfants (gros et lisible).
+/// Les boutons avec texture utilisent l'image directement (pas de dégradé).
 class ImageButton extends StatefulWidget {
-  /// Couleurs de fond prédéfinies (remplacent les anciens PNG)
+  /// Clés de couleur de fond
   static const String greenBg  = 'green';
   static const String orangeBg = 'orange';
   static const String redBg    = 'red';
 
+  /// Chemins vers les textures (null = pas de texture)
+  static const String? redTexture = 'assets/images/buttons/btn_red_texture.png';
+
   final String text; // Conservé pour accessibilité/semantics mais non affiché
-  final String backgroundAsset; // Maintenant utilisé comme clé de couleur
+  final String backgroundAsset; // Clé de couleur
   final VoidCallback onPressed;
   final IconData? icon;
   final double height;
@@ -92,11 +96,22 @@ class _ImageButtonState extends State<ImageButton>
     }
   }
 
+  /// Retourne le chemin de la texture (null si aucune)
+  String? _textureAsset() {
+    switch (widget.backgroundAsset) {
+      case 'red':
+        return ImageButton.redTexture;
+      default:
+        return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final pillRadius = widget.height / 2;
-    // Taille de l'icône proportionnelle à la hauteur du bouton
-    final iconSize = widget.height * 0.50;
+    final iconSize = widget.height * 0.60;
+    final texture = _textureAsset();
+    final hasTexture = texture != null;
 
     return Semantics(
       label: widget.text,
@@ -113,26 +128,37 @@ class _ImageButtonState extends State<ImageButton>
             child: Stack(
               alignment: Alignment.center,
               children: [
-                // Layer 1: Fond coloré avec dégradé, forme pill
-                Positioned.fill(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
+                // Layer 1: Fond — texture pleine OU dégradé de couleur
+                if (hasTexture)
+                  Positioned.fill(
+                    child: ClipRRect(
                       borderRadius: BorderRadius.circular(pillRadius),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [_bgColorLight(), _bgColor()],
+                      child: Image.asset(
+                        texture,
+                        fit: BoxFit.cover,
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: _bgColor().withValues(alpha: 0.4),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
+                    ),
+                  )
+                else
+                  Positioned.fill(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(pillRadius),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [_bgColorLight(), _bgColor()],
                         ),
-                      ],
+                        boxShadow: [
+                          BoxShadow(
+                            color: _bgColor().withValues(alpha: 0.4),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
                 // Layer 2: Contour pill foncé
                 Positioned.fill(
                   child: DecoratedBox(
@@ -145,11 +171,13 @@ class _ImageButtonState extends State<ImageButton>
                     ),
                   ),
                 ),
-                // Layer 3: Icône seule, centrée, grosse
+                // Layer 3: Icône seule, centrée, grosse, noire si texture
                 if (widget.icon != null)
                   Icon(
                     widget.icon,
-                    color: Colors.white,
+                    color: hasTexture
+                        ? const Color(0xFF2B2B2B)
+                        : Colors.white,
                     size: iconSize,
                   ),
               ],
