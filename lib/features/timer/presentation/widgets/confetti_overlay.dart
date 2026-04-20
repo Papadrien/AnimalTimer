@@ -30,9 +30,16 @@ class _ConfettiOverlayState extends State<ConfettiOverlay>
     return AnimatedBuilder(
       animation: _ctrl,
       builder: (_, __) {
-        return CustomPaint(
-          size: MediaQuery.of(context).size,
-          painter: _ConfettiPainter(_pieces, _ctrl.value),
+        // Fade out sur les derniers 15% de l'animation
+        final fadeOut = _ctrl.value > 0.85
+            ? 1.0 - ((_ctrl.value - 0.85) / 0.15)
+            : 1.0;
+        return Opacity(
+          opacity: fadeOut,
+          child: CustomPaint(
+            size: MediaQuery.of(context).size,
+            painter: _ConfettiPainter(_pieces, _ctrl.value),
+          ),
         );
       },
     );

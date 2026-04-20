@@ -139,17 +139,13 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                         shape: BoxShape.circle,
                         color: AppColors.paperLight.withValues(alpha: 0.6),
                         border: Border.all(
-                          color: AppColors.pencilDark.withValues(alpha: 0.2),
-                          width: 1.5,
-                        ),
+                          color: AppColors.pencilDark, width: 2.5),
                       ),
                       child: Icon(
                         settings.ambientSoundEnabled
                             ? Icons.volume_up_rounded
                             : Icons.volume_off_rounded,
-                        color: settings.ambientSoundEnabled
-                            ? AppColors.pencilDark.withValues(alpha: 0.6)
-                            : AppColors.accentRed.withValues(alpha: 0.7),
+                        color: AppColors.pencilDark,
                         size: 22,
                       ),
                     ),
@@ -176,13 +172,20 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                       top: circleSize * 0.18,
                       child: TimerDisplay(remaining: ts.remaining),
                     ),
-                  Positioned(
+                  if (settings.showNumbers)
+                    Positioned(
                       bottom: circleSize * 0.12,
                       child: AnimalDisplay(
                         animal: animal,
                         size: circleSize * 0.48,
                         animate: ts.status == TimerStatus.running,
                       ),
+                    )
+                  else
+                    AnimalDisplay(
+                      animal: animal,
+                      size: circleSize * 0.48,
+                      animate: ts.status == TimerStatus.running,
                     ),
                 ],
               ),

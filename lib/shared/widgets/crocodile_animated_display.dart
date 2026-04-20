@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 /// [playOnce] : si true, joue exactement 1 cycle puis s'arrête.
 ///
 /// Timing (boucle 2s, fractions du controller 0→1) :
-///   0.0 → 0.4  : repos position A
-///   0.4 → 0.5  : rotation vers position B
-///   0.5 → 0.9  : repos position B
+///   0.0 → 0.2  : repos position A
+///   0.2 → 0.3  : rotation vers position B
+///   0.3 → 0.9  : repos position B
 ///   0.9 → 1.0  : rotation vers position A
 class CrocodileAnimatedDisplay extends StatefulWidget {
   final double size;
@@ -74,10 +74,10 @@ class _CrocodileAnimatedDisplayState extends State<CrocodileAnimatedDisplay>
   }
 
   double _computeAngle(double t, double maxAngle) {
-    if (t <= 0.4) {
+    if (t <= 0.2) {
       return maxAngle;
-    } else if (t <= 0.5) {
-      final progress = (t - 0.4) / 0.1;
+    } else if (t <= 0.3) {
+      final progress = (t - 0.2) / 0.1;
       final eased = _easeInOut(progress);
       return maxAngle - 2 * maxAngle * eased;
     } else if (t <= 0.9) {

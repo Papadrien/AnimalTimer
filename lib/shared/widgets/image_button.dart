@@ -10,9 +10,6 @@ class ImageButton extends StatefulWidget {
   static const String orangeBg = 'orange';
   static const String redBg    = 'red';
 
-  /// Chemins vers les textures (null = pas de texture)
-  static const String redTexture = 'assets/images/buttons/btn_red_texture.png';
-
   final String text; // Conservé pour accessibilité/semantics mais non affiché
   final String backgroundAsset; // Clé de couleur
   final VoidCallback onPressed;
@@ -98,12 +95,7 @@ class _ImageButtonState extends State<ImageButton>
 
   /// Retourne le chemin de la texture (null si aucune)
   String? _textureAsset() {
-    switch (widget.backgroundAsset) {
-      case 'red':
-        return ImageButton.redTexture;
-      default:
-        return null;
-    }
+    return null;
   }
 
   @override

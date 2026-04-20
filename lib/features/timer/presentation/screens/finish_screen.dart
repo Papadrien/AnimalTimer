@@ -25,18 +25,37 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
   void initState() {
     super.initState();
     _bounceCtrl = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 300))
-      ..repeat(reverse: true);
-    _bounce = Tween<double>(begin: 0, end: -35).animate(
-      CurvedAnimation(parent: _bounceCtrl, curve: Curves.easeInOut));
+      vsync: this, duration: const Duration(milliseconds: 500))
+      ..repeat();
+    _bounce = TweenSequence<double>([
+      // Montée: 0 → -35 en 0.15s (30% du cycle)
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 0, end: -35)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 30,
+      ),
+      // Descente: -35 → 0 en 0.15s (30% du cycle)
+      TweenSequenceItem(
+        tween: Tween<double>(begin: -35, end: 0)
+            .chain(CurveTween(curve: Curves.easeIn)),
+        weight: 30,
+      ),
+      // Pause en bas: 0 → 0 pendant 0.2s (40% du cycle)
+      TweenSequenceItem(
+        tween: ConstantTween<double>(0),
+        weight: 40,
+      ),
+    ]).animate(_bounceCtrl);
 
     // Play end sound
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final animal = ref.read(setupProvider).selectedAnimal;
       final settings = ref.read(settingsProvider);
       if (settings.endSoundEnabled) {
-        ref.read(audioServiceProvider)
-            .playEndSound(animal.endSoundPath, volume: settings.volume);
+        // Jouer le son de canon à confettis d'abord, puis le son d'animal
+        final audio = ref.read(audioServiceProvider);
+        audio.playFinishSound(volume: settings.volume);
+        audio.playEndSound(animal.endSoundPath, volume: settings.volume);
       }
     });
   }

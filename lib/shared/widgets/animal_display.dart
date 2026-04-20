@@ -3,6 +3,7 @@ import '../../data/models/animal_model.dart';
 import 'cat_animated_display.dart';
 import 'chicken_animated_display.dart';
 import 'crocodile_animated_display.dart';
+import 'dog_animated_display.dart';
 import 'pony_animated_display.dart';
 
 /// Displays an animal image (PNG) with animation.
@@ -40,7 +41,7 @@ class _AnimalDisplayState extends State<AnimalDisplay>
   late Animation<double> _sway;
 
   /// IDs of animals that have custom multi-layer animations.
-  static const _animatedIds = {'cat', 'chicken', 'crocodile', 'pony'};
+  static const _animatedIds = {'cat', 'chicken', 'crocodile', 'dog', 'pony'};
 
   /// Returns true if this animal has a custom multi-layer animation.
   bool get _hasCustomAnimation =>
@@ -107,6 +108,16 @@ class _AnimalDisplayState extends State<AnimalDisplay>
     // Crocodile multi-layer animation
     if (id == 'crocodile' && !widget.useStaticImage) {
       return CrocodileAnimatedDisplay(
+        size: widget.size,
+        animate: widget.animate,
+        playOnce: widget.playOnce,
+      );
+    }
+
+
+    // Dog multi-layer animation
+    if (id == 'dog' && !widget.useStaticImage) {
+      return DogAnimatedDisplay(
         size: widget.size,
         animate: widget.animate,
         playOnce: widget.playOnce,

@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 
-/// Affichage animé du poney avec 3 layers (body, tail, head).
-/// La tête oscille de gauche à droite, la queue oscille de haut en bas
-/// autour de son point d'attache (base gauche de la queue).
-/// Les deux sont synchronisés avec le même timing.
+/// Affichage animé du chien avec 3 layers (body, tail, head).
+/// Basé sur l'animation du chat : mêmes timings et mêmes rotations.
+/// La tête tourne de gauche à droite et la queue de haut en bas,
+/// synchronisées dans une boucle de 2 secondes.
 ///
 /// [playOnce] : si true, joue exactement 1 cycle puis s'arrête.
 ///              si false, boucle indéfiniment.
 ///
-/// Timing (boucle 2s, fractions du controller 0->1) :
-///   0.0 -> 0.2  : repos position A (tête à droite, queue en haut)
-///   0.2 -> 0.3  : rotation vers position B (tête à gauche, queue en bas)
-///   0.3 -> 0.9  : repos position B
-///   0.9 -> 1.0  : rotation vers position A
-class PonyAnimatedDisplay extends StatefulWidget {
+/// Timing (boucle 2s, fractions du controller 0→1) :
+///   0.0 → 0.2  : repos position A (tête centrée, queue haute)
+///   0.2 → 0.3  : rotation vers position B (tête à gauche, queue en bas)
+///   0.3 → 0.9  : repos position B
+///   0.9 → 1.0  : rotation vers position A
+class DogAnimatedDisplay extends StatefulWidget {
   final double size;
   final bool animate;
   final bool playOnce;
 
-  const PonyAnimatedDisplay({
+  const DogAnimatedDisplay({
     super.key,
     this.size = 180,
     this.animate = true,
@@ -26,24 +26,25 @@ class PonyAnimatedDisplay extends StatefulWidget {
   });
 
   @override
-  State<PonyAnimatedDisplay> createState() => _PonyAnimatedDisplayState();
+  State<DogAnimatedDisplay> createState() => _DogAnimatedDisplayState();
 }
 
-class _PonyAnimatedDisplayState extends State<PonyAnimatedDisplay>
+class _DogAnimatedDisplayState extends State<DogAnimatedDisplay>
     with SingleTickerProviderStateMixin {
   late AnimationController _ctrl;
 
-  // Rotation angles (radians)
-  static const double _headAngle = 0.10; // ~6 degrees left/right
-  static const double _tailAngle = 0.18; // ~10 degrees up/down
+  // Rotation angles (radians) — same as cat
+  static const double _headAngle = 0.12; // ~7 degrees
+  static const double _tailAngle = 0.18; // ~10 degrees
 
-  // Head pivot: bottom-center of head, where neck meets body
-  static const double _headPivotX = 0.38;
-  static const double _headPivotY = 0.55;
+  // Pivot points as fractions of the 1024x1024 image
+  // Head pivot: bottom-center of head (490, 520) / 1024
+  static const double _headPivotX = 0.479;
+  static const double _headPivotY = 0.508;
 
-  // Tail pivot: base of the tail (left side), where it attaches to the body
-  static const double _tailPivotX = 0.699;
-  static const double _tailPivotY = 0.680;
+  // Tail pivot: left attachment point of tail (731, 608) / 1024
+  static const double _tailPivotX = 0.714;
+  static const double _tailPivotY = 0.594;
 
   @override
   void initState() {
@@ -65,7 +66,7 @@ class _PonyAnimatedDisplayState extends State<PonyAnimatedDisplay>
   }
 
   @override
-  void didUpdateWidget(PonyAnimatedDisplay old) {
+  void didUpdateWidget(DogAnimatedDisplay old) {
     super.didUpdateWidget(old);
     if (widget.animate && !old.animate) {
       _startAnimation();
@@ -80,9 +81,6 @@ class _PonyAnimatedDisplayState extends State<PonyAnimatedDisplay>
     super.dispose();
   }
 
-  /// Calcule l'angle de rotation en fonction du temps t (0->1).
-  /// Position A = angle positif, Position B = angle négatif.
-  /// Repos entre les rotations.
   double _computeAngle(double t, double maxAngle) {
     if (t <= 0.2) {
       return maxAngle;
@@ -105,8 +103,6 @@ class _PonyAnimatedDisplayState extends State<PonyAnimatedDisplay>
         : 1 - (-2 * t + 2) * (-2 * t + 2) / 2;
   }
 
-  /// Comme _computeAngle mais commence et finit à 0 (position neutre).
-  /// Utilisé pour playOnce.
   double _computeAngleOnce(double t, double maxAngle) {
     if (t <= 0.15) {
       final progress = t / 0.15;
@@ -140,10 +136,10 @@ class _PonyAnimatedDisplayState extends State<PonyAnimatedDisplay>
           tailAngle = 0.0;
         } else if (widget.playOnce) {
           headAngle = _computeAngleOnce(t, _headAngle);
-          tailAngle = _computeAngleOnce(t, _tailAngle);
+          tailAngle = _computeAngleOnce(t, -_tailAngle);
         } else {
           headAngle = _computeAngle(t, _headAngle);
-          tailAngle = _computeAngle(t, _tailAngle);
+          tailAngle = _computeAngle(t, -_tailAngle);
         }
 
         return SizedBox(
@@ -152,19 +148,18 @@ class _PonyAnimatedDisplayState extends State<PonyAnimatedDisplay>
           child: Stack(
             children: [
               // Layer 1 : Queue (derrière le corps)
-              // Rotation haut/bas autour de la base (gauche)
               _buildRotatedLayer(
-                'assets/images/pony/pony_tail.png',
+                'assets/images/dog/dog_tail.png',
                 size,
                 tailAngle,
                 _tailPivotX,
                 _tailPivotY,
               ),
               // Layer 2 : Corps (statique)
-              _buildLayer('assets/images/pony/pony_body.png', size),
+              _buildLayer('assets/images/dog/dog_body.png', size),
               // Layer 3 : Tête (devant le corps)
               _buildRotatedLayer(
-                'assets/images/pony/pony_head.png',
+                'assets/images/dog/dog_head.png',
                 size,
                 headAngle,
                 _headPivotX,

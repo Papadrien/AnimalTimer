@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AudioService {
   final AudioPlayer _ambientPlayer = AudioPlayer();
   final AudioPlayer _endPlayer = AudioPlayer();
+  final AudioPlayer _finishPlayer = AudioPlayer();
   bool _isAmbientPlaying = false;
 
   Future<void> playAmbient(String assetPath, {double volume = 0.5}) async {
@@ -34,6 +35,16 @@ class AudioService {
     await _ambientPlayer.stop();
   }
 
+  /// Joue le son de fin de minuteur (canon à confettis), commun à tous les animaux.
+  Future<void> playFinishSound({double volume = 0.7}) async {
+    try {
+      await _finishPlayer.setVolume(volume);
+      await _finishPlayer.play(AssetSource('audio/timer_finish.mp3'));
+    } catch (_) {
+      // Graceful fallback
+    }
+  }
+
   Future<void> playEndSound(String assetPath, {double volume = 0.7}) async {
     try {
       await _endPlayer.setVolume(volume);
@@ -46,6 +57,7 @@ class AudioService {
   Future<void> stopAll() async {
     await _ambientPlayer.stop();
     await _endPlayer.stop();
+    await _finishPlayer.stop();
     _isAmbientPlaying = false;
   }
 
@@ -56,6 +68,7 @@ class AudioService {
   void dispose() {
     _ambientPlayer.dispose();
     _endPlayer.dispose();
+    _finishPlayer.dispose();
   }
 }
 

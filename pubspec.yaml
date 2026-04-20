@@ -31,5 +31,6 @@ flutter:
     - assets/images/cat/
     - assets/images/chicken/
     - assets/images/crocodile/
+    - assets/images/dog/
     - assets/images/pony/
     - assets/audio/
