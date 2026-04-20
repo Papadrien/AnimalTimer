@@ -47,14 +47,14 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
       ),
     ]).animate(_bounceCtrl);
 
-    // Play end sound
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    // Play end sounds: canon à confettis d'abord, puis son d'animal après délai
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final animal = ref.read(setupProvider).selectedAnimal;
       final settings = ref.read(settingsProvider);
       if (settings.endSoundEnabled) {
-        // Jouer le son de canon à confettis d'abord, puis le son d'animal
         final audio = ref.read(audioServiceProvider);
-        audio.playFinishSound(volume: settings.volume);
+        await audio.playFinishSound(volume: settings.volume);
+        await Future.delayed(const Duration(milliseconds: 800));
         audio.playEndSound(animal.endSoundPath, volume: settings.volume);
       }
     });
