@@ -5,6 +5,18 @@ import '../../core/theme/app_gradients.dart';
 class AnimalRepository {
   static const List<AnimalModel> animals = [
     AnimalModel(
+      id: 'crocodile',
+      name: 'Crocodile',
+      emoji: '\u{1F40A}',
+      imageAsset: 'assets/images/crocodile.png',
+      ambientAudioPath: 'audio/ambient_crocodile.mp3',
+      endSoundPath: 'audio/end_crocodile.mp3',
+      setupGradient: AppGradients.crocodileSetup,
+      timerGradient: AppGradients.crocodileTimer,
+      primaryColor: AppColors.crocodilePrimary,
+      secondaryColor: AppColors.crocodileSecondary,
+    ),
+    AnimalModel(
       id: 'dog',
       name: 'Dog',
       emoji: '\u{1F436}',
@@ -27,18 +39,6 @@ class AnimalRepository {
       timerGradient: AppGradients.catTimer,
       primaryColor: AppColors.catPrimary,
       secondaryColor: AppColors.catSecondary,
-    ),
-    AnimalModel(
-      id: 'crocodile',
-      name: 'Crocodile',
-      emoji: '\u{1F40A}',
-      imageAsset: 'assets/images/crocodile.png',
-      ambientAudioPath: 'audio/ambient_crocodile.mp3',
-      endSoundPath: 'audio/end_crocodile.mp3',
-      setupGradient: AppGradients.crocodileSetup,
-      timerGradient: AppGradients.crocodileTimer,
-      primaryColor: AppColors.crocodilePrimary,
-      secondaryColor: AppColors.crocodileSecondary,
     ),
     AnimalModel(
       id: 'pony',

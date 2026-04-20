@@ -47,16 +47,16 @@ class AppColors {
   static const Color textOnDark    = Color(0xFFEEEEEE);
 
   // ── Per-animal colors ──
-  static const Color dogPrimary    = Color(0xFF74C0FC);
-  static const Color dogSecondary  = Color(0xFFB197FC);
-  static const Color catPrimary    = Color(0xFFFFD4A3);  // orange pâle (pelage chat)
-  static const Color catSecondary  = Color(0xFFF5A623);  // orange chaud
-  static const Color crocodilePrimary  = Color(0xFFB5CC7A);  // vert olive clair
-  static const Color crocodileSecondary = Color(0xFF7A9E3A);  // vert olive foncé
-  static const Color ponyPrimary    = Color(0xFFE8C88A);  // beige doré
-  static const Color ponySecondary  = Color(0xFF8B5E3C);  // brun chocolat
-  static const Color chickenPrimary = Color(0xFFE57373);  // rouge doux
-  static const Color chickenSecondary = Color(0xFFD32F2F);  // rouge vif
+  static const Color dogPrimary    = Color(0xFF6B8E5A);  // vert foncé
+  static const Color dogSecondary  = Color(0xFF3D5E2A);  // vert forêt
+  static const Color catPrimary    = Color(0xFFE57373);  // rouge doux
+  static const Color catSecondary  = Color(0xFFD32F2F);  // rouge vif
+  static const Color crocodilePrimary  = Color(0xFF74C0FC);  // bleu clair
+  static const Color crocodileSecondary = Color(0xFF42A5F5);  // bleu moyen
+  static const Color ponyPrimary    = Color(0xFFB5CC7A);  // vert olive clair
+  static const Color ponySecondary  = Color(0xFF7A9E3A);  // vert olive foncé
+  static const Color chickenPrimary = Color(0xFFC2956A);  // marron clair
+  static const Color chickenSecondary = Color(0xFF8B5E3C);  // marron foncé
 
   // ── Recents card colors ──
   static const Color recentBlue    = Color(0xFFBBDEFB);
