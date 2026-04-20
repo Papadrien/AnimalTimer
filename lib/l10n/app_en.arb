@@ -7,7 +7,6 @@
   "animalPony": "Pony",
   "animalChicken": "Chicken",
   "chooseAnimal": "Choose your animal",
-  "unlockSubtitle": "Use the timer to unlock new friends!",
   "start": "Start",
   "hours": "Hours",
   "minutes": "Minutes",
@@ -21,15 +20,6 @@
   "secondUnit": "s",
   "finished": "Time's up!",
   "stop": "Stop",
-  "bravo": "Well done!",
-  "unlocked": "You unlocked\n{name}!",
-  "@unlocked": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "ok": "OK",
   "settingsTimer": "TIMER",
   "showNumbers": "Show numbers",

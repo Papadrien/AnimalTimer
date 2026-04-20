@@ -7,7 +7,6 @@
   "animalPony": "Poney",
   "animalChicken": "Poule",
   "chooseAnimal": "Choisis ton animal",
-  "unlockSubtitle": "Utilise le minuteur pour débloquer de nouveaux amis !",
   "start": "Démarrer",
   "hours": "Heures",
   "minutes": "Minutes",
@@ -21,15 +20,6 @@
   "secondUnit": "s",
   "finished": "C'est fini !",
   "stop": "Arrêter",
-  "bravo": "Bravo !",
-  "unlocked": "Tu as débloqué\n{name} !",
-  "@unlocked": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "ok": "OK",
   "settingsTimer": "MINUTEUR",
   "showNumbers": "Afficher les chiffres",
