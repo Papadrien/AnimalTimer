@@ -249,12 +249,24 @@ class _PrivacyPolicyScreen extends StatelessWidget {
               content: context.l10n.policyIAPContent,
             ),
             _PolicySection(
+              title: context.l10n.policyThirdParty,
+              content: context.l10n.policyThirdPartyContent,
+            ),
+            _PolicySection(
               title: context.l10n.policyCOPPA,
               content: context.l10n.policyCOPPAContent,
             ),
             _PolicySection(
+              title: context.l10n.policyGDPR,
+              content: context.l10n.policyGDPRContent,
+            ),
+            _PolicySection(
               title: context.l10n.policyContact,
               content: context.l10n.policyContactContent,
+            ),
+            _PolicySection(
+              title: context.l10n.policyUpdate,
+              content: context.l10n.policyUpdateContent,
             ),
           ],
         ),

@@ -14,6 +14,7 @@ dependencies:
   intl: any
   flutter_riverpod: ^2.6.1
   audioplayers: ^6.1.0
+  google_mobile_ads: ^5.3.0
   shared_preferences: ^2.5.3
   flutter_local_notifications: ^18.0.1
 

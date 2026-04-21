@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/services/storage_service.dart';
 import 'core/services/notification_service.dart';
+import 'core/services/ad_service.dart';
 import 'app.dart';
 
 void main() async {
@@ -22,6 +23,10 @@ void main() async {
   final notificationService = NotificationService();
   await notificationService.init();
   await notificationService.requestPermission();
+
+  // Initialiser AdMob (COPPA pour app enfants)
+  final adService = AdService();
+  await adService.initialize();
 
   runApp(
     ProviderScope(

@@ -40,6 +40,31 @@ class StorageService {
     await _prefs.setString(_lastAnimalKey, id);
   }
 
+  // --- Déblocage des animaux ---
+  static const _unlockedAnimalsKey = 'unlocked_animal_ids';
+
+  /// Animaux débloqués par défaut (gratuits).
+  static const defaultUnlocked = {'crocodile', 'cat'};
+
+  /// Retourne la liste des IDs d'animaux débloqués.
+  Set<String> getUnlockedAnimalIds() {
+    final raw = _prefs.getStringList(_unlockedAnimalsKey);
+    if (raw == null) return Set.from(defaultUnlocked);
+    return Set.from(defaultUnlocked)..addAll(raw);
+  }
+
+  /// Débloque un animal par son ID.
+  Future<void> unlockAnimal(String animalId) async {
+    final unlocked = getUnlockedAnimalIds();
+    unlocked.add(animalId);
+    await _prefs.setStringList(_unlockedAnimalsKey, unlocked.toList());
+  }
+
+  /// Vérifie si un animal est débloqué.
+  bool isAnimalUnlocked(String animalId) {
+    return getUnlockedAnimalIds().contains(animalId);
+  }
+
 }
 
 final sharedPrefsProvider = Provider<SharedPreferences>((ref) {

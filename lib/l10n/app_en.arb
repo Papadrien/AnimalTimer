@@ -34,22 +34,46 @@
   "searchingPurchases": "Searching for purchases...",
   "version": "Version 1.0.0",
   "policyIntro": "Introduction",
-  "policyIntroContent": "AnimalTimer is a visual timer app designed for children aged 3 to 8. Protecting your children's privacy is our absolute priority.",
+  "policyIntroContent": "AnimalTimer is a visual timer application designed for children. Protecting privacy is a top priority.",
   "policyData": "Data collected",
-  "policyDataContent": "AnimalTimer does not collect any personal data. All preferences (selected animal, sound settings, unlocked animals) are stored only on your device and are never sent to any external server.",
+  "policyDataContent": "AnimalTimer does not directly collect or store personal data.\n\nHowever, the app uses third-party services (such as Google AdMob) that may collect certain technical information, including:\n• IP address\n• device type\n• anonymous usage data\n\nThis data is used solely to ensure proper app functionality and to display child-appropriate advertisements.",
   "policyAds": "Advertising",
-  "policyAdsContent": "The app may display video ads (via Google AdMob) to unlock new animals. These ads comply with COPPA regulations and do not collect personal data from children. Only child-appropriate ads are shown.",
+  "policyAdsContent": "The app may display ads via Google AdMob to unlock content (e.g., new animals).\n\nThese ads are configured to:\n• be suitable for children\n• comply with COPPA (Children's Online Privacy Protection Act)\n• not use behavioral or personalized advertising",
   "policyIAP": "In-App Purchases",
-  "policyIAPContent": "The app offers an optional one-time purchase to unlock all animals. Purchases are managed by Google Play or the App Store and are protected by your device's parental controls.",
+  "policyIAPContent": "The app offers an optional one-time purchase to unlock all animals.\n\nPayments are handled securely by Google Play or the App Store and are protected by parental controls.",
   "policyCOPPA": "COPPA Compliance",
-  "policyCOPPAContent": "AnimalTimer complies with COPPA. We do not knowingly collect personal information from children under the age of 13.",
+  "policyCOPPAContent": "AnimalTimer complies with COPPA. The app does not knowingly collect personal data from children under 13.",
   "policyContact": "Contact",
-  "policyContactContent": "For any questions regarding this privacy policy, you can contact us at:\ncontact@animaltimer.app",
+  "policyContactContent": "For any questions regarding this Privacy Policy:\npapadrien.prepa@gmail.com",
   "notifTitle": "AnimalTimer",
   "notifTimerBody": "Time's up! {animal} is done 🎉",
   "@notifTimerBody": {
     "placeholders": {
       "animal": {
+        "type": "String"
+      }
+    }
+  },
+  "policyThirdParty": "Third-Party Services",
+  "policyThirdPartyContent": "The app uses the following services:\n• Google AdMob (advertising)\n\nMore information:\nhttps://policies.google.com/privacy",
+  "policyGDPR": "User Rights (GDPR)",
+  "policyGDPRContent": "Under the General Data Protection Regulation (GDPR), you have the following rights:\n• Right of access\n• Right to rectification\n• Right to deletion\n• Right to restriction of processing\n\nTo exercise your rights:\npapadrien.prepa@gmail.com",
+  "policyUpdate": "Last Update",
+  "policyUpdateContent": "Last updated: April 2026",
+  "watchAdToUnlock": "Watch a short video to unlock {animalName}!",
+  "@watchAdToUnlock": {
+    "placeholders": {
+      "animalName": {
+        "type": "String"
+      }
+    }
+  },
+  "watchAd": "Watch",
+  "adLoading": "Loading video…",
+  "animalUnlocked": "{animalName} is unlocked! 🎉",
+  "@animalUnlocked": {
+    "placeholders": {
+      "animalName": {
         "type": "String"
       }
     }

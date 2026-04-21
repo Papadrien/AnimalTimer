@@ -34,22 +34,46 @@
   "searchingPurchases": "Recherche des achats en cours...",
   "version": "Version 1.0.0",
   "policyIntro": "Introduction",
-  "policyIntroContent": "AnimalTimer est une application de minuteur visuel conçue pour les enfants de 3 à 8 ans. La protection de la vie privée de vos enfants est notre priorité absolue.",
+  "policyIntroContent": "AnimalTimer est une application de minuteur visuel conçue pour les enfants. La protection de la vie privée est une priorité.",
   "policyData": "Données collectées",
-  "policyDataContent": "AnimalTimer ne collecte aucune donnée personnelle. Toutes les préférences (animal sélectionné, réglages du son, animaux débloqués) sont stockées uniquement sur votre appareil et ne sont jamais transmises à un serveur externe.",
+  "policyDataContent": "AnimalTimer ne collecte ni ne stocke directement de données personnelles.\n\nCependant, l'application utilise des services tiers (comme Google AdMob) susceptibles de collecter certaines informations techniques, telles que :\n• l'adresse IP\n• le type d'appareil\n• des données d'utilisation anonymes\n\nCes données sont utilisées uniquement pour assurer le bon fonctionnement de l'application et afficher des publicités adaptées aux enfants.",
   "policyAds": "Publicités",
-  "policyAdsContent": "L’application peut afficher des publicités vidéo (via Google AdMob) pour débloquer de nouveaux animaux. Ces publicités sont conformes à la réglementation COPPA et ne collectent pas de données personnelles sur les enfants. Seules des publicités adaptées aux enfants sont affichées.",
+  "policyAdsContent": "L'application peut afficher des publicités via Google AdMob afin de débloquer du contenu (ex : nouveaux animaux).\n\nCes publicités sont configurées pour :\n• être adaptées aux enfants\n• respecter la réglementation COPPA (Children's Online Privacy Protection Act)\n• ne pas proposer de publicité comportementale personnalisée",
   "policyIAP": "Achats intégrés",
-  "policyIAPContent": "L’application propose un achat unique optionnel pour débloquer tous les animaux. Les achats sont gérés par Google Play ou l’App Store et sont protégés par les contrôles parentaux de votre appareil.",
+  "policyIAPContent": "L'application propose un achat unique optionnel permettant de débloquer tous les animaux.\n\nLes paiements sont gérés par Google Play ou l'App Store et sont sécurisés par les contrôles parentaux du système.",
   "policyCOPPA": "Conformité COPPA",
-  "policyCOPPAContent": "AnimalTimer est conforme à la loi COPPA. Nous ne collectons pas sciemment d’informations personnelles auprès d’enfants de moins de 13 ans.",
+  "policyCOPPAContent": "AnimalTimer est conforme à la loi COPPA. L'application ne collecte pas sciemment de données personnelles auprès d'enfants de moins de 13 ans.",
   "policyContact": "Contact",
-  "policyContactContent": "Pour toute question concernant cette politique de confidentialité, vous pouvez nous contacter à :\ncontact@animaltimer.app",
+  "policyContactContent": "Pour toute question concernant cette politique de confidentialité :\npapadrien.prepa@gmail.com",
   "notifTitle": "AnimalTimer",
   "notifTimerBody": "C'est fini ! Le {animal} a terminé 🎉",
   "@notifTimerBody": {
     "placeholders": {
       "animal": {
+        "type": "String"
+      }
+    }
+  },
+  "policyThirdParty": "Services tiers",
+  "policyThirdPartyContent": "L'application utilise les services suivants :\n• Google AdMob (publicités)\n\nPour plus d'informations :\nhttps://policies.google.com/privacy",
+  "policyGDPR": "Droits des utilisateurs (RGPD)",
+  "policyGDPRContent": "Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez des droits suivants :\n• Droit d'accès\n• Droit de rectification\n• Droit à l'effacement\n• Droit à la limitation du traitement\n\nPour toute demande :\npapadrien.prepa@gmail.com",
+  "policyUpdate": "Mise à jour",
+  "policyUpdateContent": "Dernière mise à jour : Avril 2026",
+  "watchAdToUnlock": "Regarde une courte vidéo pour débloquer {animalName} !",
+  "@watchAdToUnlock": {
+    "placeholders": {
+      "animalName": {
+        "type": "String"
+      }
+    }
+  },
+  "watchAd": "Regarder",
+  "adLoading": "Chargement de la vidéo…",
+  "animalUnlocked": "{animalName} est débloqué ! 🎉",
+  "@animalUnlocked": {
+    "placeholders": {
+      "animalName": {
         "type": "String"
       }
     }
