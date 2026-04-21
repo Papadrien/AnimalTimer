@@ -205,10 +205,10 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
       onReward: () async {
         await gamif.unlockAnimal(animal.id);
         if (mounted) {
-          setState(() {}); // Rafraîchir la grille
-          // Sélectionner l'animal débloqué
+          // Sélectionner l'animal débloqué et fermer la sheet
           widget.onAnimalSelected(animal.id);
           if (mounted) {
+            Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(context.l10n.animalUnlocked(
@@ -285,21 +285,20 @@ class _AnimalCard extends StatelessWidget {
                 ),
               ),
             ),
-            // Lock / Play badge if locked
+            // Lock / Play badge if locked — centré sur la carte
             if (isLocked)
-              Positioned(
-                right: 8, top: 8,
+              Center(
                 child: Container(
-                  width: 32, height: 32,
+                  width: 48, height: 48,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColors.pencilDark.withValues(alpha: 0.7),
-                    border: Border.all(color: Colors.white, width: 2),
+                    border: Border.all(color: Colors.white, width: 2.5),
                   ),
                   child: const Icon(
                     Icons.play_arrow_rounded,
                     color: Colors.white,
-                    size: 18,
+                    size: 28,
                   ),
                 ),
               ),

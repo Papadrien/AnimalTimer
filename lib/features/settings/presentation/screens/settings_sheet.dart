@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../../../../core/utils/localization_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -11,11 +12,14 @@ class SettingsSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
-    return DraggableScrollableSheet(
-      initialChildSize: 0.55,
-      minChildSize: 0.3,
-      maxChildSize: 0.8,
-      builder: (_, controller) {
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pop(),
+      behavior: HitTestBehavior.opaque,
+      child: DraggableScrollableSheet(
+        initialChildSize: 0.55,
+        minChildSize: 0.3,
+        maxChildSize: 0.8,
+        builder: (_, controller) {
         return Container(
           decoration: BoxDecoration(
             color: AppColors.sheetBg,
@@ -107,22 +111,31 @@ class SettingsSheet extends ConsumerWidget {
               ),
               const SizedBox(height: 24),
 
-              Center(
-                child: Text(
-                  context.l10n.version,
-                  style: TextStyle(
-                    fontFamily: 'Nunito',
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.pencilFaint.withValues(alpha: 0.4),
-                  ),
-                ),
+              FutureBuilder<PackageInfo>(
+                future: PackageInfo.fromPlatform(),
+                builder: (context, snapshot) {
+                  final version = snapshot.hasData
+                      ? 'Version ${snapshot.data!.version}'
+                      : '';
+                  return Center(
+                    child: Text(
+                      version,
+                      style: TextStyle(
+                        fontFamily: 'Nunito',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.pencilFaint.withValues(alpha: 0.4),
+                      ),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 8),
             ],
           ),
         );
       },
+      ),
     );
   }
 }

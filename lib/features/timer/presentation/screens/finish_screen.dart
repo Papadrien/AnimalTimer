@@ -53,8 +53,10 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
       final settings = ref.read(settingsProvider);
       if (settings.endSoundEnabled) {
         final audio = ref.read(audioServiceProvider);
-        await audio.playFinishSound(volume: settings.volume);
-        await Future.delayed(const Duration(milliseconds: 800));
+        // Jouer le son de canon et attendre sa fin réelle
+        await audio.playFinishSoundAndWait(volume: settings.volume);
+        // Petite pause de silence avant le son d'animal
+        await Future.delayed(const Duration(milliseconds: 500));
         audio.playEndSound(animal.endSoundPath, volume: settings.volume);
       }
     });

@@ -44,7 +44,7 @@ class _DogAnimatedDisplayState extends State<DogAnimatedDisplay>
 
   // Tail pivot: left attachment point of tail (731, 608) / 1024
   static const double _tailPivotX = 0.714;
-  static const double _tailPivotY = 0.594;
+  static const double _tailPivotY = 0.684;
 
   @override
   void initState() {
@@ -136,10 +136,10 @@ class _DogAnimatedDisplayState extends State<DogAnimatedDisplay>
           tailAngle = 0.0;
         } else if (widget.playOnce) {
           headAngle = _computeAngleOnce(t, _headAngle);
-          tailAngle = _computeAngleOnce(t, -_tailAngle);
+          tailAngle = _computeAngleOnce(t, _tailAngle);
         } else {
           headAngle = _computeAngle(t, _headAngle);
-          tailAngle = _computeAngle(t, -_tailAngle);
+          tailAngle = _computeAngle(t, _tailAngle);
         }
 
         return SizedBox(

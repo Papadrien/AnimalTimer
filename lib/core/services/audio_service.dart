@@ -36,10 +36,13 @@ class AudioService {
   }
 
   /// Joue le son de fin de minuteur (canon à confettis), commun à tous les animaux.
-  Future<void> playFinishSound({double volume = 0.7}) async {
+  /// Attend la fin complète du son via onPlayerComplete.
+  Future<void> playFinishSoundAndWait({double volume = 0.7}) async {
     try {
       await _finishPlayer.setVolume(volume);
       await _finishPlayer.play(AssetSource('audio/timer_finish.mp3'));
+      // Attendre la fin réelle du son
+      await _finishPlayer.onPlayerComplete.first;
     } catch (_) {
       // Graceful fallback
     }

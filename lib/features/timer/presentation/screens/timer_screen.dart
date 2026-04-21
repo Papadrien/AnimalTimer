@@ -145,7 +145,9 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                         settings.ambientSoundEnabled
                             ? Icons.volume_up_rounded
                             : Icons.volume_off_rounded,
-                        color: AppColors.pencilDark,
+                        color: settings.ambientSoundEnabled
+                            ? AppColors.pencilDark
+                            : AppColors.accentRed,
                         size: 22,
                       ),
                     ),
