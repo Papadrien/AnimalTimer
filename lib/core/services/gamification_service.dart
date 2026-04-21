@@ -23,7 +23,7 @@ class GamificationService {
 
   // --- Déblocage individuel ---
 
-  /// Vérifie si un animal est débloqué (par pub, par défaut, ou par premium).
+  /// Vérifie si un animal est débloqué (par défaut, par pub avec expiration, ou par premium).
   bool isUnlocked(String animalId) {
     if (isPremiumUnlocked()) return true; // Premium → tout débloqué
     return _storage.isAnimalUnlocked(animalId);
@@ -32,19 +32,27 @@ class GamificationService {
   /// Retourne les IDs des animaux verrouillés.
   List<String> getLockedAnimalIds() {
     if (isPremiumUnlocked()) return []; // Premium → rien de verrouillé
-    final unlocked = _storage.getUnlockedAnimalIds();
     return AnimalRepository.animals
         .map((a) => a.id)
-        .where((id) => !unlocked.contains(id))
+        .where((id) => !_storage.isAnimalUnlocked(id))
         .toList();
   }
 
   /// Retourne true s'il reste des animaux verrouillés.
   bool hasLockedAnimals() => getLockedAnimalIds().isNotEmpty;
 
-  /// Débloque un animal (après visionnage de pub).
+  /// Débloque un animal pour 10 jours (après visionnage de pub).
   Future<void> unlockAnimal(String animalId) async {
-    await _storage.unlockAnimal(animalId);
+    await _storage.unlockAnimalByAd(animalId, days: 10);
+  }
+
+  /// Retourne le nombre de jours restants pour un animal débloqué par pub.
+  /// Retourne null si gratuit, premium, ou jamais débloqué par pub.
+  int? getDaysRemaining(String animalId) {
+    if (isPremiumUnlocked()) return null; // Premium → permanent
+    if (StorageService.defaultUnlocked.contains(animalId)) return null; // Gratuit
+    final days = _storage.getDaysRemaining(animalId);
+    return days > 0 ? days : null;
   }
 }
 

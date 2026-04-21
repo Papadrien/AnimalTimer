@@ -40,7 +40,7 @@ class AudioService {
   Future<void> playFinishSoundAndWait({double volume = 0.7}) async {
     try {
       await _finishPlayer.setVolume(volume);
-      await _finishPlayer.play(AssetSource('audio/timer_finish.mp3'));
+      await _finishPlayer.play(AssetSource('audio/timer_end.mp3'));
       // Attendre la fin réelle du son
       await _finishPlayer.onPlayerComplete.first;
     } catch (_) {

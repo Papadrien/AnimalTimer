@@ -45,15 +45,6 @@
   "policyCOPPAContent": "AnimalTimer complies with COPPA. The app does not knowingly collect personal data from children under 13.",
   "policyContact": "Contact",
   "policyContactContent": "For any questions regarding this Privacy Policy:\npapadrien.prepa@gmail.com",
-  "notifTitle": "AnimalTimer",
-  "notifTimerBody": "Time's up! {animal} is done 🎉",
-  "@notifTimerBody": {
-    "placeholders": {
-      "animal": {
-        "type": "String"
-      }
-    }
-  },
   "policyThirdParty": "Third-Party Services",
   "policyThirdPartyContent": "The app uses the following services:\n• Google AdMob (advertising)\n\nMore information:\nhttps://policies.google.com/privacy",
   "policyGDPR": "User Rights (GDPR)",
@@ -78,18 +69,21 @@
       }
     }
   },
-  "unlockAllButton": "🌟 Unlock all — {price}",
-  "@unlockAllButton": {
+  "unlockAllButton": "Unlock all",
+  "unlockAllSuccess": "All animals are unlocked! 🎉",
+  "purchaseError": "Purchase failed. Please try again.",
+  "restoreSuccess": "Purchases restored!",
+  "restoreEmpty": "No purchases found.",
+  "storeNotAvailable": "Store not available. Check your connection.",
+  "purchaseDialogTitle": "Unlock all",
+  "purchaseDialogBody": "Unlock all current and future animals, forever!",
+  "purchaseDialogOneTime": "One-time purchase, no subscription.",
+  "purchaseDialogBuy": "Buy — {price}",
+  "@purchaseDialogBuy": {
     "placeholders": {
       "price": {
         "type": "String"
       }
     }
-  },
-  "unlockAllSuccess": "All animals are unlocked! 🎉",
-  "unlockAllOr": "Or unlock all at once:",
-  "purchaseError": "Purchase failed. Please try again.",
-  "restoreSuccess": "Purchases restored!",
-  "restoreEmpty": "No purchases found.",
-  "storeNotAvailable": "Store not available. Check your connection."
+  }
 }

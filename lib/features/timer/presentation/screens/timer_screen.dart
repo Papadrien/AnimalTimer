@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/services/timer_service.dart';
 import '../../../../core/services/audio_service.dart';
-import '../../../../core/services/notification_service.dart';
 import '../../../../shared/widgets/gradient_background.dart';
 import '../../../../shared/widgets/animal_display.dart';
 import '../../../../shared/widgets/image_button.dart';
@@ -31,11 +30,6 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
       final setup = ref.read(setupProvider);
       final settings = ref.read(settingsProvider);
       ref.read(timerServiceProvider.notifier).start(setup.duration);
-      ref.read(notificationServiceProvider).scheduleTimerEnd(
-        duration: setup.duration,
-        title: context.l10n.notifTitle,
-        body: context.l10n.notifTimerBody(localizedAnimalName(context, setup.selectedAnimal.id)),
-      );
       // Only start ambient music if sound is enabled
       if (settings.ambientSoundEnabled) {
         ref.read(audioServiceProvider).playAmbient(
@@ -77,7 +71,6 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
     final setup = ref.watch(setupProvider);
     final settings = ref.watch(settingsProvider);
     final animal = setup.selectedAnimal;
-    final notifications = ref.read(notificationServiceProvider);
     final screenW = MediaQuery.of(context).size.width;
     final circleSize = screenW * 0.78;
 
@@ -88,7 +81,6 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
           prev?.status != TimerStatus.finished) {
         HapticFeedback.heavyImpact();
         ref.read(audioServiceProvider).stopAmbient();
-        notifications.cancelAll();
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
             pageBuilder: (_, __, ___) => const FinishScreen(),
@@ -208,8 +200,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                       onPressed: () {
                         ref.read(timerServiceProvider.notifier).cancel();
                         ref.read(audioServiceProvider).stopAll();
-                        notifications.cancelAll();
-                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
                       },
                     ),
                   ),
@@ -231,18 +222,12 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                         if (ts.status == TimerStatus.running) {
                           // === PAUSE ===
                           notifier.pause();
-                          notifications.cancelAll();
-                          if (settings.ambientSoundEnabled) {
+                                            if (settings.ambientSoundEnabled) {
                             audio.pauseAmbient();
                           }
                         } else if (ts.status == TimerStatus.paused) {
                           // === RESUME ===
                           notifier.resume();
-                          notifications.scheduleTimerEnd(
-                            duration: ts.remaining,
-                            title: context.l10n.notifTitle,
-                            body: context.l10n.notifTimerBody(localizedAnimalName(context, animal.id)),
-                          );
                           if (settings.ambientSoundEnabled) {
                             audio.resumeAmbient();
                           }

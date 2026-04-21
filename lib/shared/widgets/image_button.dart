@@ -8,6 +8,7 @@ class ImageButton extends StatefulWidget {
   static const String greenBg  = 'green';
   static const String orangeBg = 'orange';
   static const String redBg    = 'red';
+  static const String blueBg   = 'blue';
 
   final String text;
   final String backgroundAsset;
@@ -47,7 +48,7 @@ class _ImageButtonState extends State<ImageButton>
   void initState() {
     super.initState();
     _ctrl = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 80));
+      vsync: this, duration: const Duration(milliseconds: 60));
     _scale = Tween<double>(begin: 1.0, end: 0.92).animate(
       CurvedAnimation(parent: _ctrl, curve: Curves.easeIn));
   }
@@ -82,8 +83,8 @@ class _ImageButtonState extends State<ImageButton>
     await _ctrl.reverse();
 
     // Phase 2 : overshoot (1.0 → 1.06)
-    const overshootDuration = Duration(milliseconds: 100);
-    const settleDuration = Duration(milliseconds: 80);
+    const overshootDuration = Duration(milliseconds: 75);
+    const settleDuration = Duration(milliseconds: 60);
 
     final start = DateTime.now();
     while (true) {
@@ -123,6 +124,7 @@ class _ImageButtonState extends State<ImageButton>
       case 'green':  return const Color(0xFF4CAF50);
       case 'orange': return const Color(0xFFFF9800);
       case 'red':    return const Color(0xFFE53935);
+      case 'blue':   return const Color(0xFF42A5F5);
       default:       return const Color(0xFF4CAF50);
     }
   }
@@ -132,6 +134,7 @@ class _ImageButtonState extends State<ImageButton>
       case 'green':  return const Color(0xFF66BB6A);
       case 'orange': return const Color(0xFFFFA726);
       case 'red':    return const Color(0xFFEF5350);
+      case 'blue':   return const Color(0xFF64B5F6);
       default:       return const Color(0xFF66BB6A);
     }
   }

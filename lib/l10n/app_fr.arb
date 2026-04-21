@@ -45,15 +45,6 @@
   "policyCOPPAContent": "AnimalTimer est conforme à la loi COPPA. L'application ne collecte pas sciemment de données personnelles auprès d'enfants de moins de 13 ans.",
   "policyContact": "Contact",
   "policyContactContent": "Pour toute question concernant cette politique de confidentialité :\npapadrien.prepa@gmail.com",
-  "notifTitle": "AnimalTimer",
-  "notifTimerBody": "C'est fini ! Le {animal} a terminé 🎉",
-  "@notifTimerBody": {
-    "placeholders": {
-      "animal": {
-        "type": "String"
-      }
-    }
-  },
   "policyThirdParty": "Services tiers",
   "policyThirdPartyContent": "L'application utilise les services suivants :\n• Google AdMob (publicités)\n\nPour plus d'informations :\nhttps://policies.google.com/privacy",
   "policyGDPR": "Droits des utilisateurs (RGPD)",
@@ -78,18 +69,21 @@
       }
     }
   },
-  "unlockAllButton": "🌟 Tout débloquer — {price}",
-  "@unlockAllButton": {
+  "unlockAllButton": "Débloquer tout",
+  "unlockAllSuccess": "Tous les animaux sont débloqués ! 🎉",
+  "purchaseError": "L'achat a échoué. Réessaie.",
+  "restoreSuccess": "Achats restaurés !",
+  "restoreEmpty": "Aucun achat trouvé.",
+  "storeNotAvailable": "Boutique indisponible. Vérifie ta connexion.",
+  "purchaseDialogTitle": "Tout débloquer",
+  "purchaseDialogBody": "Débloque tous les animaux actuels et futurs, pour toujours !",
+  "purchaseDialogOneTime": "Un seul achat, pas d'abonnement.",
+  "purchaseDialogBuy": "Acheter — {price}",
+  "@purchaseDialogBuy": {
     "placeholders": {
       "price": {
         "type": "String"
       }
     }
-  },
-  "unlockAllSuccess": "Tous les animaux sont débloqués ! 🎉",
-  "unlockAllOr": "Ou tout débloquer d'un coup :",
-  "purchaseError": "L'achat a échoué. Réessaie.",
-  "restoreSuccess": "Achats restaurés !",
-  "restoreEmpty": "Aucun achat trouvé.",
-  "storeNotAvailable": "Boutique indisponible. Vérifie ta connexion."
+  }
 }

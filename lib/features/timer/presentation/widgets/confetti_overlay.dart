@@ -31,9 +31,9 @@ class _ConfettiOverlayState extends State<ConfettiOverlay>
       animation: _ctrl,
       builder: (_, __) {
         // Fade out sur les derniers 15% de l'animation
-        final fadeOut = _ctrl.value > 0.85
+        final fadeOut = (_ctrl.value > 0.85
             ? 1.0 - ((_ctrl.value - 0.85) / 0.15)
-            : 1.0;
+            : 1.0).clamp(0.0, 1.0);
         return Opacity(
           opacity: fadeOut,
           child: CustomPaint(

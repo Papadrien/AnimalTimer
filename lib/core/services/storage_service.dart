@@ -41,29 +41,56 @@ class StorageService {
   }
 
   // --- Déblocage des animaux ---
-  static const _unlockedAnimalsKey = 'unlocked_animal_ids';
+  static const _adUnlockedKey = 'ad_unlocked_animals';
   static const _premiumKey = 'premium_unlocked';
 
   /// Animaux débloqués par défaut (gratuits).
   static const defaultUnlocked = {'crocodile', 'cat'};
 
-  /// Retourne la liste des IDs d'animaux débloqués.
-  Set<String> getUnlockedAnimalIds() {
-    final raw = _prefs.getStringList(_unlockedAnimalsKey);
-    if (raw == null) return Set.from(defaultUnlocked);
-    return Set.from(defaultUnlocked)..addAll(raw);
+  /// Retourne la map des animaux débloqués par pub {animalId: expirationTimestamp}.
+  Map<String, int> _getAdUnlockedMap() {
+    final raw = _prefs.getString(_adUnlockedKey);
+    if (raw == null) return {};
+    final decoded = jsonDecode(raw) as Map<String, dynamic>;
+    return decoded.map((k, v) => MapEntry(k, v as int));
   }
 
-  /// Débloque un animal par son ID.
-  Future<void> unlockAnimal(String animalId) async {
-    final unlocked = getUnlockedAnimalIds();
-    unlocked.add(animalId);
-    await _prefs.setStringList(_unlockedAnimalsKey, unlocked.toList());
+  /// Sauvegarde la map des animaux débloqués par pub.
+  Future<void> _saveAdUnlockedMap(Map<String, int> map) async {
+    await _prefs.setString(_adUnlockedKey, jsonEncode(map));
   }
 
-  /// Vérifie si un animal est débloqué.
+  /// Débloque un animal par pub pour [days] jours.
+  Future<void> unlockAnimalByAd(String animalId, {int days = 10}) async {
+    final map = _getAdUnlockedMap();
+    final expiration = DateTime.now().add(Duration(days: days));
+    map[animalId] = expiration.millisecondsSinceEpoch;
+    await _saveAdUnlockedMap(map);
+  }
+
+  /// Vérifie si un animal débloqué par pub est encore valide.
+  bool isAdUnlockValid(String animalId) {
+    final map = _getAdUnlockedMap();
+    final expiration = map[animalId];
+    if (expiration == null) return false;
+    return DateTime.now().millisecondsSinceEpoch < expiration;
+  }
+
+  /// Retourne le nombre de jours restants pour un animal débloqué par pub.
+  /// Retourne 0 si expiré ou jamais débloqué.
+  int getDaysRemaining(String animalId) {
+    final map = _getAdUnlockedMap();
+    final expiration = map[animalId];
+    if (expiration == null) return 0;
+    final remaining = expiration - DateTime.now().millisecondsSinceEpoch;
+    if (remaining <= 0) return 0;
+    return (remaining / (1000 * 60 * 60 * 24)).ceil();
+  }
+
+  /// Vérifie si un animal est débloqué (par défaut, pub ou premium).
   bool isAnimalUnlocked(String animalId) {
-    return getUnlockedAnimalIds().contains(animalId);
+    if (defaultUnlocked.contains(animalId)) return true;
+    return isAdUnlockValid(animalId);
   }
 
   // --- Premium (achat in-app) ---

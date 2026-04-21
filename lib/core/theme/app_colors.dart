@@ -24,6 +24,8 @@ class AppColors {
   static const Color accentRedLight   = Color(0xFFEF5350);
   static const Color accentOrange     = Color(0xFFFF9800);
   static const Color accentOrangeLight= Color(0xFFFFA726);
+  static const Color accentBlue       = Color(0xFF42A5F5);
+  static const Color accentBlueLight  = Color(0xFF64B5F6);
 
   // ── Crayons de couleur (Setup) ──
   static const Color crayonYellow  = Color(0xFFFFD43B);

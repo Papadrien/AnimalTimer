@@ -9,6 +9,7 @@ import '../../../../data/repositories/animal_repository.dart';
 import '../../../../core/services/ad_service.dart';
 import '../../../../core/services/gamification_service.dart';
 import '../../../../core/services/purchase_service.dart';
+import '../../../../shared/widgets/image_button.dart';
 
 /// Bottom sheet affichant les animaux disponibles dans une grille.
 /// Les animaux verrouillés affichent une icône ▶ et nécessitent
@@ -94,10 +95,12 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
                 final animal = animals[index];
                 final isSelected = animal.id == widget.selectedAnimalId;
                 final isLocked = !gamif.isUnlocked(animal.id);
+                final daysRemaining = gamif.getDaysRemaining(animal.id);
                 return _AnimalCard(
                   animal: animal,
                   isSelected: isSelected,
                   isLocked: isLocked,
+                  daysRemaining: daysRemaining,
                   onTap: () {
                     HapticFeedback.selectionClick();
                     if (isLocked) {
@@ -113,46 +116,15 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
           ),
           // Bouton "Tout débloquer" — visible seulement s'il reste des verrouillés
           if (hasLocked) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Text(
-                context.l10n.unlockAllOr,
-                style: TextStyle(
-                  fontFamily: 'Nunito',
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.pencilFaint.withValues(alpha: 0.6),
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton(
-                  onPressed: _handlePurchase,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.accentOrange,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 2,
-                  ),
-                  child: Text(
-                    context.l10n.unlockAllButton(
-                      ref.read(purchaseServiceProvider).localizedPrice,
-                    ),
-                    style: const TextStyle(
-                      fontFamily: 'Nunito',
-                      fontSize: 17,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ),
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: ImageButton(
+                text: context.l10n.unlockAllButton,
+                icon: Icons.star_rounded,
+                backgroundAsset: ImageButton.blueBg,
+                onPressed: _showPurchaseConfirmation,
+                height: 64,
               ),
             ),
           ],
@@ -205,6 +177,87 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
   }
 
   /// Lance l'achat in-app "Tout débloquer".
+  /// Affiche un dialogue d'information avant l'achat.
+  void _showPurchaseConfirmation() {
+    HapticFeedback.mediumImpact();
+    final price = ref.read(purchaseServiceProvider).localizedPrice;
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          context.l10n.purchaseDialogTitle,
+          style: const TextStyle(
+            fontFamily: 'Nunito',
+            fontWeight: FontWeight.w900,
+            color: AppColors.pencilDark,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              context.l10n.purchaseDialogBody,
+              style: const TextStyle(
+                fontFamily: 'Nunito',
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppColors.pencilDark,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              context.l10n.purchaseDialogOneTime,
+              style: TextStyle(
+                fontFamily: 'Nunito',
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: AppColors.pencilFaint.withValues(alpha: 0.7),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              HapticFeedback.selectionClick();
+              Navigator.of(ctx).pop();
+            },
+            child: Text(
+              context.l10n.cancel,
+              style: const TextStyle(
+                fontFamily: 'Nunito',
+                fontWeight: FontWeight.w700,
+                color: AppColors.pencilLight,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              HapticFeedback.mediumImpact();
+              Navigator.of(ctx).pop();
+              _handlePurchase();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.accentBlue,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12)),
+            ),
+            child: Text(
+              context.l10n.purchaseDialogBuy(price),
+              style: const TextStyle(
+                fontFamily: 'Nunito',
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _handlePurchase() async {
     HapticFeedback.mediumImpact();
     final purchaseService = ref.read(purchaseServiceProvider);
@@ -252,21 +305,13 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Row(
-          children: [
-            const Icon(Icons.lock_outline, color: AppColors.pencilDark),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                animalName,
-                style: const TextStyle(
-                  fontFamily: 'Nunito',
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.pencilDark,
-                ),
-              ),
-            ),
-          ],
+        title: Text(
+          animalName,
+          style: const TextStyle(
+            fontFamily: 'Nunito',
+            fontWeight: FontWeight.w900,
+            color: AppColors.pencilDark,
+          ),
         ),
         content: Text(
           context.l10n.watchAdToUnlock(animalName),
@@ -363,12 +408,14 @@ class _AnimalCard extends StatelessWidget {
   final AnimalModel animal;
   final bool isSelected;
   final bool isLocked;
+  final int? daysRemaining;
   final VoidCallback onTap;
 
   const _AnimalCard({
     required this.animal,
     required this.isSelected,
     required this.isLocked,
+    this.daysRemaining,
     required this.onTap,
   });
 
@@ -452,6 +499,38 @@ class _AnimalCard extends StatelessWidget {
                     Icons.check,
                     color: Colors.white,
                     size: 16,
+                  ),
+                ),
+              ),
+            // Days remaining badge (ad-unlocked animals)
+            if (daysRemaining != null && !isLocked)
+              Positioned(
+                right: 6, top: 6,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: AppColors.accentOrange,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: Colors.white, width: 1.5),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.timer_outlined,
+                        color: Colors.white, size: 12),
+                      const SizedBox(width: 2),
+                      Text(
+                        '${daysRemaining}j',
+                        style: const TextStyle(
+                          fontFamily: 'Nunito',
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
