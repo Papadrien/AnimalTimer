@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'storage_service.dart';
 import 'gamification_service.dart';
 
 /// Service de gestion des achats in-app.
@@ -12,7 +10,6 @@ class PurchaseService {
   static const String unlockAllId = 'unlock_all_animals';
 
   final InAppPurchase _iap = InAppPurchase.instance;
-  final StorageService _storage;
   final GamificationService _gamification;
 
   StreamSubscription<List<PurchaseDetails>>? _subscription;
@@ -22,7 +19,7 @@ class PurchaseService {
   /// Callback appelé quand l'achat est validé (pour rafraîchir l'UI).
   VoidCallback? onPurchaseCompleted;
 
-  PurchaseService(this._storage, this._gamification);
+  PurchaseService(this._gamification);
 
   /// Le produit est-il chargé et prêt à l'achat ?
   bool get isProductAvailable => _product != null;
@@ -123,9 +120,8 @@ class PurchaseService {
 }
 
 final purchaseServiceProvider = Provider<PurchaseService>((ref) {
-  final storage = ref.watch(storageServiceProvider);
   final gamification = ref.watch(gamificationServiceProvider);
-  final service = PurchaseService(storage, gamification);
+  final service = PurchaseService(gamification);
   ref.onDispose(service.dispose);
   return service;
 });

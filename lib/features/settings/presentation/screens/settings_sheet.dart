@@ -93,7 +93,7 @@ class SettingsSheet extends ConsumerWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (ctx) => _PrivacyPolicyScreen(),
+                      builder: (ctx) => const _PrivacyPolicyScreen(),
                     ),
                   );
                 },
@@ -103,18 +103,21 @@ class SettingsSheet extends ConsumerWidget {
                 icon: Icons.restore_rounded,
                 onTap: () async {
                   final purchaseService = ref.read(purchaseServiceProvider);
+                  final messenger = ScaffoldMessenger.of(context);
+                  final searchingText = context.l10n.searchingPurchases;
+                  final successText = context.l10n.restoreSuccess;
                   // S'assurer que le service est initialisé
                   await purchaseService.initialize();
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  messenger.showSnackBar(
                     SnackBar(
-                      content: Text(context.l10n.searchingPurchases),
+                      content: Text(searchingText),
                       duration: const Duration(seconds: 2),
                     ),
                   );
                   purchaseService.onPurchaseCompleted = () {
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    messenger.showSnackBar(
                       SnackBar(
-                        content: Text(context.l10n.restoreSuccess),
+                        content: Text(successText),
                         duration: const Duration(seconds: 2),
                         backgroundColor: AppColors.accentGreen,
                       ),

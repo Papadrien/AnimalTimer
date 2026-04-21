@@ -167,14 +167,14 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
                 child: OutlinedButton(
                   onPressed: () async {
                     HapticFeedback.mediumImpact();
+                    final messenger = ScaffoldMessenger.of(context);
                     await ref.read(gamificationServiceProvider).unlockAllAnimals();
                     if (mounted) {
                       setState(() {});
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text('DEBUG: Tous les animaux débloqués !'),
-                          duration: const Duration(seconds: 2),
-                          backgroundColor: AppColors.accentGreen,
+                      messenger.showSnackBar(
+                        const SnackBar(
+                          content: Text('DEBUG: Tous les animaux débloqués !'),
+                          duration: Duration(seconds: 2),
                         ),
                       );
                     }
