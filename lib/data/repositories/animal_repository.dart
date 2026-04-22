@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/animal_model.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_gradients.dart';
@@ -71,3 +72,5 @@ class AnimalRepository {
   }
   List<AnimalModel> getAll() => animals;
 }
+
+final animalRepoProvider = Provider((ref) => AnimalRepository());

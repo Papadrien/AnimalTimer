@@ -2,8 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/animal_repository.dart';
 import 'storage_service.dart';
 
-final animalRepoProvider = Provider((ref) => AnimalRepository());
-
 /// Service de gestion du déblocage des animaux.
 /// Crocodile et Chat sont débloqués par défaut.
 /// Les autres nécessitent le visionnage d'une pub OU l'achat premium.
