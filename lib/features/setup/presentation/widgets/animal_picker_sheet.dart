@@ -306,7 +306,7 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
-          animalName,
+          context.l10n.unlockAnimalTitle(animalName),
           style: const TextStyle(
             fontFamily: 'Nunito',
             fontWeight: FontWeight.w900,

@@ -32,7 +32,6 @@
   "privacyPolicy": "Politique de confidentialité",
   "restorePurchases": "Restaurer les achats",
   "searchingPurchases": "Recherche des achats en cours...",
-  "version": "Version 1.0.0",
   "policyIntro": "Introduction",
   "policyIntroContent": "AnimalTimer est une application de minuteur visuel conçue pour les enfants. La protection de la vie privée est une priorité.",
   "policyData": "Données collectées",
@@ -82,6 +81,14 @@
   "@purchaseDialogBuy": {
     "placeholders": {
       "price": {
+        "type": "String"
+      }
+    }
+  },
+  "unlockAnimalTitle": "Débloquer {animalName}",
+  "@unlockAnimalTitle": {
+    "placeholders": {
+      "animalName": {
         "type": "String"
       }
     }

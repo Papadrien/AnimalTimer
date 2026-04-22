@@ -32,7 +32,6 @@
   "privacyPolicy": "Privacy Policy",
   "restorePurchases": "Restore purchases",
   "searchingPurchases": "Searching for purchases...",
-  "version": "Version 1.0.0",
   "policyIntro": "Introduction",
   "policyIntroContent": "AnimalTimer is a visual timer application designed for children. Protecting privacy is a top priority.",
   "policyData": "Data collected",
@@ -82,6 +81,14 @@
   "@purchaseDialogBuy": {
     "placeholders": {
       "price": {
+        "type": "String"
+      }
+    }
+  },
+  "unlockAnimalTitle": "Unlock {animalName}",
+  "@unlockAnimalTitle": {
+    "placeholders": {
+      "animalName": {
         "type": "String"
       }
     }

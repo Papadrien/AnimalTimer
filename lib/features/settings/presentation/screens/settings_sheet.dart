@@ -132,7 +132,7 @@ class SettingsSheet extends ConsumerWidget {
                 future: PackageInfo.fromPlatform(),
                 builder: (context, snapshot) {
                   final version = snapshot.hasData
-                      ? 'Version ${snapshot.data!.version}'
+                      ? 'Version 1.0.${snapshot.data!.buildNumber}'
                       : '';
                   return Center(
                     child: Text(
