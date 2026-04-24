@@ -5,7 +5,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'gamification_service.dart';
 
 /// Service de gestion des achats in-app.
-/// Produit unique "unlock_all_animals" (non-consumable, 0.99€).
+/// Produit unique "unlock_all_animals" (non-consumable, 1,99 €).
 class PurchaseService {
   static const String unlockAllId = 'unlock_all_animals';
 
@@ -27,8 +27,8 @@ class PurchaseService {
   /// L'utilisateur est-il déjà premium ?
   bool get isPremium => _gamification.isPremiumUnlocked();
 
-  /// Prix localisé du produit (ex: "0,99 €").
-  String get localizedPrice => _product?.price ?? '0.99€';
+  /// Prix localisé du produit (ex: "1,99 €").
+  String get localizedPrice => _product?.price ?? '1,99 €';
 
   /// Initialise le service : vérifie la disponibilité et charge le produit.
   Future<void> initialize() async {
