@@ -3,6 +3,11 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- Required for apps targeting Android 13+ (API 33) that use the Advertising ID.
+         Without this permission, the Advertising ID returns a string of zeros.
+         AnimalTimer uses Google Mobile Ads (AdMob), so this permission is required. -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+
     <application
         android:label="AnimalTimer"
         android:name="${applicationName}"
