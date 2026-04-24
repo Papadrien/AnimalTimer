@@ -8,6 +8,11 @@
          AnimalTimer uses Google Mobile Ads (AdMob), so this permission is required. -->
     <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
 
+    <!-- Required for Google Play Billing (in-app purchases).
+         The in_app_purchase plugin normally merges this permission automatically,
+         but we declare it explicitly to be safe and to make the dependency visible. -->
+    <uses-permission android:name="com.android.vending.BILLING"/>
+
     <application
         android:label="AnimalTimer"
         android:name="${applicationName}"
