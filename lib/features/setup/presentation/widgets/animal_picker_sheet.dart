@@ -14,7 +14,7 @@ import '../../../../shared/widgets/image_button.dart';
 /// Bottom sheet affichant les animaux disponibles dans une grille.
 /// Les animaux verrouillés affichent une icône ▶ et nécessitent
 /// le visionnage d'une pub Rewarded pour être débloqués.
-/// Un bouton "Tout débloquer" permet l'achat in-app (0.99€).
+/// Un bouton "Tout débloquer" permet l'achat in-app (1,99 €).
 class AnimalPickerSheet extends ConsumerStatefulWidget {
   final String selectedAnimalId;
   final ValueChanged<String> onAnimalSelected;

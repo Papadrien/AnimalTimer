@@ -5,7 +5,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'gamification_service.dart';
 
 /// Service de gestion des achats in-app.
-/// Produit unique "unlock_all_animals" (non-consumable, 0.99€).
+/// Produit unique "unlock_all_animals" (non-consumable, 1,99 €).
 class PurchaseService {
   static const String unlockAllId = 'unlock_all_animals';
 
@@ -14,6 +14,7 @@ class PurchaseService {
 
   StreamSubscription<List<PurchaseDetails>>? _subscription;
   bool _available = false;
+  bool _initialized = false;
   ProductDetails? _product;
 
   /// Callback appelé quand l'achat est validé (pour rafraîchir l'UI).
@@ -27,11 +28,16 @@ class PurchaseService {
   /// L'utilisateur est-il déjà premium ?
   bool get isPremium => _gamification.isPremiumUnlocked();
 
-  /// Prix localisé du produit (ex: "0,99 €").
-  String get localizedPrice => _product?.price ?? '0.99€';
+  /// Prix localisé du produit (ex: "1,99 €").
+  String get localizedPrice => _product?.price ?? '1,99 €';
 
   /// Initialise le service : vérifie la disponibilité et charge le produit.
+  /// Idempotent : les appels supplémentaires après la première initialisation
+  /// réussie sont no-op (sauf si le store n'était pas dispo, auquel cas on
+  /// retente).
   Future<void> initialize() async {
+    if (_initialized) return;
+
     _available = await _iap.isAvailable();
     if (!_available) {
       debugPrint('[PurchaseService] Store not available');
@@ -58,6 +64,8 @@ class PurchaseService {
         debugPrint('[PurchaseService] Error: \${response.error}');
       }
     }
+
+    _initialized = true;
   }
 
   /// Lance l'achat "Tout débloquer".
