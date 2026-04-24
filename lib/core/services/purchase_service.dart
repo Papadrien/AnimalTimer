@@ -14,6 +14,7 @@ class PurchaseService {
 
   StreamSubscription<List<PurchaseDetails>>? _subscription;
   bool _available = false;
+  bool _initialized = false;
   ProductDetails? _product;
 
   /// Callback appelé quand l'achat est validé (pour rafraîchir l'UI).
@@ -31,7 +32,12 @@ class PurchaseService {
   String get localizedPrice => _product?.price ?? '1,99 €';
 
   /// Initialise le service : vérifie la disponibilité et charge le produit.
+  /// Idempotent : les appels supplémentaires après la première initialisation
+  /// réussie sont no-op (sauf si le store n'était pas dispo, auquel cas on
+  /// retente).
   Future<void> initialize() async {
+    if (_initialized) return;
+
     _available = await _iap.isAvailable();
     if (!_available) {
       debugPrint('[PurchaseService] Store not available');
@@ -58,6 +64,8 @@ class PurchaseService {
         debugPrint('[PurchaseService] Error: \${response.error}');
       }
     }
+
+    _initialized = true;
   }
 
   /// Lance l'achat "Tout débloquer".
