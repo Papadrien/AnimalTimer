@@ -103,19 +103,24 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
                     fontFamily: 'Nunito', fontSize: 36,
                     fontWeight: FontWeight.w900,
                     color: AppColors.pencilDark)),
-                  const SizedBox(height: 32),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 60),
-                    child: ImageButton(
-                      text: context.l10n.stop,
-                      icon: Icons.home_rounded,
-                      backgroundAsset: ImageButton.greenBg,
-                      onPressed: _goHome,
-                      height: 80,
-                      bounce: true,
-                    ),
-                  ),
                 ],
+              ),
+            ),
+            // Home button positioned at bottom like in timer_screen
+            Positioned(
+              bottom: 32 + MediaQuery.of(context).padding.bottom,
+              left: 0,
+              right: 0,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 60),
+                child: ImageButton(
+                  text: context.l10n.stop,
+                  icon: Icons.home_rounded,
+                  backgroundAsset: ImageButton.greenBg,
+                  onPressed: _goHome,
+                  height: 80,
+                  bounce: true,
+                ),
               ),
             ),
             // Confetti on top of everything
