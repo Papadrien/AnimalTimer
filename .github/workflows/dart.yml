@@ -33,14 +33,26 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Extract version from pubspec.yaml
+      - name: Extract version from pubspec.yaml and regenerate build number
         id: version
         run: |
+          # Version sémantique (x.y.z) lue depuis pubspec.yaml — source de vérité.
           VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //' | sed 's/+.*//')
-          BUILD=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
+
+          # Build number déclaré dans pubspec.yaml (informatif, on ne l'utilise pas
+          # pour le build final afin d'éviter les collisions avec Google Play).
+          PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
+
+          # Build number EFFECTIVEMENT utilisé pour cette exécution : timestamp Unix
+          # courant. Garantit un versionCode strictement croissant à chaque run CI,
+          # sans avoir à modifier pubspec.yaml (pas de commit de bump nécessaire).
+          BUILD=$(date +%s)
+
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "build=$BUILD" >> $GITHUB_OUTPUT
-          echo "📦 Version: $VERSION+$BUILD"
+          echo "📦 Version sémantique : $VERSION"
+          echo "🕒 Build number (timestamp CI) : $BUILD"
+          echo "ℹ️  Build dans pubspec.yaml : $PUBSPEC_BUILD (informatif uniquement)"
 
       - uses: subosito/flutter-action@v2
         with:

@@ -8,7 +8,7 @@ import '../../../../data/repositories/animal_repository.dart';
 import '../../../timer/presentation/screens/timer_screen.dart';
 import '../../providers/setup_provider.dart';
 
-/// Section "DERNIERS MINUTEURS" — tap = lance le timer directement.
+/// Section "DERNIERS MINUTEURS" — seul le bouton lecture lance le timer.
 class RecentsSection extends ConsumerWidget {
   const RecentsSection({super.key});
 
@@ -37,67 +37,81 @@ class RecentsSection extends ConsumerWidget {
           final animal = animalRepo.getById(preset.animalId);
           final cardColor = _cardColors[i % _cardColors.length];
 
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: GestureDetector(
-              onTap: () {
-                HapticFeedback.mediumImpact();
-                ref.read(setupProvider.notifier).loadPreset(preset);
-                Navigator.of(context).push(PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => const TimerScreen(),
-                  transitionsBuilder: (_, anim, __, child) => FadeTransition(
-                    opacity: anim,
-                    child: ScaleTransition(
-                      scale: Tween<double>(begin: 0.95, end: 1.0).animate(
-                        CurvedAnimation(parent: anim, curve: Curves.easeOutCubic)),
-                      child: child)),
-                  transitionDuration: const Duration(milliseconds: 400),
-                ));
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                decoration: BoxDecoration(
-                  color: cardColor.withValues(alpha: 0.7),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: AppColors.pencilDark,
-                    width: 2.5,
+          void launchPreset() {
+            HapticFeedback.mediumImpact();
+            ref.read(setupProvider.notifier).loadPreset(preset);
+            Navigator.of(context).push(
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => const TimerScreen(),
+                transitionsBuilder: (_, anim, __, child) => FadeTransition(
+                  opacity: anim,
+                  child: ScaleTransition(
+                    scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                      CurvedAnimation(
+                        parent: anim,
+                        curve: Curves.easeOutCubic,
+                      ),
+                    ),
+                    child: child,
                   ),
                 ),
-                child: Row(
-                  children: [
-                    // Animal icon circle with black outline
-                    Container(
-                      width: 46,
-                      height: 46,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.6),
-                        border: Border.all(
-                          color: AppColors.pencilDark,
-                          width: 2,
-                        ),
-                      ),
-                      child: Center(
-                        child: Image.asset(
-                          animal.imageAsset, width: 32, height: 32,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(preset.name, style: AppTextStyles.recentName),
-                          const SizedBox(height: 2),
-                          Text(preset.formattedDuration, style: AppTextStyles.recentDuration),
-                        ],
+                transitionDuration: const Duration(milliseconds: 400),
+              ),
+            );
+          }
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              decoration: BoxDecoration(
+                color: cardColor.withValues(alpha: 0.7),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.pencilDark,
+                  width: 2.5,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 46,
+                    height: 46,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withValues(alpha: 0.6),
+                      border: Border.all(
+                        color: AppColors.pencilDark,
+                        width: 2,
                       ),
                     ),
-                    // Play icon with black outline
-                    Container(
+                    child: Center(
+                      child: Image.asset(
+                        animal.imageAsset,
+                        width: 32,
+                        height: 32,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(preset.name, style: AppTextStyles.recentName),
+                        const SizedBox(height: 2),
+                        Text(
+                          preset.formattedDuration,
+                          style: AppTextStyles.recentDuration,
+                        ),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: launchPreset,
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
                       width: 34,
                       height: 34,
                       decoration: BoxDecoration(
@@ -108,11 +122,14 @@ class RecentsSection extends ConsumerWidget {
                           width: 2,
                         ),
                       ),
-                      child: const Icon(Icons.play_arrow,
-                        color: AppColors.accentGreen, size: 20),
+                      child: const Icon(
+                        Icons.play_arrow,
+                        color: AppColors.accentGreen,
+                        size: 20,
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );

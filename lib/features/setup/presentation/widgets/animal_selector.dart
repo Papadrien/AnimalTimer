@@ -81,6 +81,7 @@ class AnimalSelector extends ConsumerWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
+      enableDrag: false, // Empêcher la fermeture par swipe vers le bas
       builder: (_) => AnimalPickerSheet(
         selectedAnimalId: currentId,
         onAnimalSelected: (id) {

@@ -104,8 +104,10 @@ class SetupScreen extends ConsumerWidget {
 
   void _showSettings(BuildContext context) {
     showModalBottomSheet(
-      context: context, isScrollControlled: true,
+      context: context, 
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
+      enableDrag: false, // Empêcher la fermeture par swipe vers le bas
       builder: (_) => const SettingsSheet(),
     );
   }

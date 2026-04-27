@@ -48,6 +48,9 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
     final bottomPad = MediaQuery.of(context).padding.bottom;
     final gamif = ref.watch(gamificationServiceProvider);
     final hasLocked = gamif.hasLockedAnimals();
+    final purchaseService = ref.watch(purchaseServiceProvider);
+    // Afficher le bouton si: il y a des animaux verrouillés OU si pas d'achat in-app fait
+    final shouldShowUnlockButton = hasLocked || !purchaseService.isPremium;
 
     return Container(
       decoration: const BoxDecoration(
@@ -115,7 +118,7 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
             ),
           ),
           // Bouton "Tout débloquer" — visible seulement s'il reste des verrouillés
-          if (hasLocked) ...[
+          if (shouldShowUnlockButton) ...[
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),

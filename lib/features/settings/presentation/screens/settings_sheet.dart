@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import '../../../../core/utils/localization_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../providers/settings_provider.dart';
@@ -83,8 +84,12 @@ class SettingsSheet extends ConsumerWidget {
               _NavItem(
                 label: context.l10n.rateApp,
                 icon: Icons.star_outline,
-                onTap: () {
-                  // TODO: Ajouter in_app_review quand l'app sera sur les stores
+                onTap: () async {
+                  const url = 'https://play.google.com/store/apps/details?id=com.papadrien.animaltimer';
+                  final uri = Uri.parse(url);
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  }
                 },
               ),
               _NavItem(
