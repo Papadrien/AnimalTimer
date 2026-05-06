@@ -11,6 +11,7 @@ class AnimalModel {
   final LinearGradient timerGradient;
   final Color primaryColor;
   final Color secondaryColor;
+  final bool isDarkTheme;
 
   const AnimalModel({
     required this.id,
@@ -23,5 +24,6 @@ class AnimalModel {
     required this.timerGradient,
     required this.primaryColor,
     required this.secondaryColor,
+    this.isDarkTheme = false,
   });
 }

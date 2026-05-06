@@ -6,28 +6,40 @@ import '../../../../core/theme/app_colors.dart';
 import '../../providers/setup_provider.dart';
 
 class TimePickerCard extends ConsumerWidget {
-  const TimePickerCard({super.key});
+  /// Conservé pour compat. API, mais la carte garde toujours un fond clair
+  /// identique entre tous les thèmes d'animaux (requin compris).
+  final bool isDark;
+  const TimePickerCard({super.key, this.isDark = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final setup = ref.watch(setupProvider);
-    return Container(
+    // Thème fixe (clair) pour la roue de sélection du temps, indépendant de
+    // l'animal sélectionné — demandé : le requin ne doit pas changer ce fond.
+    const borderColor = AppColors.pencilDark;
+    final bgColor = AppColors.paperLight.withValues(alpha: 0.8);
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
       decoration: BoxDecoration(
-        color: AppColors.paperLight.withValues(alpha: 0.8),
+        color: bgColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.pencilDark, width: 2.5),
+        border: Border.all(color: borderColor, width: 2.5),
       ),
       child: Row(
         children: [
           _Col(value: setup.hours, label: context.l10n.hours, color: AppColors.crayonBlue,
-            max: 23, onChanged: ref.read(setupProvider.notifier).setHours),
+            max: 23, step: 1, isDark: isDark,
+            onChanged: ref.read(setupProvider.notifier).setHours),
           const SizedBox(width: 8),
           _Col(value: setup.minutes, label: context.l10n.minutes, color: AppColors.crayonOrange,
-            max: 59, onChanged: ref.read(setupProvider.notifier).setMinutes),
+            max: 59, step: 1, isDark: isDark,
+            onChanged: ref.read(setupProvider.notifier).setMinutes),
           const SizedBox(width: 8),
           _Col(value: setup.seconds, label: context.l10n.seconds, color: AppColors.crayonRed,
-            max: 59, onChanged: ref.read(setupProvider.notifier).setSeconds),
+            max: 59, step: 5, isDark: isDark,
+            onChanged: ref.read(setupProvider.notifier).setSeconds),
         ],
       ),
     );
@@ -39,9 +51,12 @@ class _Col extends StatefulWidget {
   final String label;
   final Color color;
   final int max;
+  final int step;
+  final bool isDark;
   final ValueChanged<int> onChanged;
   const _Col({required this.value, required this.label,
-    required this.color, required this.max, required this.onChanged});
+    required this.color, required this.max, required this.step,
+    required this.onChanged, this.isDark = false});
   @override
   State<_Col> createState() => _ColState();
 }
@@ -50,17 +65,24 @@ class _ColState extends State<_Col> {
   late FixedExtentScrollController _ctrl;
   bool _userScrolling = false;
 
+  int _valueToIndex(int value) {
+    if (widget.step <= 1) return value;
+    return (value ~/ widget.step).clamp(0, _itemCount - 1);
+  }
+
+  int get _itemCount => widget.step <= 1 ? widget.max + 1 : (widget.max ~/ widget.step) + 1;
+
   @override
   void initState() {
     super.initState();
-    _ctrl = FixedExtentScrollController(initialItem: widget.value);
+    _ctrl = FixedExtentScrollController(initialItem: _valueToIndex(widget.value));
   }
 
   @override
   void didUpdateWidget(_Col old) {
     super.didUpdateWidget(old);
     if (!_userScrolling && old.value != widget.value && _ctrl.hasClients) {
-      _ctrl.jumpToItem(widget.value);
+      _ctrl.jumpToItem(_valueToIndex(widget.value));
     }
   }
 
@@ -69,17 +91,21 @@ class _ColState extends State<_Col> {
 
   @override
   Widget build(BuildContext context) {
+    // Fond/pick bordure fixés en clair : indépendant du thème de l'animal.
+    const pickerBorder = AppColors.pencilDark;
+    const pickerBg = Colors.white;
+
     return Expanded(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
             height: 160,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: pickerBg,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: AppColors.pencilDark, width: 2),
+              border: Border.all(color: pickerBorder, width: 2),
             ),
             child: NotificationListener<ScrollNotification>(
               onNotification: (notif) {
@@ -106,16 +132,21 @@ class _ColState extends State<_Col> {
                         width: 1.5)),
                   ),
                 ),
-                onSelectedItemChanged: widget.onChanged,
-                childCount: widget.max + 1,
+                onSelectedItemChanged: (index) {
+                  final realValue = index * widget.step;
+                  widget.onChanged(realValue);
+                },
+                childCount: _itemCount,
                 itemBuilder: (context, index) {
+                  final displayValue = index * widget.step;
+                  final isSelected = displayValue == widget.value;
                   return Center(child: Text(
-                    '$index',
+                    '$displayValue',
                     style: TextStyle(
                       fontFamily: 'Nunito',
                       fontSize: 32,
                       fontWeight: FontWeight.w900,
-                      color: index == widget.value
+                      color: isSelected
                           ? widget.color
                           : AppColors.pencilFaint,
                     ),
@@ -125,10 +156,16 @@ class _ColState extends State<_Col> {
             ),
           ),
           const SizedBox(height: 8),
-          Text(widget.label, style: TextStyle(
-            fontFamily: 'Nunito', fontSize: 13,
-            fontWeight: FontWeight.w700,
-            color: widget.color, letterSpacing: 0.5)),
+          AnimatedDefaultTextStyle(
+            duration: const Duration(milliseconds: 300),
+            style: TextStyle(
+              fontFamily: 'Nunito', fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: widget.color,
+              letterSpacing: 0.5,
+            ),
+            child: Text(widget.label),
+          ),
         ],
       ),
     );

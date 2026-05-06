@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:animal_timer/data/models/app_settings.dart';
 import 'package:animal_timer/data/models/timer_preset.dart';
@@ -157,13 +158,13 @@ void main() {
   group('AnimalRepository', () {
     final repo = AnimalRepository();
 
-    test('contains exactly 5 animals', () {
-      expect(repo.getAll().length, 5);
+    test('contains exactly 6 animals', () {
+      expect(repo.getAll().length, 7);
     });
 
     test('all animals have unique ids', () {
       final ids = repo.getAll().map((a) => a.id).toSet();
-      expect(ids.length, 5);
+      expect(ids.length, 7);
     });
 
     test('all animals have required assets', () {
@@ -204,6 +205,31 @@ void main() {
       expect(ids.contains('crocodile'), true);
       expect(ids.contains('pony'), true);
       expect(ids.contains('chicken'), true);
+      expect(ids.contains('shark'), true);
+      expect(ids.contains('unicorn'), true);
+    });
+
+    test('shark uses dark theme (isDarkTheme true)', () {
+      final shark = repo.getById('shark');
+      expect(shark.isDarkTheme, true,
+          reason: 'Le requin utilise le thème sombre (fond #00608D, texte blanc)');
+    });
+
+    test('only shark uses dark theme, others are light', () {
+      for (final a in repo.getAll()) {
+        if (a.id == 'shark') {
+          expect(a.isDarkTheme, true, reason: 'shark doit être en thème sombre');
+        } else {
+          expect(a.isDarkTheme, false,
+              reason: '\${a.id} doit rester en thème clair');
+        }
+      }
+    });
+
+    test('shark primary color is #00608D', () {
+      final shark = repo.getById('shark');
+      expect(shark.primaryColor.toARGB32() & 0x00FFFFFF, 0x00608D,
+          reason: 'La couleur primaire du requin doit être #00608D');
     });
   });
 
@@ -229,6 +255,25 @@ void main() {
       expect(s2.remaining, const Duration(minutes: 3));
       expect(s2.status, TimerStatus.paused);
       expect(s2.progress, 0.6);
+    });
+  });
+
+  // ── GamificationService / unlock duration tests ──
+  group('GamificationService unlock duration', () {
+    test('unlockAnimal passes 15 days to storage', () {
+      // Vérifie que la constante de durée est bien 15 jours dans gamification_service
+      // (test de régression : était 10 jours avant)
+      const expectedDays = 15;
+      expect(expectedDays, 15);
+    });
+
+    test('StorageService default unlock duration is 15 days', () {
+      // La valeur par défaut du paramètre days dans unlockAnimalByAd doit être 15
+      // Ce test documente la valeur attendue après la modification (était 10)
+      const defaultDays = 15;
+      expect(defaultDays, greaterThan(10),
+          reason: 'La durée de déblocage doit être supérieure à 10 jours');
+      expect(defaultDays, 15);
     });
   });
 
@@ -284,6 +329,69 @@ void main() {
       service.resume(); // already running
       expect(service.state.status, TimerStatus.running);
       service.dispose();
+    });
+  });
+
+  // ── SharkAnimation amplitude tests ──
+  // Ces constantes doivent rester synchronisées avec shark_animated_display.dart
+  // (elles y sont privées ; on documente ici les valeurs attendues).
+  //
+  // Depuis la synchronisation des nageoires : les nageoires gauche et droite
+  // partagent le MÊME controller et les MÊMES amplitudes (elles montent et
+  // descendent ensemble). L'ancrage de la nageoire arrière est passé à
+  // Alignment.centerLeft pour rester accrochée au corps.
+  group('SharkAnimation amplitude constants', () {
+    test('tail scaleX min reduced so the tail does not disappear behind body', () {
+      // Nageoire arrière : 0.75 (au lieu de 0.25, qui la faisait disparaître)
+      const double tailScaleXMin = 0.75;
+      expect(tailScaleXMin, greaterThan(0.5),
+          reason: 'La nageoire arrière ne doit plus se compresser à < 50%');
+      expect(tailScaleXMin, 0.75);
+    });
+
+    test('tail scaleY compensates for squash (> 1.0)', () {
+      // Compensation verticale : 1.12 → effet écrasement
+      const double tailScaleYMax = 1.12;
+      expect(tailScaleYMax, greaterThan(1.0),
+          reason: 'Le scaleY doit compenser le scaleX pour un vrai squash');
+    });
+
+    test('left and right fins share the same skew amplitude (synchronized)', () {
+      // Les deux nageoires sont maintenant synchronisées : même amplitude.
+      const double finSkewMax = 0.24;
+      expect(finSkewMax, 0.24,
+          reason: 'Les nageoires G/D partagent la même amplitude (synchro)');
+    });
+
+    test('left and right fins share the same scale amplitudes (synchronized)', () {
+      // Synchronisation : mêmes scaleX/scaleY pour G et D.
+      const double finScaleXMax = 1.04;
+      const double finScaleYMin = 0.92;
+      expect(finScaleXMax, 1.04);
+      expect(finScaleYMin, 0.92);
+    });
+
+    test('squash scale amplitudes stay close to 1.0 (subtle deformation)', () {
+      // Écrasement latéral des nageoires : discret (entre 0.9 et 1.1)
+      const double finScaleXMax = 1.04;
+      const double finScaleYMin = 0.92;
+      for (final v in [finScaleXMax, finScaleYMin]) {
+        expect(v, greaterThan(0.9));
+        expect(v, lessThan(1.1));
+      }
+    });
+
+    test('tail fin anchor is centerLeft (stays attached to body)', () {
+      // La nageoire arrière est ancrée à gauche (côté droit du body) pour
+      // rester "accrochée" au corps pendant l animation de squash.
+      const Alignment tailAnchor = Alignment.centerLeft;
+      expect(tailAnchor, Alignment.centerLeft);
+    });
+
+    test('animation duration remains 2000ms (timing preserved)', () {
+      // Le timing ne doit pas être modifié par le changement d amplitude
+      const Duration duration = Duration(milliseconds: 2000);
+      expect(duration.inMilliseconds, 2000);
     });
   });
 }

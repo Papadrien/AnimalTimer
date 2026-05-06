@@ -39,9 +39,9 @@ class GamificationService {
   /// Retourne true s'il reste des animaux verrouillés.
   bool hasLockedAnimals() => getLockedAnimalIds().isNotEmpty;
 
-  /// Débloque un animal pour 10 jours (après visionnage de pub).
+  /// Débloque un animal pour 15 jours (après visionnage de pub).
   Future<void> unlockAnimal(String animalId) async {
-    await _storage.unlockAnimalByAd(animalId, days: 10);
+    await _storage.unlockAnimalByAd(animalId, days: 15);
   }
 
   /// Retourne le nombre de jours restants pour un animal débloqué par pub.

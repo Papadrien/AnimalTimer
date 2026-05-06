@@ -15,6 +15,16 @@ class AnimalSelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final animal = ref.watch(setupProvider).selectedAnimal;
+    final isDark = animal.isDarkTheme;
+
+    // En thème sombre (requin), le badge adopte le même style que le bouton
+    // paramètres : fond translucide blanc + bordure/icône blanches.
+    final badgeBg = isDark
+        ? Colors.white.withValues(alpha: 0.15)
+        : animal.secondaryColor.withValues(alpha: 0.85);
+    final badgeBorderColor = isDark ? AppColors.textOnColor : AppColors.pencilDark;
+    final badgeIconColor = isDark ? AppColors.textOnColor : AppColors.pencilDark;
+
     return GestureDetector(
       onTap: () {
         HapticFeedback.selectionClick();
@@ -43,18 +53,19 @@ class AnimalSelector extends ConsumerWidget {
                 ),
               ),
             ),
-            // Change badge — bottom right, circular with swap icon + black outline
+            // Change badge — bottom right, circular with swap icon
             Positioned(
               right: 0,
               bottom: 0,
-              child: Container(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: animal.secondaryColor.withValues(alpha: 0.85),
+                  color: badgeBg,
                   border: Border.all(
-                    color: AppColors.pencilDark,
+                    color: badgeBorderColor,
                     width: 2.5,
                   ),
                   boxShadow: [
@@ -65,8 +76,8 @@ class AnimalSelector extends ConsumerWidget {
                     ),
                   ],
                 ),
-                child: const Icon(Icons.swap_horiz,
-                  color: AppColors.pencilDark, size: 22),
+                child: Icon(Icons.swap_horiz,
+                  color: badgeIconColor, size: 22),
               ),
             ),
           ],
@@ -81,7 +92,7 @@ class AnimalSelector extends ConsumerWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      enableDrag: false, // Empêcher la fermeture par swipe vers le bas
+      enableDrag: false,
       builder: (_) => AnimalPickerSheet(
         selectedAnimalId: currentId,
         onAnimalSelected: (id) {

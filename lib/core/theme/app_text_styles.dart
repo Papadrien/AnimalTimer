@@ -21,17 +21,6 @@ class AppTextStyles {
     color: AppColors.pencilFaint, letterSpacing: 1,
   );
 
-  // Legacy (kept for compat)
-  static const TextStyle timePickerLarge = TextStyle(
-    fontFamily: _ff, fontSize: 72, fontWeight: FontWeight.w900,
-    color: AppColors.pencilDark, height: 1.0,
-  );
-
-  static TextStyle get timePickerGhost => const TextStyle(
-    fontFamily: _ff, fontSize: 48, fontWeight: FontWeight.w900,
-    color: AppColors.pencilFaint, height: 1.0,
-  );
-
   // ── Timer: Countdown on dark background (vert maquette) ──
   static const TextStyle timerCountdown = TextStyle(
     fontFamily: _ff, fontSize: 46, fontWeight: FontWeight.w900,
@@ -64,11 +53,6 @@ class AppTextStyles {
   static const TextStyle buttonLabel = TextStyle(
     fontFamily: _ff, fontSize: 18, fontWeight: FontWeight.w800,
     color: AppColors.textOnColor,
-  );
-
-  static const TextStyle buttonLabelDark = TextStyle(
-    fontFamily: _ff, fontSize: 18, fontWeight: FontWeight.w800,
-    color: AppColors.pencilDark,
   );
 
   static const TextStyle startButtonLabel = TextStyle(

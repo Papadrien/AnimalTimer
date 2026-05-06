@@ -17,7 +17,7 @@ def flutterVersionCode = flutter.versionCode?.toInteger() ?: 1
 def flutterVersionName = flutter.versionName ?: "1.0.0"
 
 android {
-    namespace "com.papadrien.animaltimer"
+    namespace "com.junade.animaltimer"
     compileSdk 36
     ndkVersion flutter.ndkVersion
 
@@ -33,7 +33,7 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
     defaultConfig {
-        applicationId "com.papadrien.animaltimer"
+        applicationId "com.junade.animaltimer"
         minSdk 21
         targetSdk 36
         versionCode flutterVersionCode

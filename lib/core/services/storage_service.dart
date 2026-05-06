@@ -61,7 +61,7 @@ class StorageService {
   }
 
   /// Débloque un animal par pub pour [days] jours.
-  Future<void> unlockAnimalByAd(String animalId, {int days = 10}) async {
+  Future<void> unlockAnimalByAd(String animalId, {int days = 15}) async {
     final map = _getAdUnlockedMap();
     final expiration = DateTime.now().add(Duration(days: days));
     map[animalId] = expiration.millisecondsSinceEpoch;

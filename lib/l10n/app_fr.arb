@@ -92,5 +92,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "animalShark": "Requin",
+  "animalUnicorn": "Licorne",
+  "cancelConfirmTitle": "Annuler le minuteur ?",
+  "cancelConfirmBody": "Le minuteur sera arrêté et tu reviendras à l'écran d'accueil.",
+  "continueTimer": "Continuer"
 }

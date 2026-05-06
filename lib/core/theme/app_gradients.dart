@@ -77,4 +77,31 @@ class AppGradients {
     colors: [Color(0xFFF5ECD7), Color(0xFFEBDCC4), Color(0xFFE0CCB0)],
     stops: [0.0, 0.5, 1.0],
   );
+  // Requin — bleu profond #00608D (thème sombre, texte blanc)
+  static const LinearGradient sharkSetup = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFF0077B0), Color(0xFF00608D), Color(0xFF004E72)],
+    stops: [0.0, 0.5, 1.0],
+  );
+  static const LinearGradient sharkTimer = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFF0077B0), Color(0xFF00608D), Color(0xFF004E72)],
+    stops: [0.0, 0.5, 1.0],
+  );
+
+  // Licorne — rose magenta pâle
+  static const LinearGradient unicornSetup = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFFFFD6F9), Color(0xFFFFB3F3), Color(0xFFFF90ED)],
+    stops: [0.0, 0.5, 1.0],
+  );
+  static const LinearGradient unicornTimer = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFFFFD6F9), Color(0xFFFFB3F3), Color(0xFFFF90ED)],
+    stops: [0.0, 0.5, 1.0],
+  );
 }

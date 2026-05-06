@@ -46,135 +46,147 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
   Widget build(BuildContext context) {
     const animals = AnimalRepository.animals;
     final bottomPad = MediaQuery.of(context).padding.bottom;
+    final topPad = MediaQuery.of(context).padding.top;
+    final screenHeight = MediaQuery.of(context).size.height;
+    // On laisse au minimum la hauteur de la status bar + 24dp de marge
+    // pour que la sheet ne remonte jamais sous le notch.
+    const double sheetTopMargin = 50.0;
+    final maxSheetHeight = screenHeight - topPad - sheetTopMargin;
     final gamif = ref.watch(gamificationServiceProvider);
     final hasLocked = gamif.hasLockedAnimals();
     final purchaseService = ref.watch(purchaseServiceProvider);
-    // Afficher le bouton si: il y a des animaux verrouillés OU si pas d'achat in-app fait
     final shouldShowUnlockButton = hasLocked || !purchaseService.isPremium;
 
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 12),
-          // Drag handle
-          Container(
-            width: 40, height: 4,
-            decoration: BoxDecoration(
-              color: AppColors.pencilFaint,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const SizedBox(height: 20),
-          // Title
-          Text(
-            context.l10n.chooseAnimal,
-            style: const TextStyle(
-              fontFamily: 'Nunito',
-              fontSize: 22,
-              fontWeight: FontWeight.w900,
-              color: AppColors.pencilDark,
-            ),
-          ),
-          const SizedBox(height: 20),
-          // Grid of animals
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 1.0,
-              ),
-              itemCount: animals.length,
-              itemBuilder: (context, index) {
-                final animal = animals[index];
-                final isSelected = animal.id == widget.selectedAnimalId;
-                final isLocked = !gamif.isUnlocked(animal.id);
-                final daysRemaining = gamif.getDaysRemaining(animal.id);
-                return _AnimalCard(
-                  animal: animal,
-                  isSelected: isSelected,
-                  isLocked: isLocked,
-                  daysRemaining: daysRemaining,
-                  onTap: () {
-                    HapticFeedback.selectionClick();
-                    if (isLocked) {
-                      _showUnlockDialog(context, animal);
-                    } else {
-                      widget.onAnimalSelected(animal.id);
-                      Navigator.of(context).pop();
-                    }
-                  },
-                );
-              },
-            ),
-          ),
-          // Bouton "Tout débloquer" — visible seulement s'il reste des verrouillés
-          if (shouldShowUnlockButton) ...[
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: ImageButton(
-                text: context.l10n.unlockAllButton,
-                showLabel: true,
-                backgroundAsset: ImageButton.blueBg,
-                onPressed: _showPurchaseConfirmation,
-                height: 64,
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: maxSheetHeight),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // ── Header fixe ──
+            const SizedBox(height: 12),
+            Container(
+              width: 40, height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.pencilFaint,
+                borderRadius: BorderRadius.circular(2),
               ),
             ),
-          ],
-          // ⚠️ DEBUG ONLY — Simuler l'achat sans passer par le store
-          if (kDebugMode && hasLocked) ...[
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: SizedBox(
-                width: double.infinity,
-                height: 40,
-                child: OutlinedButton(
-                  onPressed: () async {
-                    HapticFeedback.mediumImpact();
-                    final messenger = ScaffoldMessenger.of(context);
-                    await ref.read(gamificationServiceProvider).unlockAllAnimals();
-                    if (mounted) {
-                      setState(() {});
-                      messenger.showSnackBar(
-                        const SnackBar(
-                          content: Text('DEBUG: Tous les animaux débloqués !'),
-                          duration: Duration(seconds: 2),
+            const SizedBox(height: 20),
+            Text(
+              context.l10n.chooseAnimal,
+              style: const TextStyle(
+                fontFamily: 'Nunito',
+                fontSize: 22,
+                fontWeight: FontWeight.w900,
+                color: AppColors.pencilDark,
+              ),
+            ),
+            const SizedBox(height: 20),
+            // ── Contenu scrollable ──
+            Flexible(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(
+                  left: 24, right: 24, bottom: bottomPad + 20),
+                child: Column(
+                  children: [
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 1.0,
+                      ),
+                      itemCount: animals.length,
+                      itemBuilder: (context, index) {
+                        final animal = animals[index];
+                        final isSelected = animal.id == widget.selectedAnimalId;
+                        final isLocked = !gamif.isUnlocked(animal.id);
+                        final daysRemaining = gamif.getDaysRemaining(animal.id);
+                        return _AnimalCard(
+                          animal: animal,
+                          isSelected: isSelected,
+                          isLocked: isLocked,
+                          daysRemaining: daysRemaining,
+                          onTap: () {
+                            HapticFeedback.selectionClick();
+                            if (isLocked) {
+                              _showUnlockDialog(context, animal);
+                            } else {
+                              widget.onAnimalSelected(animal.id);
+                              Navigator.of(context).pop();
+                            }
+                          },
+                        );
+                      },
+                    ),
+                    if (shouldShowUnlockButton) ...[
+                      const SizedBox(height: 16),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: ImageButton(
+                          text: context.l10n.unlockAllButton,
+                          showLabel: true,
+                          backgroundAsset: ImageButton.blueBg,
+                          onPressed: _showPurchaseConfirmation,
+                          height: 64,
                         ),
-                      );
-                    }
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.red,
-                    side: const BorderSide(color: Colors.red),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text(
-                    '🐛 [DEBUG] Simuler achat',
-                    style: TextStyle(
-                      fontFamily: 'Nunito',
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
+                      ),
+                    ],
+                    if (kDebugMode && hasLocked) ...[
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 40,
+                        child: OutlinedButton(
+                          onPressed: () async {
+                            HapticFeedback.mediumImpact();
+                            final messenger = ScaffoldMessenger.of(context);
+                            await ref
+                                .read(gamificationServiceProvider)
+                                .unlockAllAnimals();
+                            if (mounted) {
+                              setState(() {});
+                              messenger.showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'DEBUG: Tous les animaux débloqués !'),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            }
+                          },
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.red,
+                            side: const BorderSide(color: Colors.red),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            '🐛 [DEBUG] Simuler achat',
+                            style: TextStyle(
+                              fontFamily: 'Nunito',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ),
             ),
           ],
-          SizedBox(height: bottomPad + 20),
-        ],
+        ),
       ),
     );
   }

@@ -28,35 +28,31 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
       vsync: this, duration: const Duration(milliseconds: 500))
       ..repeat();
     _bounce = TweenSequence<double>([
-      // Montée: 0 → -35 en 0.15s (30% du cycle)
       TweenSequenceItem(
         tween: Tween<double>(begin: 0, end: -35)
             .chain(CurveTween(curve: Curves.easeOut)),
         weight: 30,
       ),
-      // Descente: -35 → 0 en 0.15s (30% du cycle)
       TweenSequenceItem(
         tween: Tween<double>(begin: -35, end: 0)
             .chain(CurveTween(curve: Curves.easeIn)),
         weight: 30,
       ),
-      // Pause en bas: 0 → 0 pendant 0.2s (40% du cycle)
       TweenSequenceItem(
         tween: ConstantTween<double>(0),
         weight: 40,
       ),
     ]).animate(_bounceCtrl);
 
-    // Play end sounds: canon à confettis d'abord, puis son d'animal après délai
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final animal = ref.read(setupProvider).selectedAnimal;
       final settings = ref.read(settingsProvider);
       if (settings.endSoundEnabled) {
         final audio = ref.read(audioServiceProvider);
-        // Jouer le son de canon et attendre sa fin réelle
         await audio.playFinishSoundAndWait(volume: settings.volume);
-        // Enchaîner immédiatement avec le son d'animal
-        audio.playEndSound(animal.endSoundPath, volume: settings.volume);
+        if (animal.endSoundPath.isNotEmpty) {
+          audio.playEndSound(animal.endSoundPath, volume: settings.volume);
+        }
       }
     });
   }
@@ -64,7 +60,6 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
   @override
   void dispose() { _bounceCtrl.dispose(); super.dispose(); }
 
-  /// Navigate back to setup screen.
   void _goHome() {
     ref.read(audioServiceProvider).stopAll();
     Navigator.of(context).popUntil((route) => route.isFirst);
@@ -73,6 +68,10 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
   @override
   Widget build(BuildContext context) {
     final animal = ref.watch(setupProvider).selectedAnimal;
+    // Texte "c'est fini !" : blanc si thème sombre, sinon pencilDark
+    final finishedTextColor = animal.isDarkTheme
+        ? Colors.white
+        : AppColors.pencilDark;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -80,12 +79,10 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
         gradient: animal.setupGradient,
         child: Stack(
           children: [
-            // Main content
             Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Bouncing animal
                   AnimatedBuilder(
                     animation: _bounce,
                     builder: (_, __) => Transform.translate(
@@ -99,14 +96,13 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
                     ),
                   ),
                   const SizedBox(height: 32),
-                  Text(context.l10n.finished, style: const TextStyle(
+                  Text(context.l10n.finished, style: TextStyle(
                     fontFamily: 'Nunito', fontSize: 36,
                     fontWeight: FontWeight.w900,
-                    color: AppColors.pencilDark)),
+                    color: finishedTextColor)),
                 ],
               ),
             ),
-            // Home button positioned at bottom like in timer_screen
             Positioned(
               bottom: 32 + MediaQuery.of(context).padding.bottom,
               left: 0,
@@ -123,7 +119,6 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
                 ),
               ),
             ),
-            // Confetti on top of everything
             const Positioned.fill(
               child: IgnorePointer(child: ConfettiOverlay())),
           ],
