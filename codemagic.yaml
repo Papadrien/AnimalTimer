@@ -134,10 +134,6 @@ workflows:
       - dist/*.apk
       - dist/*.aab
     publishing:
-      google_play:
-        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
-        track: internal
-        submit_as_draft: true
       email:
         recipients:
           - ivorydu13@gmail.com
@@ -227,11 +223,6 @@ workflows:
       - dist/*.ipa
       - flutter_drive.log
     publishing:
-      app_store_connect:
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        submit_to_testflight: true
       email:
         recipients:
           - ivorydu13@gmail.com
