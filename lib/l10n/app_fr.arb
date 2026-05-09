@@ -50,7 +50,8 @@
   "policyGDPRContent": "Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez des droits suivants :\n• Droit d'accès\n• Droit de rectification\n• Droit à l'effacement\n• Droit à la limitation du traitement\n\nPour toute demande :\npapadrien.prepa@gmail.com",
   "policyUpdate": "Mise à jour",
   "policyUpdateContent": "Dernière mise à jour : Avril 2026",
-  "watchAdToUnlock": "Regarde une courte vidéo pour débloquer {animalName} !",
+  "rewardedAdTitle": "Publicité récompensée",
+  "watchAdToUnlock": "Regarde une vidéo publicitaire pour débloquer {animalName}",
   "@watchAdToUnlock": {
     "placeholders": {
       "animalName": {
@@ -69,6 +70,15 @@
     }
   },
   "unlockAllButton": "Débloquer tout",
+  "unlockAllButtonWithPrice": "Débloquer tout – {price}",
+  "@unlockAllButtonWithPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "adBadgeLabel": "PUB",
   "unlockAllSuccess": "Tous les animaux sont débloqués ! 🎉",
   "purchaseError": "L'achat a échoué. Réessaie.",
   "restoreSuccess": "Achats restaurés !",

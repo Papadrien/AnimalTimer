@@ -17,6 +17,9 @@ class PurchaseService {
   bool _initialized = false;
   ProductDetails? _product;
 
+  /// Prix localisé réactif (mise à jour quand le produit est chargé).
+  final ValueNotifier<String> localizedPriceNotifier = ValueNotifier('…');
+
   /// Callback appelé quand l'achat est validé (pour rafraîchir l'UI).
   VoidCallback? onPurchaseCompleted;
 
@@ -29,7 +32,7 @@ class PurchaseService {
   bool get isPremium => _gamification.isPremiumUnlocked();
 
   /// Prix localisé du produit (ex: "1,99 €").
-  String get localizedPrice => _product?.price ?? '1,99 €';
+  String get localizedPrice => _product?.price ?? '…';
 
   /// Initialise le service : vérifie la disponibilité et charge le produit.
   /// Idempotent : les appels supplémentaires après la première initialisation
@@ -57,6 +60,7 @@ class PurchaseService {
     final response = await _iap.queryProductDetails({unlockAllId});
     if (response.productDetails.isNotEmpty) {
       _product = response.productDetails.first;
+      localizedPriceNotifier.value = _product!.price;
       debugPrint('[PurchaseService] Product loaded: \${_product!.price}');
     } else {
       debugPrint('[PurchaseService] Product not found on store');
@@ -124,6 +128,7 @@ class PurchaseService {
 
   void dispose() {
     _subscription?.cancel();
+    localizedPriceNotifier.dispose();
   }
 }
 

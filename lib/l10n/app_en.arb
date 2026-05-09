@@ -50,7 +50,8 @@
   "policyGDPRContent": "Under the General Data Protection Regulation (GDPR), you have the following rights:\n• Right of access\n• Right to rectification\n• Right to deletion\n• Right to restriction of processing\n\nTo exercise your rights:\npapadrien.prepa@gmail.com",
   "policyUpdate": "Last Update",
   "policyUpdateContent": "Last updated: April 2026",
-  "watchAdToUnlock": "Watch a short video to unlock {animalName}!",
+  "rewardedAdTitle": "Rewarded Ad",
+  "watchAdToUnlock": "Watch an ad video to unlock {animalName}",
   "@watchAdToUnlock": {
     "placeholders": {
       "animalName": {
@@ -69,6 +70,15 @@
     }
   },
   "unlockAllButton": "Unlock all",
+  "unlockAllButtonWithPrice": "Unlock all – {price}",
+  "@unlockAllButtonWithPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "adBadgeLabel": "AD",
   "unlockAllSuccess": "All animals are unlocked! 🎉",
   "purchaseError": "Purchase failed. Please try again.",
   "restoreSuccess": "Purchases restored!",

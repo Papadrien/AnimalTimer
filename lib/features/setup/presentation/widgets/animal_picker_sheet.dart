@@ -131,12 +131,21 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
                       const SizedBox(height: 16),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: ImageButton(
-                          text: context.l10n.unlockAllButton,
-                          showLabel: true,
-                          backgroundAsset: ImageButton.blueBg,
-                          onPressed: _showPurchaseConfirmation,
-                          height: 64,
+                        child: ValueListenableBuilder<String>(
+                          valueListenable:
+                              ref.read(purchaseServiceProvider).localizedPriceNotifier,
+                          builder: (context, price, _) {
+                            final label = price == '…'
+                                ? context.l10n.unlockAllButton
+                                : context.l10n.unlockAllButtonWithPrice(price);
+                            return ImageButton(
+                              text: label,
+                              showLabel: true,
+                              backgroundAsset: ImageButton.blueBg,
+                              onPressed: _showPurchaseConfirmation,
+                              height: 64,
+                            );
+                          },
                         ),
                       ),
                     ],
@@ -321,7 +330,7 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
-          context.l10n.unlockAnimalTitle(animalName),
+          context.l10n.rewardedAdTitle,
           style: const TextStyle(
             fontFamily: 'Nunito',
             fontWeight: FontWeight.w900,
@@ -481,20 +490,36 @@ class _AnimalCard extends StatelessWidget {
                 ),
               ),
             ),
-            // Lock / Play badge if locked
+            // Lock / Ad badge if locked — caméra vidéo + label AD/PUB
             if (isLocked)
               Center(
                 child: Container(
-                  width: 48, height: 48,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.pencilDark.withValues(alpha: 0.7),
-                    border: Border.all(color: Colors.white, width: 2.5),
+                    color: Colors.black.withValues(alpha: 0.75),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Icon(
-                    Icons.play_arrow_rounded,
-                    color: Colors.white,
-                    size: 28,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.videocam_rounded,
+                        color: Colors.white,
+                        size: 26,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        localizedAdBadgeLabel(context),
+                        style: const TextStyle(
+                          fontFamily: 'Nunito',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                          height: 1.1,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
