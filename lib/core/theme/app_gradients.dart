@@ -105,17 +105,17 @@ class AppGradients {
     stops: [0.0, 0.5, 1.0],
   );
 
-  // Tortue — brun terra pâle
+  // Tortue — clair en haut, brun #7F3D02 en bas
   static const LinearGradient turtleSetup = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFFF5E8D5), Color(0xFFEBD5B8), Color(0xFFDFC29E)],
-    stops: [0.0, 0.5, 1.0],
+    colors: [Color(0xFFE8C490), Color(0xFFB8732A), Color(0xFF7F3D02)],
+    stops: [0.0, 0.55, 1.0],
   );
   static const LinearGradient turtleTimer = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFFF5E8D5), Color(0xFFEBD5B8), Color(0xFFDFC29E)],
-    stops: [0.0, 0.5, 1.0],
+    colors: [Color(0xFFE8C490), Color(0xFFB8732A), Color(0xFF7F3D02)],
+    stops: [0.0, 0.55, 1.0],
   );
 }
