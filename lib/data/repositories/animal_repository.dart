@@ -90,6 +90,18 @@ class AnimalRepository {
       primaryColor: AppColors.unicornPrimary,
       secondaryColor: AppColors.unicornSecondary,
     ),
+    AnimalModel(
+      id: 'turtle',
+      name: 'Turtle',
+      emoji: '\u{1F422}',
+      imageAsset: 'assets/images/turtle.png',
+      ambientAudioPath: 'audio/ambient_turtle_128.mp3',
+      endSoundPath: '',
+      setupGradient: AppGradients.turtleSetup,
+      timerGradient: AppGradients.turtleTimer,
+      primaryColor: AppColors.turtlePrimary,
+      secondaryColor: AppColors.turtleSecondary,
+    ),
   ];
 
   AnimalModel getById(String id) {

@@ -105,6 +105,7 @@
   },
   "animalShark": "Requin",
   "animalUnicorn": "Licorne",
+  "animalTurtle": "Tortue",
   "cancelConfirmTitle": "Annuler le minuteur ?",
   "cancelConfirmBody": "Le minuteur sera arrêté et tu reviendras à l'écran d'accueil.",
   "continueTimer": "Continuer"

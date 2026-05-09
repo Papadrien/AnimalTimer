@@ -104,4 +104,18 @@ class AppGradients {
     colors: [Color(0xFFFFD6F9), Color(0xFFFFB3F3), Color(0xFFFF90ED)],
     stops: [0.0, 0.5, 1.0],
   );
+
+  // Tortue — brun terra pâle
+  static const LinearGradient turtleSetup = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFFF5E8D5), Color(0xFFEBD5B8), Color(0xFFDFC29E)],
+    stops: [0.0, 0.5, 1.0],
+  );
+  static const LinearGradient turtleTimer = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFFF5E8D5), Color(0xFFEBD5B8), Color(0xFFDFC29E)],
+    stops: [0.0, 0.5, 1.0],
+  );
 }

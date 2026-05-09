@@ -38,6 +38,7 @@ flutter:
     - assets/images/pony/
     - assets/images/shark/
     - assets/images/unicorn/
+    - assets/images/turtle/
     - assets/audio/
 
   fonts:

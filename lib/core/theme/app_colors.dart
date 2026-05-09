@@ -50,6 +50,8 @@ class AppColors {
   static const Color sharkSecondary  = Color(0xFF004466);  // bleu requin foncé
   static const Color unicornPrimary   = Color(0xFFFF61E7);  // rose licorne
   static const Color unicornSecondary = Color(0xFFE040CC);  // rose licorne foncé
+  static const Color turtlePrimary    = Color(0xFF7F3D02);  // brun tortue
+  static const Color turtleSecondary  = Color(0xFF5A2B00);  // brun tortue foncé
 
 
   // ── Recents card colors ──

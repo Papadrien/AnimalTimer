@@ -159,12 +159,12 @@ void main() {
     final repo = AnimalRepository();
 
     test('contains exactly 6 animals', () {
-      expect(repo.getAll().length, 7);
+      expect(repo.getAll().length, 8);
     });
 
     test('all animals have unique ids', () {
       final ids = repo.getAll().map((a) => a.id).toSet();
-      expect(ids.length, 7);
+      expect(ids.length, 8);
     });
 
     test('all animals have required assets', () {
@@ -174,7 +174,8 @@ void main() {
         expect(a.emoji.isNotEmpty, true);
         expect(a.imageAsset.contains('assets/images/'), true);
         expect(a.ambientAudioPath.contains('audio/'), true);
-        expect(a.endSoundPath.contains('audio/'), true);
+        // endSoundPath peut être vide (ex: tortue — pas de son de fin animal)
+        expect(a.endSoundPath.isEmpty || a.endSoundPath.contains('audio/'), true);
       }
     });
 
@@ -207,6 +208,7 @@ void main() {
       expect(ids.contains('chicken'), true);
       expect(ids.contains('shark'), true);
       expect(ids.contains('unicorn'), true);
+      expect(ids.contains('turtle'), true);
     });
 
     test('shark uses dark theme (isDarkTheme true)', () {
