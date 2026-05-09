@@ -6,7 +6,11 @@ extension LocalizationExt on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this)!;
 }
 
-/// Returns the localized name of an animal given its ID.
+/// Returns the localized ad badge label ("AD" or "PUB").
+String localizedAdBadgeLabel(BuildContext context) {
+  return AppLocalizations.of(context)!.adBadgeLabel;
+}
+
 String localizedAnimalName(BuildContext context, String animalId) {
   final l10n = AppLocalizations.of(context)!;
   switch (animalId) {
