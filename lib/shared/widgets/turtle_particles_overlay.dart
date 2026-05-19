@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-/// Overlay de particules "cailloux et terre soulevée" pour la tortue.
+/// Overlay de particules "feuilles de salade et poussière" pour la tortue.
 /// Boucle 8 s, sans saccade (positions déterministes via phase fixe).
 class TurtleParticlesOverlay extends StatefulWidget {
   const TurtleParticlesOverlay({super.key});
@@ -14,7 +14,7 @@ class TurtleParticlesOverlay extends StatefulWidget {
 class _TurtleParticlesOverlayState extends State<TurtleParticlesOverlay>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late List<_Pebble> _pebbles;
+  late List<_Leaf> _leaves;
   late List<_DirtPuff> _dirtPuffs;
 
   @override
@@ -26,7 +26,7 @@ class _TurtleParticlesOverlayState extends State<TurtleParticlesOverlay>
     )..repeat();
 
     final rng = Random(42);
-    _pebbles = List.generate(18, (i) => _Pebble.random(rng, i, 18));
+    _leaves = List.generate(18, (i) => _Leaf.random(rng, i, 18));
     _dirtPuffs = List.generate(22, (i) => _DirtPuff.random(rng, i, 22));
   }
 
@@ -43,7 +43,7 @@ class _TurtleParticlesOverlayState extends State<TurtleParticlesOverlay>
         animation: _controller,
         builder: (_, __) => CustomPaint(
           painter: _TurtlePainter(
-            pebbles: _pebbles,
+            leaves: _leaves,
             dirtPuffs: _dirtPuffs,
             progress: _controller.value,
           ),
@@ -54,59 +54,61 @@ class _TurtleParticlesOverlayState extends State<TurtleParticlesOverlay>
   }
 }
 
-// ─────────────── Pebble (caillou) ───────────────
+// ─────────────── Leaf (feuille de salade) ───────────────
 
-class _Pebble {
+class _Leaf {
   final double x;        // position X fixe [0..1]
   final double y;        // position Y fixe [0..1] — bas de l'écran
-  final double size;     // rayon [px]
+  final double size;     // taille [px]
   final double phase;    // offset animation [0..1]
   final double jumpAmp;  // amplitude saut vertical [0..1]
   final double jumpFreq; // fréquence du saut
+  final double rotation; // rotation initiale [radians]
   final Color color;
 
-  const _Pebble({
+  const _Leaf({
     required this.x,
     required this.y,
     required this.size,
     required this.phase,
     required this.jumpAmp,
     required this.jumpFreq,
+    required this.rotation,
     required this.color,
   });
 
-  factory _Pebble.random(Random rng, int index, int total) {
+  factory _Leaf.random(Random rng, int index, int total) {
     const colors = [
-      Color(0xFF8B6B45),
-      Color(0xFF6B4F30),
-      Color(0xFFA07850),
-      Color(0xFF5C3D1E),
-      Color(0xFF9C7A55),
-      Color(0xFF7A5C38),
+      Color(0xFF5CB85C), // vert salade vif
+      Color(0xFF4CAF50), // vert moyen
+      Color(0xFF8BC34A), // vert lime
+      Color(0xFF6DBF67), // vert clair
+      Color(0xFF388E3C), // vert foncé
+      Color(0xFF7CB342), // vert olive clair
     ];
-    return _Pebble(
+    return _Leaf(
       x: rng.nextDouble(),
       y: 0.72 + rng.nextDouble() * 0.22,
-      size: 3.5 + rng.nextDouble() * 5.0,
-      // phase espacée uniformément pour éviter la synchronisation visible
+      size: 5.0 + rng.nextDouble() * 7.0,
       phase: index / total,
       jumpAmp: 0.008 + rng.nextDouble() * 0.018,
       jumpFreq: 0.5 + rng.nextDouble() * 1.0,
+      rotation: rng.nextDouble() * pi * 2,
       color: colors[rng.nextInt(colors.length)],
     );
   }
 }
 
-// ─────────────── DirtPuff (nuage de terre) ───────────────
+// ─────────────── DirtPuff (nuage de poussière) ───────────────
 
 class _DirtPuff {
-  final double startX; // X de départ [0..1]
-  final double baseY;  // Y de base [0..1]
-  final double speed;  // vitesse défilement [fraction/cycle]
+  final double startX;
+  final double baseY;
+  final double speed;
   final double size;
   final double opacity;
   final double phase;
-  final double riseAmp; // amplitude montée [0..1]
+  final double riseAmp;
   final Color color;
 
   const _DirtPuff({
@@ -129,7 +131,6 @@ class _DirtPuff {
       Color(0xFFD4A870),
     ];
     return _DirtPuff(
-      // Répartition uniforme sur X pour éviter saccade au début du cycle
       startX: index / total.toDouble(),
       baseY: 0.68 + rng.nextDouble() * 0.20,
       speed: 0.08 + rng.nextDouble() * 0.12,
@@ -145,12 +146,12 @@ class _DirtPuff {
 // ─────────────── Painter ───────────────
 
 class _TurtlePainter extends CustomPainter {
-  final List<_Pebble> pebbles;
+  final List<_Leaf> leaves;
   final List<_DirtPuff> dirtPuffs;
   final double progress;
 
   const _TurtlePainter({
-    required this.pebbles,
+    required this.leaves,
     required this.dirtPuffs,
     required this.progress,
   });
@@ -158,20 +159,16 @@ class _TurtlePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     _drawDirtPuffs(canvas, size);
-    _drawPebbles(canvas, size);
+    _drawLeaves(canvas, size);
   }
 
   void _drawDirtPuffs(Canvas canvas, Size size) {
     for (final p in dirtPuffs) {
-      // t local : défilement continu sans saut (modulo 1.0)
       final t = ((progress * p.speed + p.phase) % 1.0);
-
       final x = (p.startX + t / p.speed * p.speed) * size.width;
-      // montée douce puis redescente avec sin
       final riseOffset = -sin(t * pi * 2) * p.riseAmp * size.height;
       final y = p.baseY * size.height + riseOffset;
 
-      // Fade in 15%, plateau, fade out 20%
       final fade = _fadeAlpha(t, fadeIn: 0.15, fadeOut: 0.20);
       final alpha = (fade * p.opacity).clamp(0.0, 1.0);
       if (alpha <= 0.01) continue;
@@ -180,7 +177,6 @@ class _TurtlePainter extends CustomPainter {
         ..color = p.color.withValues(alpha: alpha)
         ..style = PaintingStyle.fill;
 
-      // Nuage ovale aplati
       canvas.drawOval(
         Rect.fromCenter(
           center: Offset(x, y),
@@ -190,7 +186,6 @@ class _TurtlePainter extends CustomPainter {
         paint,
       );
 
-      // Petite trace de poussière derrière
       if (p.size > 8) {
         final trailPaint = Paint()
           ..color = p.color.withValues(alpha: alpha * 0.35)
@@ -207,16 +202,22 @@ class _TurtlePainter extends CustomPainter {
     }
   }
 
-  void _drawPebbles(Canvas canvas, Size size) {
-    for (final p in pebbles) {
-      // Oscillation verticale douce (saut)
+  void _drawLeaves(Canvas canvas, Size size) {
+    for (final leaf in leaves) {
       final jumpOffset =
-          -sin((progress * p.jumpFreq + p.phase) * pi * 2).abs() *
-              p.jumpAmp *
+          -sin((progress * leaf.jumpFreq + leaf.phase) * pi * 2).abs() *
+              leaf.jumpAmp *
               size.height;
 
-      final cx = p.x * size.width;
-      final cy = p.y * size.height + jumpOffset;
+      final cx = leaf.x * size.width;
+      final cy = leaf.y * size.height + jumpOffset;
+
+      // Rotation légère qui oscille
+      final angle = leaf.rotation + sin((progress * leaf.jumpFreq + leaf.phase) * pi * 2) * 0.3;
+
+      canvas.save();
+      canvas.translate(cx, cy);
+      canvas.rotate(angle);
 
       // Ombre
       final shadowPaint = Paint()
@@ -224,38 +225,52 @@ class _TurtlePainter extends CustomPainter {
         ..style = PaintingStyle.fill;
       canvas.drawOval(
         Rect.fromCenter(
-          center: Offset(cx, p.y * size.height + p.size * 0.3),
-          width: p.size * 1.8,
-          height: p.size * 0.5,
+          center: Offset(0, leaf.size * 0.5),
+          width: leaf.size * 1.8,
+          height: leaf.size * 0.4,
         ),
         shadowPaint,
       );
 
-      // Corps principal du caillou
-      final paint = Paint()
-        ..color = p.color
+      // Corps de la feuille (ovale)
+      final leafPaint = Paint()
+        ..color = leaf.color
         ..style = PaintingStyle.fill;
       canvas.drawOval(
         Rect.fromCenter(
-          center: Offset(cx, cy),
-          width: p.size * 1.6,
-          height: p.size * 1.2,
+          center: Offset.zero,
+          width: leaf.size * 1.8,
+          height: leaf.size * 1.1,
         ),
-        paint,
+        leafPaint,
       );
 
-      // Reflet (highlight)
+      // Nervure centrale
+      final veinPaint = Paint()
+        ..color = Colors.white.withValues(alpha: 0.35)
+        ..strokeWidth = leaf.size * 0.12
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round;
+      canvas.drawLine(
+        Offset(-leaf.size * 0.7, 0),
+        Offset(leaf.size * 0.7, 0),
+        veinPaint,
+      );
+
+      // Reflet
       final highlightPaint = Paint()
-        ..color = Colors.white.withValues(alpha: 0.25)
+        ..color = Colors.white.withValues(alpha: 0.20)
         ..style = PaintingStyle.fill;
       canvas.drawOval(
         Rect.fromCenter(
-          center: Offset(cx - p.size * 0.25, cy - p.size * 0.28),
-          width: p.size * 0.5,
-          height: p.size * 0.3,
+          center: Offset(-leaf.size * 0.2, -leaf.size * 0.2),
+          width: leaf.size * 0.5,
+          height: leaf.size * 0.25,
         ),
         highlightPaint,
       );
+
+      canvas.restore();
     }
   }
 

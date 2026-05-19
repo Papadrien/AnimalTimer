@@ -31,10 +31,9 @@ class _TurtleAnimatedDisplayState extends State<TurtleAnimatedDisplay>
   static const double _headAngle = 0.10; // ~6 degrés
   static const double _tailAngle = 0.14; // ~8 degrés
 
-  // Pivot tête : bas-centre de la tête (image 1080x1080)
-  // La tête est dans le quart supérieur-gauche (~x:200, y:430)
-  static const double _headPivotX = 0.185;
-  static const double _headPivotY = 0.398;
+  // Pivot tête : point rouge (nez) sur turtle_head_2.png (~x:210, y:530 sur 1080x1080)
+  static const double _headPivotX = 0.194;
+  static const double _headPivotY = 0.490;
 
   // Pivot queue : gauche de la queue (jonction avec le corps ~x:845, y:625)
   static const double _tailPivotX = 0.782;

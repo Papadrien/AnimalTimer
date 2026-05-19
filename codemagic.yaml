@@ -1,6 +1,7 @@
 # codemagic.yaml — AnimalTimer
 # Basé sur la GitHub Action ci.yml / dart.yml
 # Secrets requis dans Codemagic :
+#   GOOGLE_SERVICES_JSON_BASE64 — android/app/google-services.json encodé en base64
 #   ANDROID_KEYSTORE_BASE64   — keystore encodé en base64
 #   ANDROID_KEY_PROPERTIES    — contenu du fichier key.properties
 #   CM_CERTIFICATE            — certificat de distribution iOS (base64, pour release iOS)
@@ -30,6 +31,14 @@ workflows:
     scripts:
       - name: Get dependencies
         script: flutter pub get
+      - name: Inject google-services.json
+        script: |
+          if [ -n "$GOOGLE_SERVICES_JSON_BASE64" ]; then
+            echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 --decode > android/app/google-services.json
+            echo "✅ google-services.json injecté depuis les secrets CodeMagic"
+          else
+            echo "⚠️  GOOGLE_SERVICES_JSON_BASE64 absent — Firebase Analytics désactivé"
+          fi
       - name: Generate localizations
         script: flutter gen-l10n
       - name: Analyze
@@ -85,6 +94,14 @@ workflows:
     scripts:
       - name: Get dependencies
         script: flutter pub get
+      - name: Inject google-services.json
+        script: |
+          if [ -n "$GOOGLE_SERVICES_JSON_BASE64" ]; then
+            echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 --decode > android/app/google-services.json
+            echo "✅ google-services.json injecté depuis les secrets CodeMagic"
+          else
+            echo "⚠️  GOOGLE_SERVICES_JSON_BASE64 absent — Firebase Analytics désactivé"
+          fi
       - name: Generate localizations
         script: flutter gen-l10n
       - name: Analyze

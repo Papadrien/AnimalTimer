@@ -91,31 +91,31 @@ class AppGradients {
     stops: [0.0, 0.5, 1.0],
   );
 
-  // Licorne — rose magenta pâle
+  // Licorne — rose pastel (10% plus clair)
   static const LinearGradient unicornSetup = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFFFFD6F9), Color(0xFFFFB3F3), Color(0xFFFF90ED)],
+    colors: [Color(0xFFFFF0FD), Color(0xFFFFD6FA), Color(0xFFFFB3F6)],
     stops: [0.0, 0.5, 1.0],
   );
   static const LinearGradient unicornTimer = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFFFFD6F9), Color(0xFFFFB3F3), Color(0xFFFF90ED)],
+    colors: [Color(0xFFFFF0FD), Color(0xFFFFD6FA), Color(0xFFFFB3F6)],
     stops: [0.0, 0.5, 1.0],
   );
 
-  // Tortue — clair en haut, brun #7F3D02 en bas
+  // Tortue — clair en haut, brun éclairci en bas
   static const LinearGradient turtleSetup = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFFE8C490), Color(0xFFB8732A), Color(0xFF7F3D02)],
+    colors: [Color(0xFFE8C490), Color(0xFFB8732A), Color(0xFF8C4402)],
     stops: [0.0, 0.55, 1.0],
   );
   static const LinearGradient turtleTimer = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFFE8C490), Color(0xFFB8732A), Color(0xFF7F3D02)],
+    colors: [Color(0xFFE8C490), Color(0xFFB8732A), Color(0xFF8C4402)],
     stops: [0.0, 0.55, 1.0],
   );
 }

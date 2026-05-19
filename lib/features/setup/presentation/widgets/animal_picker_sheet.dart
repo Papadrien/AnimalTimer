@@ -94,6 +94,28 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
                   left: 24, right: 24, bottom: bottomPad + 20),
                 child: Column(
                   children: [
+                    // ── Bouton "Tout débloquer" au-dessus de la liste ──
+                    if (shouldShowUnlockButton) ...[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: ValueListenableBuilder<String>(
+                          valueListenable:
+                              ref.read(purchaseServiceProvider).localizedPriceNotifier,
+                          builder: (context, price, _) {
+                            final label = price == '…'
+                                ? context.l10n.unlockAllButton
+                                : context.l10n.unlockAllButtonWithPrice(price);
+                            return ImageButton(
+                              text: label,
+                              showLabel: true,
+                              backgroundAsset: ImageButton.blueBg,
+                              onPressed: _showPurchaseConfirmation,
+                              height: 64,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                     GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -127,28 +149,7 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
                         );
                       },
                     ),
-                    if (shouldShowUnlockButton) ...[
-                      const SizedBox(height: 16),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: ValueListenableBuilder<String>(
-                          valueListenable:
-                              ref.read(purchaseServiceProvider).localizedPriceNotifier,
-                          builder: (context, price, _) {
-                            final label = price == '…'
-                                ? context.l10n.unlockAllButton
-                                : context.l10n.unlockAllButtonWithPrice(price);
-                            return ImageButton(
-                              text: label,
-                              showLabel: true,
-                              backgroundAsset: ImageButton.blueBg,
-                              onPressed: _showPurchaseConfirmation,
-                              height: 64,
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+
                     if (kDebugMode && hasLocked) ...[
                       const SizedBox(height: 8),
                       SizedBox(
