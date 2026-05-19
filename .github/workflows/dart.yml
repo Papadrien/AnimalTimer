@@ -118,6 +118,17 @@ jobs:
       - run: flutter pub get
       - run: flutter gen-l10n
 
+
+      - name: Inject google-services.json
+        env:
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+        run: |
+          if [ -n "$GOOGLE_SERVICES_JSON_BASE64" ]; then
+            echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 --decode > android/app/google-services.json
+            echo "✅ google-services.json injecté depuis les secrets GitHub"
+          else
+            echo "⚠️  GOOGLE_SERVICES_JSON_BASE64 absent — Firebase Analytics désactivé"
+          fi
       - name: Build APK (Debug)
         run: flutter build apk --debug --no-pub
 
@@ -191,6 +202,17 @@ jobs:
             echo "✅ Signing debug stable (sans secrets)"
           fi
 
+
+      - name: Inject google-services.json
+        env:
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+        run: |
+          if [ -n "$GOOGLE_SERVICES_JSON_BASE64" ]; then
+            echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 --decode > android/app/google-services.json
+            echo "✅ google-services.json injecté depuis les secrets GitHub"
+          else
+            echo "⚠️  GOOGLE_SERVICES_JSON_BASE64 absent — Firebase Analytics désactivé"
+          fi
       - run: flutter pub get
       - run: flutter gen-l10n
 
