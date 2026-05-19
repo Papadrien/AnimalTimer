@@ -21,6 +21,7 @@ String localizedAnimalName(BuildContext context, String animalId) {
     case 'chicken':   return l10n.animalChicken;
     case 'shark':     return l10n.animalShark;
     case 'unicorn':   return l10n.animalUnicorn;
+    case 'turtle':    return l10n.animalTurtle;
     default:          return animalId;
   }
 }
