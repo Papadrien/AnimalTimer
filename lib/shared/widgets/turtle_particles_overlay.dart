@@ -25,8 +25,8 @@ class _TurtleParticlesOverlayState extends State<TurtleParticlesOverlay>
     )..repeat();
 
     final rng = Random(42);
-    // 20 feuilles, phases régulièrement espacées → boucle sans discontinuité
-    _leaves = List.generate(20, (i) => _LettuceLeaf.random(rng, i, 20));
+    // 10 feuilles (divisé par 2), phases régulièrement espacées → boucle sans discontinuité
+    _leaves = List.generate(10, (i) => _LettuceLeaf.random(rng, i, 10));
   }
 
   @override
@@ -136,7 +136,10 @@ class _LettucePainter extends CustomPainter {
 
     // Alpha : sin(t·π) → 0 en début et fin de cycle, 1 au milieu
     // Garantit une boucle parfaitement lisse sans flash
-    final alpha = (sin(t * pi) * 0.88).clamp(0.0, 1.0);
+    // Fade in : on booste l'alpha en début de cycle (t < 0.15) pour un effet d'apparition fondue
+    final rawAlpha = (sin(t * pi) * 0.704).clamp(0.0, 1.0); // opacité -20% (0.88 * 0.8)
+    final fadeIn = (t / 0.15).clamp(0.0, 1.0); // fade in sur les 15% premiers du cycle
+    final alpha = rawAlpha * fadeIn;
     if (alpha <= 0.01) return;
 
     // Chute de haut en bas (easeIn : accélère en tombant)

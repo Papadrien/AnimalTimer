@@ -109,13 +109,13 @@ class AppGradients {
   static const LinearGradient turtleSetup = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFFE8C490), Color(0xFFB8732A), Color(0xFF8C4402)],
+    colors: [Color(0xFFEFF4C0), Color(0xFFBFCF59), Color(0xFF8FA030)],
     stops: [0.0, 0.55, 1.0],
   );
   static const LinearGradient turtleTimer = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFFE8C490), Color(0xFFB8732A), Color(0xFF8C4402)],
+    colors: [Color(0xFFEFF4C0), Color(0xFFBFCF59), Color(0xFF8FA030)],
     stops: [0.0, 0.55, 1.0],
   );
 }
