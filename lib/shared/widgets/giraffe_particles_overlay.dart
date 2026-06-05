@@ -218,20 +218,6 @@ class _GiraffePainter extends CustomPainter {
   static const double _mainBranchY = 0.07;
   static const double _branchSway  = 0.012;
 
-  // ── Point sur la branche principale (Bézier cubique) ──
-  Offset _mainPoint(double t, Size size, double sway) {
-    final baseY = _mainBranchY * size.height;
-    final p0  = Offset(-0.05 * size.width, baseY + sway * 0.3);
-    final cp1 = Offset( 0.20 * size.width, baseY - 18 + sway * 0.5);
-    final cp2 = Offset( 0.55 * size.width, baseY + 12 + sway * 0.8);
-    final p3  = Offset( 0.78 * size.width, baseY + sway);
-    final u = 1 - t;
-    return Offset(
-      u*u*u*p0.dx + 3*u*u*t*cp1.dx + 3*u*t*t*cp2.dx + t*t*t*p3.dx,
-      u*u*u*p0.dy + 3*u*u*t*cp1.dy + 3*u*t*t*cp2.dy + t*t*t*p3.dy,
-    );
-  }
-
   // ── Base et pointe d'une branche secondaire ──
   ({Offset base, Offset tip}) _subEndpoints(int s, Size size, double baseY, double sway) {
     final xFrac   = _SubBranches.xFracs[s];
