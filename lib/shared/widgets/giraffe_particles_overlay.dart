@@ -158,9 +158,6 @@ class _BranchLeaf {
   final Color  color;
   final bool   above;
 
-  // main
-  final double tMain;
-
   // sub / tertiary
   final int    subIndex;       // index branche secondaire (0–5)
   final double tSub;           // position [0..1] sur la secondaire
@@ -173,7 +170,6 @@ class _BranchLeaf {
     required this.offsetY, required this.size,
     required this.angle, required this.swayPhase,
     required this.swayAmp, required this.color, required this.above,
-    this.tMain   = 0,
     this.subIndex = 0,
     this.tSub    = 0,
     this.tTer    = 0,
@@ -345,7 +341,7 @@ class _GiraffePainter extends CustomPainter {
   void _drawBranchLeaf(
       Canvas canvas, Size size, _BranchLeaf l, double sway, double baseY) {
     final Offset pt = switch (l.branchType) {
-      _BranchType.main      => _mainPoint(l.tMain, size, sway),
+      _BranchType.main      => throw UnimplementedError('Main branch leaves are not created'),
       _BranchType.sub       => _subPoint(l.subIndex, l.tSub, size, baseY, sway),
       _BranchType.tertiary  => _terPoint(l.subIndex, l.tSub, l.tTer, size, baseY, sway),
     };
