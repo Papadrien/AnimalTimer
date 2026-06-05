@@ -2,8 +2,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 /// Overlay girafe :
-/// • Branche principale + 6 secondaires (5 vers le haut + 1 vers le bas) + 1 tertiaire par secondaire
-/// • Feuilles abondantes sur secondaires et tertiaires, légères sur la principale
+/// • 6 branches secondaires (5 vers le haut + 1 vers le bas) + 1 tertiaire par secondaire
+/// • Feuilles abondantes sur secondaires et tertiaires
 /// • Feuilles tombantes sans saccade (même technique que la tortue)
 class GiraffeParticlesOverlay extends StatefulWidget {
   const GiraffeParticlesOverlay({super.key});
@@ -34,8 +34,6 @@ class _GiraffeParticlesOverlayState extends State<GiraffeParticlesOverlay>
 
   List<_BranchLeaf> _buildAllBranchLeaves(Random rng) {
     final leaves = <_BranchLeaf>[];
-
-    // ── Branche principale : aucune feuille ──
 
     // ── 6 branches secondaires ──
     // Les 5 premières montent, la 6e descend (branche inférieure)
@@ -215,7 +213,7 @@ class _GiraffePainter extends CustomPainter {
     required this.progress,
   });
 
-  static const double _mainBranchY = 0.07;
+  static const double _mainBranchY = 0.03;
   static const double _branchSway  = 0.012;
 
   // ── Base et pointe d'une branche secondaire ──
@@ -276,29 +274,6 @@ class _GiraffePainter extends CustomPainter {
   }
 
   void _drawAllBranches(Canvas canvas, Size size, double baseY, double sway) {
-    // Branche principale
-    final p0  = Offset(-0.05 * size.width, baseY + sway * 0.3);
-    final cp1 = Offset( 0.20 * size.width, baseY - 18 + sway * 0.5);
-    final cp2 = Offset( 0.55 * size.width, baseY + 12 + sway * 0.8);
-    final p3  = Offset( 0.78 * size.width, baseY + sway);
-
-    final mainPath = Path()
-      ..moveTo(p0.dx, p0.dy)
-      ..cubicTo(cp1.dx, cp1.dy, cp2.dx, cp2.dy, p3.dx, p3.dy);
-
-    canvas.drawPath(mainPath, Paint()
-      ..color = const Color(0xFF4E342E)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 12.0
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round);
-
-    canvas.drawPath(mainPath, Paint()
-      ..color = const Color(0xFF6D4C41)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3.0
-      ..strokeCap = StrokeCap.round);
-
     // Secondaires + tertiaires
     for (int s = 0; s < _SubBranches.count; s++) {
       final ep = _subEndpoints(s, size, baseY, sway);
@@ -327,9 +302,9 @@ class _GiraffePainter extends CustomPainter {
   void _drawBranchLeaf(
       Canvas canvas, Size size, _BranchLeaf l, double sway, double baseY) {
     final Offset pt = switch (l.branchType) {
-      _BranchType.main      => throw UnimplementedError('Main branch leaves are not created'),
       _BranchType.sub       => _subPoint(l.subIndex, l.tSub, size, baseY, sway),
       _BranchType.tertiary  => _terPoint(l.subIndex, l.tSub, l.tTer, size, baseY, sway),
+      _BranchType.main      => throw StateError('Unexpected main branch leaf'),
     };
     final sign  = l.above ? -1.0 : 1.0;
     final pos   = Offset(pt.dx, pt.dy + sign * l.offsetY);
