@@ -14,6 +14,7 @@ import '../../../../shared/widgets/yarn_particles_overlay.dart';
 import '../../../../shared/widgets/grass_particles_overlay.dart';
 import '../../../../shared/widgets/straw_particles_overlay.dart';
 import '../../../../shared/widgets/turtle_particles_overlay.dart';
+import '../../../../shared/widgets/giraffe_particles_overlay.dart';
 import '../../../setup/providers/setup_provider.dart';
 import '../../../settings/providers/settings_provider.dart';
 import '../widgets/radial_progress.dart';
@@ -86,6 +87,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
     final isShark = animal.id == 'shark';
     final isUnicorn = animal.id == 'unicorn';
     final isTurtle = animal.id == 'turtle';
+    final isGiraffe = animal.id == 'giraffe';
 
     ref.listen<TimerState>(timerServiceProvider, (prev, next) {
       if (next.status == TimerStatus.finished &&
@@ -125,6 +127,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
             if (isShark) const WaterParticlesOverlay(),
             if (isUnicorn) const StarParticlesOverlay(),
             if (isTurtle) const TurtleParticlesOverlay(),
+            if (isGiraffe) const GiraffeParticlesOverlay(),
             Column(
               children: [
                 const SizedBox(height: 8),

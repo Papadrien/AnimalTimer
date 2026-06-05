@@ -41,6 +41,7 @@ flutter:
     - assets/images/shark/
     - assets/images/unicorn/
     - assets/images/turtle/
+    - assets/images/giraffe/
     - assets/audio/
 
   fonts:

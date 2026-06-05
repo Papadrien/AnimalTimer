@@ -118,4 +118,18 @@ class AppGradients {
     colors: [Color(0xFFEFF4C0), Color(0xFFBFCF59), Color(0xFF8FA030)],
     stops: [0.0, 0.55, 1.0],
   );
+
+  // Girafe — orange chaud #FFBC71 en bas
+  static const LinearGradient giraffeSetup = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFFFFF3E0), Color(0xFFFFD9A0), Color(0xFFFFBC71)],
+    stops: [0.0, 0.5, 1.0],
+  );
+  static const LinearGradient giraffeTimer = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFFFFF3E0), Color(0xFFFFD9A0), Color(0xFFFFBC71)],
+    stops: [0.0, 0.5, 1.0],
+  );
 }
