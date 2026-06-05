@@ -179,18 +179,6 @@ class _BranchLeaf {
     this.tTer    = 0,
   });
 
-  factory _BranchLeaf.onMain(Random rng) => _BranchLeaf(
-    branchType: _BranchType.main,
-    tMain:     rng.nextDouble(),
-    offsetY:   2.0 + rng.nextDouble() * 6.0,
-    size:      7.0 + rng.nextDouble() * 11.0,
-    angle:     (rng.nextDouble() - 0.5) * pi * 0.9,
-    swayPhase: rng.nextDouble() * pi * 2,
-    swayAmp:   0.04 + rng.nextDouble() * 0.06,
-    color:     _leafColors[rng.nextInt(_leafColors.length)],
-    above:     rng.nextBool(),
-  );
-
   factory _BranchLeaf.onSub(Random rng, {required int subIndex}) => _BranchLeaf(
     branchType: _BranchType.sub,
     subIndex:  subIndex,

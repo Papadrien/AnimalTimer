@@ -224,7 +224,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                           backgroundAsset: ImageButton.redBg,
                           height: 80,
                           bounce: true,
-                          onPressed: () => _showCancelConfirmDialog(),
+                          onPressed: _showCancelConfirmDialog,
                         ),
                       ),
                       const SizedBox(width: 16),
