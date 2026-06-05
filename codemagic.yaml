@@ -12,6 +12,8 @@ workflows:
 
   # ═══════════════════════════════════════════════════════════════════════════
   # ANDROID DEBUG — branche develop
+  # Trigger : push sur la branche "develop" uniquement.
+  # Permet de valider chaque commit de développement avec un APK debug.
   # ═══════════════════════════════════════════════════════════════════════════
   android-debug:
     name: Android Debug
@@ -19,10 +21,10 @@ workflows:
     instance_type: mac_mini_m2
     triggering:
       events:
-        - push
+        - push           # Déclenché à chaque push (pas de PR, pas de tag)
       branch_patterns:
         - pattern: develop
-          include: true
+          include: true  # Exclusif à la branche develop
     environment:
       flutter: 3.32.4
       java: 17
@@ -71,6 +73,8 @@ workflows:
 
   # ═══════════════════════════════════════════════════════════════════════════
   # ANDROID RELEASE — branche master et tags v*
+  # Trigger : push sur "master" OU création d'un tag commençant par "v".
+  # Produit à la fois un APK et un AAB signés, prêts pour le Play Store.
   # ═══════════════════════════════════════════════════════════════════════════
   android-release:
     name: Android Release
@@ -78,14 +82,14 @@ workflows:
     instance_type: mac_mini_m2
     triggering:
       events:
-        - push
-        - tag
+        - push           # Push sur master → build release immédiat
+        - tag            # Tag v* → release officielle versionnée
       branch_patterns:
         - pattern: master
-          include: true
+          include: true  # Seulement la branche master (pas develop, pas feature/*)
       tag_patterns:
         - pattern: "v*"
-          include: true
+          include: true  # Tags sémantiques : v1.0.0, v1.2.3, etc.
     environment:
       flutter: 3.32.4
       java: 17
@@ -160,6 +164,9 @@ workflows:
 
   # ═══════════════════════════════════════════════════════════════════════════
   # iOS DEBUG — déclenchement manuel uniquement
+  # Trigger : aucun trigger automatique (events: []).
+  # Lancer via "Start new build" dans le dashboard Codemagic.
+  # Valide la compilation iOS sans codesign (pas de certificat requis).
   # ═══════════════════════════════════════════════════════════════════════════
   ios-debug:
     name: iOS Debug
@@ -193,6 +200,10 @@ workflows:
 
   # ═══════════════════════════════════════════════════════════════════════════
   # iOS RELEASE — tags v* uniquement
+  # Trigger : création d'un tag commençant par "v" (ex. v1.2.0).
+  # Produit un IPA signé, prêt pour l'App Store Connect / TestFlight.
+  # Nécessite les secrets CM_CERTIFICATE, CM_CERTIFICATE_PASSWORD,
+  # CM_PROVISIONING_PROFILE configurés dans le groupe de variables Codemagic.
   # ═══════════════════════════════════════════════════════════════════════════
   ios-release:
     name: iOS Release
@@ -200,10 +211,10 @@ workflows:
     instance_type: mac_mini_m2
     triggering:
       events:
-        - tag
+        - tag            # Déclenché uniquement à la création d'un tag Git
       tag_patterns:
         - pattern: "v*"
-          include: true
+          include: true  # Tags sémantiques : v1.0.0, v1.2.3, etc.
     environment:
       flutter: 3.32.4
       xcode: latest
