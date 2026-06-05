@@ -31,9 +31,9 @@ class _GiraffeAnimatedDisplayState extends State<GiraffeAnimatedDisplay>
   static const double _tailAngle = 0.18; // ~10 degrés
 
   // Pivots en fraction de l'image 1024×1024
-  // Head pivot: extrémité gauche de la bouche
-  static const double _headPivotX = 0.303;
-  static const double _headPivotY = 0.410;
+  // Head pivot: centre du cou (jonction tête/corps)
+  static const double _headPivotX = 0.451;
+  static const double _headPivotY = 0.454;
 
   // Tail pivot: extrémité gauche de la queue
   static const double _tailPivotX = 0.674;
