@@ -35,21 +35,18 @@ class _GiraffeParticlesOverlayState extends State<GiraffeParticlesOverlay>
   List<_BranchLeaf> _buildAllBranchLeaves(Random rng) {
     final leaves = <_BranchLeaf>[];
 
-    // ── Branche principale : peu de feuilles ──
-    for (int i = 0; i < 15; i++) {
-      leaves.add(_BranchLeaf.onMain(rng));
-    }
+    // ── Branche principale : aucune feuille ──
 
     // ── 6 branches secondaires ──
     // Les 5 premières montent, la 6e descend (branche inférieure)
     for (int s = 0; s < _SubBranches.count; s++) {
-      // Secondaire : 7–8 feuilles
-      final countSec = 7 + rng.nextInt(2);
+      // Secondaire : 10–12 feuilles
+      final countSec = 10 + rng.nextInt(3);
       for (int i = 0; i < countSec; i++) {
         leaves.add(_BranchLeaf.onSub(rng, subIndex: s));
       }
-      // Tertiaire rattachée à cette secondaire : 5–6 feuilles
-      final countTer = 5 + rng.nextInt(2);
+      // Tertiaire rattachée à cette secondaire : 7–9 feuilles
+      final countTer = 7 + rng.nextInt(3);
       for (int i = 0; i < countTer; i++) {
         leaves.add(_BranchLeaf.onTertiary(rng, parentSubIndex: s));
       }
@@ -101,13 +98,13 @@ class _SubBranches {
   static const int count = 6;
 
   // xFrac : position X de départ sur la branche principale [0..1]
-  static const xFracs    = [0.18,  0.32,  0.47,  0.60,  0.72,  0.85 ];
+  static const xFracs    = [0.18,  0.32,  0.47,  0.60,  0.72,  0.40 ];
   // dxFrac : déplacement X de la pointe
-  static const dxFracs   = [-0.055, 0.040, -0.050, 0.035, -0.040, 0.050];
+  static const dxFracs   = [-0.055, 0.040, -0.050, 0.035, -0.040,  0.045];
   // dyFrac : déplacement Y de la pointe (positif = monte, négatif = descend)
-  static const dyFracs   = [ 0.045, 0.038,  0.050, 0.042,  0.035, -0.040];
+  static const dyFracs   = [ 0.045, 0.038,  0.050, 0.042,  0.035, -0.055];
   // swayFrac : fraction du sway principal appliquée à la base
-  static const swayFracs = [ 0.3,   0.5,    0.7,   0.8,    0.9,   0.95 ];
+  static const swayFracs = [ 0.3,   0.5,    0.7,   0.8,    0.9,   0.55 ];
   // strokeW : épaisseur de trait
   static const strokeWs  = [ 6.0,   5.5,    5.0,   4.5,    4.0,   5.0  ];
 
@@ -198,9 +195,9 @@ class _BranchLeaf {
     branchType: _BranchType.sub,
     subIndex:  subIndex,
     tSub:      rng.nextDouble(),
-    offsetY:   1.5 + rng.nextDouble() * 4.0,
-    size:      5.0 + rng.nextDouble() * 9.0,
-    angle:     (rng.nextDouble() - 0.5) * pi * 0.8,
+    offsetY:   3.0 + rng.nextDouble() * 12.0,
+    size:      5.0 + rng.nextDouble() * 10.0,
+    angle:     (rng.nextDouble() - 0.5) * pi * 0.9,
     swayPhase: rng.nextDouble() * pi * 2,
     swayAmp:   0.04 + rng.nextDouble() * 0.07,
     color:     _leafColors[rng.nextInt(_leafColors.length)],
@@ -210,11 +207,11 @@ class _BranchLeaf {
   factory _BranchLeaf.onTertiary(Random rng, {required int parentSubIndex}) => _BranchLeaf(
     branchType: _BranchType.tertiary,
     subIndex:  parentSubIndex,
-    tSub:      0.6, // tertiaire part toujours à 60% de la secondaire
+    tSub:      0.6,
     tTer:      rng.nextDouble(),
-    offsetY:   1.0 + rng.nextDouble() * 3.0,
-    size:      4.0 + rng.nextDouble() * 7.0,
-    angle:     (rng.nextDouble() - 0.5) * pi * 0.7,
+    offsetY:   2.5 + rng.nextDouble() * 10.0,
+    size:      4.0 + rng.nextDouble() * 8.0,
+    angle:     (rng.nextDouble() - 0.5) * pi * 0.8,
     swayPhase: rng.nextDouble() * pi * 2,
     swayAmp:   0.05 + rng.nextDouble() * 0.08,
     color:     _leafColors[rng.nextInt(_leafColors.length)],
