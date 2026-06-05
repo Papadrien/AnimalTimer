@@ -207,9 +207,9 @@ class _GiraffePainter extends CustomPainter {
 
     // ── Branches secondaires (solides) ──
     _drawSubBranch(canvas, size, 0.18, baseY + sway * 0.3, -0.055, 0.045, 6.0);
-    _drawSubBranch(canvas, size, 0.32, baseY + sway * 0.5, +0.040, 0.038, 5.5);
+    _drawSubBranch(canvas, size, 0.32, baseY + sway * 0.5, 0.040, 0.038, 5.5);
     _drawSubBranch(canvas, size, 0.47, baseY + sway * 0.7, -0.050, 0.050, 5.0);
-    _drawSubBranch(canvas, size, 0.60, baseY + sway * 0.8, +0.035, 0.042, 4.5);
+    _drawSubBranch(canvas, size, 0.60, baseY + sway * 0.8, 0.035, 0.042, 4.5);
     _drawSubBranch(canvas, size, 0.72, baseY + sway * 0.9, -0.040, 0.035, 4.0);
   }
 
