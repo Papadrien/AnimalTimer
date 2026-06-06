@@ -1,16 +1,24 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 
 /// Wrapper autour de Firebase Analytics.
 /// Toutes les méthodes sont silencieuses en cas d'erreur pour éviter
 /// tout crash si Firebase ne s'initialise pas correctement.
+///
+/// La collecte est automatiquement désactivée en mode debug (kDebugMode)
+/// pour ne pas polluer les données de production.
 class AnalyticsService {
   static FirebaseAnalytics? _analytics;
   static bool _initialized = false;
 
   /// Doit être appelé après Firebase.initializeApp().
-  static void init(FirebaseAnalytics analytics) {
+  /// Désactive la collecte en debug, l'active en release.
+  static Future<void> init(FirebaseAnalytics analytics) async {
     _analytics = analytics;
     _initialized = true;
+    try {
+      await analytics.setAnalyticsCollectionEnabled(!kDebugMode);
+    } catch (_) {}
   }
 
   static FirebaseAnalytics? get instance => _initialized ? _analytics : null;

@@ -13,7 +13,7 @@ void main() async {
 
   try {
     await Firebase.initializeApp();
-    AnalyticsService.init(FirebaseAnalytics.instance);
+    await AnalyticsService.init(FirebaseAnalytics.instance);
   } catch (_) {}
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
