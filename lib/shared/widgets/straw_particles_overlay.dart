@@ -106,7 +106,7 @@ class _StrawPainter extends CustomPainter {
       final t = (progress * p.speed + p.phase) % 1.0;
 
       // sin(t*pi) : 0 en t=0 et t=1, max en t=0.5 → fondu naturel naissance/mort
-      final alpha = (sin(t * pi) * 0.85).clamp(0.0, 1.0);
+      final alpha = (sin(t * pi) * 0.60).clamp(0.0, 1.0);
       if (alpha <= 0.01) continue;
 
       // Montée en easeOut comme les feuilles

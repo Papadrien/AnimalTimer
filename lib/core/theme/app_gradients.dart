@@ -132,4 +132,18 @@ class AppGradients {
     colors: [Color(0xFFFFF3E0), Color(0xFFFFD9A0), Color(0xFFFFBC71)],
     stops: [0.0, 0.5, 1.0],
   );
+
+  // Mouton — rose #EDA28A en bas
+  static const LinearGradient sheepSetup = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFFFFF5F2), Color(0xFFF5C9BC), Color(0xFFEDA28A)],
+    stops: [0.0, 0.5, 1.0],
+  );
+  static const LinearGradient sheepTimer = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFFFFF5F2), Color(0xFFF5C9BC), Color(0xFFEDA28A)],
+    stops: [0.0, 0.5, 1.0],
+  );
 }

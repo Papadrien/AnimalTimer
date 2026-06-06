@@ -97,7 +97,7 @@ class _WaterParticlesPainter extends CustomPainter {
 
       // Fondu doux : 15% fade in / 15% fade out
       final fade = _fadeAlpha(t, fadeIn: 0.15, fadeOut: 0.15);
-      final alpha = (p.opacity * (0.7 + 0.3 * sin(t * pi * 4)) * fade).clamp(0.0, 1.0);
+      final alpha = (p.opacity * (0.7 + 0.3 * sin(t * pi * 4)) * fade).clamp(0.0, 0.60);
       if (alpha <= 0) continue;
 
       _drawBubble(canvas, Offset(x, y), p.size, alpha);

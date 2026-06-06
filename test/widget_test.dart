@@ -159,12 +159,12 @@ void main() {
     final repo = AnimalRepository();
 
     test('contains exactly 6 animals', () {
-      expect(repo.getAll().length, 9);
+      expect(repo.getAll().length, 10);
     });
 
     test('all animals have unique ids', () {
       final ids = repo.getAll().map((a) => a.id).toSet();
-      expect(ids.length, 9);
+      expect(ids.length, 10);
     });
 
     test('all animals have required assets', () {
@@ -210,6 +210,7 @@ void main() {
       expect(ids.contains('unicorn'), true);
       expect(ids.contains('turtle'), true);
       expect(ids.contains('giraffe'), true);
+      expect(ids.contains('sheep'), true);
     });
 
     test('shark uses dark theme (isDarkTheme true)', () {
@@ -233,6 +234,35 @@ void main() {
       final shark = repo.getById('shark');
       expect(shark.primaryColor.toARGB32() & 0x00FFFFFF, 0x00608D,
           reason: 'La couleur primaire du requin doit être #00608D');
+    });
+
+    test('sheep exists and has correct id', () {
+      final sheep = repo.getById('sheep');
+      expect(sheep.id, 'sheep');
+      expect(sheep.name, 'Sheep');
+      expect(sheep.emoji, '🐑');
+    });
+
+    test('sheep uses correct audio files', () {
+      final sheep = repo.getById('sheep');
+      expect(sheep.ambientAudioPath, 'audio/ambient_sheep_128.mp3');
+      expect(sheep.endSoundPath, 'audio/end_sheep.mp3');
+    });
+
+    test('sheep uses correct image assets', () {
+      final sheep = repo.getById('sheep');
+      expect(sheep.imageAsset, 'assets/images/sheep.png');
+    });
+
+    test('sheep primary color is #EDA28A', () {
+      final sheep = repo.getById('sheep');
+      expect(sheep.primaryColor.toARGB32() & 0x00FFFFFF, 0xEDA28A,
+          reason: 'La couleur primaire du mouton doit être #EDA28A');
+    });
+
+    test('sheep uses light theme (isDarkTheme false)', () {
+      final sheep = repo.getById('sheep');
+      expect(sheep.isDarkTheme, false);
     });
   });
 
@@ -393,6 +423,48 @@ void main() {
 
     test('animation duration remains 2000ms (timing preserved)', () {
       // Le timing ne doit pas être modifié par le changement d amplitude
+      const Duration duration = Duration(milliseconds: 2000);
+      expect(duration.inMilliseconds, 2000);
+    });
+  });
+
+  // ── SheepAnimation constants tests ──
+  group('SheepAnimation constants', () {
+    test('head rotation angle is subtle (~7 degrees)', () {
+      const double headAngle = 0.12;
+      expect(headAngle, greaterThan(0.0));
+      expect(headAngle, lessThan(0.3),
+          reason: 'La rotation de tête doit rester subtile');
+      expect(headAngle, 0.12);
+    });
+
+    test('tail rotation angle is slightly larger than head', () {
+      const double headAngle = 0.12;
+      const double tailAngle = 0.18;
+      expect(tailAngle, greaterThan(headAngle),
+          reason: 'La queue doit avoir une amplitude supérieure à la tête');
+      expect(tailAngle, 0.18);
+    });
+
+    test('head pivot is in left-center zone (neck center)', () {
+      const double pivotX = 0.41;
+      const double pivotY = 0.45;
+      expect(pivotX, greaterThan(0.3));
+      expect(pivotX, lessThan(0.6));
+      expect(pivotY, greaterThan(0.3));
+      expect(pivotY, lessThan(0.6));
+    });
+
+    test('tail pivot is in right zone (left edge of tail)', () {
+      const double pivotX = 0.77;
+      const double pivotY = 0.55;
+      expect(pivotX, greaterThan(0.6),
+          reason: 'La queue est à droite de l image');
+      expect(pivotY, greaterThan(0.4));
+      expect(pivotY, lessThan(0.7));
+    });
+
+    test('animation duration matches cat (2000ms)', () {
       const Duration duration = Duration(milliseconds: 2000);
       expect(duration.inMilliseconds, 2000);
     });

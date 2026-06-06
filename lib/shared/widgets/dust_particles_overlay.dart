@@ -106,7 +106,7 @@ class _DustPainter extends CustomPainter {
 
       // Fondu : 20% fade in, 20% fade out
       final fade = _fadeAlpha(t, fadeIn: 0.20, fadeOut: 0.20);
-      final alpha = (fade * p.opacity).clamp(0.0, 1.0);
+      final alpha = (fade * p.opacity).clamp(0.0, 0.60);
       if (alpha <= 0) continue;
 
       final paint = Paint()

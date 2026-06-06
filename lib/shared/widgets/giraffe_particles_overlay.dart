@@ -113,10 +113,10 @@ class _GiraffePainter extends CustomPainter {
   void _drawFallingLeaf(Canvas canvas, Size size, _FallingLeaf l) {
     final t = (progress + l.phase) % 1.0;
 
-    final rawAlpha     = sin(t * pi) * 0.85;
+    final rawAlpha     = sin(t * pi) * 0.60;
     final fadeInLinear = (t / 0.25).clamp(0.0, 1.0);
     final fadeIn       = fadeInLinear * fadeInLinear;
-    final alpha        = (rawAlpha * fadeIn).clamp(0.0, 1.0);
+    final alpha        = (rawAlpha * fadeIn).clamp(0.0, 0.60);
     if (alpha <= 0.01) return;
 
     final fall = t * t;
