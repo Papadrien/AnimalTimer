@@ -123,7 +123,7 @@ class _StarParticlesPainter extends CustomPainter {
       // Même si la particule était encore à l'écran, cela évite toute
       // coupure brutale à la boucle.
       final fade = _fadeAlpha(t, fadeIn: 0.15, fadeOut: 0.15);
-      final alpha = (p.opacity * fade).clamp(0.0, 1.0);
+      final alpha = (p.opacity * fade).clamp(0.0, 0.60);
       if (alpha <= 0.01) continue;
 
       final angle = p.rotation + t * p.spinSpeed * 2 * pi;

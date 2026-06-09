@@ -52,6 +52,10 @@ class AppColors {
   static const Color unicornSecondary = Color(0xFFE040CC);  // rose licorne foncé
   static const Color turtlePrimary    = Color(0xFFBFCF59);  // vert tortue
   static const Color turtleSecondary  = Color(0xFF8FA030);  // vert tortue foncé
+  static const Color giraffePrimary   = Color(0xFFFFBC71);  // orange girafe
+  static const Color giraffeSecondary = Color(0xFFE09040);  // orange girafe foncé
+  static const Color sheepPrimary     = Color(0xFFEDA28A);  // rose mouton
+  static const Color sheepSecondary   = Color(0xFFD47D63);  // rose mouton foncé
 
 
   // ── Recents card colors ──

@@ -163,7 +163,7 @@ class _GrassPainter extends CustomPainter {
 
     // Alpha continu via sin — aucune discontinuité entre boucles
     // sin(t*pi) est 0 en t=0 et t=1, max en t=0.5 → fondu naturel
-    final alpha = (sin(t * pi) * 0.80).clamp(0.0, 1.0);
+    final alpha = (sin(t * pi) * 0.60).clamp(0.0, 1.0);
     if (alpha <= 0.01) return;
 
     // Progression de montée = t directement (0→1 sur tout le cycle)

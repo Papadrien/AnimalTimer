@@ -73,7 +73,7 @@ class _WaterParticle {
       startY: 0.2 + rng.nextDouble() * 0.8,
       speed: 0.06 + rng.nextDouble() * 0.18,
       size: 3.0 + rng.nextDouble() * 8.0,
-      opacity: 0.10 + rng.nextDouble() * 0.30,
+      opacity: 0.35 + rng.nextDouble() * 0.35,
       phase: index / 28.0,
       drift: 0.01 + rng.nextDouble() * 0.03,
     );
@@ -97,7 +97,7 @@ class _WaterParticlesPainter extends CustomPainter {
 
       // Fondu doux : 15% fade in / 15% fade out
       final fade = _fadeAlpha(t, fadeIn: 0.15, fadeOut: 0.15);
-      final alpha = (p.opacity * (0.7 + 0.3 * sin(t * pi * 4)) * fade).clamp(0.0, 1.0);
+      final alpha = (p.opacity * (0.7 + 0.3 * sin(t * pi * 4)) * fade).clamp(0.0, 0.60);
       if (alpha <= 0) continue;
 
       _drawBubble(canvas, Offset(x, y), p.size, alpha);
@@ -112,7 +112,7 @@ class _WaterParticlesPainter extends CustomPainter {
 
   void _drawBubble(Canvas canvas, Offset center, double radius, double alpha) {
     final paint = Paint()
-      ..color = const Color(0xFF4FC3F7).withValues(alpha: alpha * 0.5)
+      ..color = const Color(0xFF4FC3F7).withValues(alpha: alpha * 0.85)
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, radius, paint);
 

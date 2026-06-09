@@ -137,11 +137,11 @@ class _LettucePainter extends CustomPainter {
     // Alpha : sin(t·π) → 0 en début et fin de cycle, 1 au milieu
     // Garantit une boucle parfaitement lisse sans flash
     // opacité -20% puis -10% supplémentaire = 0.88 * 0.8 * 0.9 = 0.6336
-    final rawAlpha = (sin(t * pi) * 0.6336).clamp(0.0, 1.0);
+    final rawAlpha = (sin(t * pi) * 0.60).clamp(0.0, 1.0);
     // Fade in progressif sur 30% du cycle, avec easing quadratique pour une apparition très douce
     final fadeInLinear = (t / 0.30).clamp(0.0, 1.0);
     final fadeIn = fadeInLinear * fadeInLinear; // easeIn quadratique
-    final alpha = rawAlpha * fadeIn;
+    final alpha = (rawAlpha * fadeIn).clamp(0.0, 0.60);
     if (alpha <= 0.01) return;
 
     // Chute de haut en bas (easeIn : accélère en tombant)

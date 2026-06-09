@@ -102,6 +102,30 @@ class AnimalRepository {
       primaryColor: AppColors.turtlePrimary,
       secondaryColor: AppColors.turtleSecondary,
     ),
+    AnimalModel(
+      id: 'giraffe',
+      name: 'Giraffe',
+      emoji: '\u{1F992}',
+      imageAsset: 'assets/images/giraffe.png',
+      ambientAudioPath: 'audio/ambient_giraffe_128.mp3',
+      endSoundPath: 'audio/end_giraffe.mp3',
+      setupGradient: AppGradients.giraffeSetup,
+      timerGradient: AppGradients.giraffeTimer,
+      primaryColor: AppColors.giraffePrimary,
+      secondaryColor: AppColors.giraffeSecondary,
+    ),
+    AnimalModel(
+      id: 'sheep',
+      name: 'Sheep',
+      emoji: '\u{1F411}',
+      imageAsset: 'assets/images/sheep.png',
+      ambientAudioPath: 'audio/ambient_sheep_128.mp3',
+      endSoundPath: 'audio/end_sheep.mp3',
+      setupGradient: AppGradients.sheepSetup,
+      timerGradient: AppGradients.sheepTimer,
+      primaryColor: AppColors.sheepPrimary,
+      secondaryColor: AppColors.sheepSecondary,
+    ),
   ];
 
   AnimalModel getById(String id) {
