@@ -34,29 +34,37 @@ class PurchaseService {
   /// Prix localisé du produit (ex: "1,99 €").
   String get localizedPrice => _product?.price ?? '…';
 
-  /// Initialise le service : vérifie la disponibilité et charge le produit.
-  /// Idempotent : les appels supplémentaires après la première initialisation
-  /// réussie sont no-op (sauf si le store n'était pas dispo, auquel cas on
-  /// retente).
+  /// Initialise le service : vérifie la disponibilité du store et crée le
+  /// stream d'achat (une seule fois). Charge ensuite le produit depuis le
+  /// store, avec retentative possible si le produit n'a pas encore été trouvé.
+  ///
+  /// - La création du stream est idempotente (no-op si déjà fait).
+  /// - Le chargement du produit est retenté tant que _product == null,
+  ///   ce qui couvre le cas où le store répond "produit non trouvé" au
+  ///   démarrage (ex : play store non encore prêt, app pas encore publiée).
   Future<void> initialize() async {
-    if (_initialized) return;
+    // Étape 1 : créer le stream une seule fois
+    if (!_initialized) {
+      _available = await _iap.isAvailable();
+      if (!_available) {
+        debugPrint('[PurchaseService] Store not available');
+        return;
+      }
 
-    _available = await _iap.isAvailable();
-    if (!_available) {
-      debugPrint('[PurchaseService] Store not available');
-      return;
+      _subscription = _iap.purchaseStream.listen(
+        _onPurchaseUpdate,
+        onDone: () => _subscription?.cancel(),
+        onError: (error) {
+          debugPrint('[PurchaseService] Purchase stream error: \$error');
+        },
+      );
+
+      _initialized = true;
     }
 
-    // Écouter les mises à jour d'achats
-    _subscription = _iap.purchaseStream.listen(
-      _onPurchaseUpdate,
-      onDone: () => _subscription?.cancel(),
-      onError: (error) {
-        debugPrint('[PurchaseService] Purchase stream error: \$error');
-      },
-    );
+    // Étape 2 : charger le produit (retenté si pas encore trouvé)
+    if (_product != null) return;
 
-    // Charger le produit depuis le store
     final response = await _iap.queryProductDetails({unlockAllId});
     if (response.productDetails.isNotEmpty) {
       _product = response.productDetails.first;
@@ -68,8 +76,6 @@ class PurchaseService {
         debugPrint('[PurchaseService] Error: \${response.error}');
       }
     }
-
-    _initialized = true;
   }
 
   /// Lance l'achat "Tout débloquer".
