@@ -34,11 +34,8 @@ class AppSettings {
 
   factory AppSettings.fromJson(Map<String, dynamic> json) => AppSettings(
     showNumbers: json['show_numbers'] ?? true,
-    // Backward compat: old 'sound_enabled' / 'tick_tock_sound' maps to both
-    ambientSoundEnabled: json['ambient_sound_enabled']
-        ?? json['sound_enabled'] ?? json['tick_tock_sound'] ?? true,
-    endSoundEnabled: json['end_sound_enabled']
-        ?? json['sound_enabled'] ?? true,
+    ambientSoundEnabled: json['ambient_sound_enabled'] ?? true,
+    endSoundEnabled: json['end_sound_enabled'] ?? true,
     volume: (json['volume'] ?? 0.7).toDouble(),
   );
 }

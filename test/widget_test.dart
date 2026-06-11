@@ -70,12 +70,6 @@ void main() {
       expect(s.volume, 0.7);
     });
 
-    test('fromJson backward compat with old sound_enabled key', () {
-      final s = AppSettings.fromJson({'sound_enabled': false});
-      expect(s.ambientSoundEnabled, false);
-      expect(s.endSoundEnabled, false);
-    });
-
     test('json round-trip preserves all fields', () {
       const s = AppSettings(
         showNumbers: false,
