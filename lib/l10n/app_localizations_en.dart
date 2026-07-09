@@ -90,6 +90,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get endSoundSub => 'Sound when timer ends';
 
   @override
+  String get randomAnimalMode => 'Random animal';
+
+  @override
+  String get randomAnimalModeSub =>
+      'Picks a random unlocked animal each time you start the timer';
+
+  @override
   String get settingsInfo => 'INFORMATION';
 
   @override

@@ -8,6 +8,7 @@ import 'package:intl/intl.dart' as intl;
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
 import 'app_localizations_fr.dart';
+import 'app_localizations_it.dart';
 
 // ignore_for_file: type=lint
 
@@ -97,7 +98,8 @@ abstract class AppLocalizations {
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('es'),
-    Locale('fr')
+    Locale('fr'),
+    Locale('it')
   ];
 
   /// No description provided for @appName.
@@ -261,6 +263,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sound when timer ends'**
   String get endSoundSub;
+
+  /// No description provided for @randomAnimalMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Random animal'**
+  String get randomAnimalMode;
+
+  /// No description provided for @randomAnimalModeSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Picks a random unlocked animal each time you start the timer'**
+  String get randomAnimalModeSub;
 
   /// No description provided for @settingsInfo.
   ///
@@ -568,7 +582,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'es', 'fr'].contains(locale.languageCode);
+      <String>['en', 'es', 'fr', 'it'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -583,6 +597,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEs();
     case 'fr':
       return AppLocalizationsFr();
+    case 'it':
+      return AppLocalizationsIt();
   }
 
   throw FlutterError(

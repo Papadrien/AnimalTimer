@@ -27,6 +27,8 @@
   "ambientSoundSub": "Musique pendant le décompte",
   "endSound": "Son de fin",
   "endSoundSub": "Son quand le minuteur est terminé",
+  "randomAnimalMode": "Animal aléatoire",
+  "randomAnimalModeSub": "Choisit au hasard un animal débloqué à chaque lancement du minuteur",
   "settingsInfo": "INFORMATIONS",
   "rateApp": "Laisser un avis",
   "privacyPolicy": "Politique de confidentialité",

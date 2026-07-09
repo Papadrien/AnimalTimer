@@ -27,6 +27,8 @@
   "ambientSoundSub": "Music during countdown",
   "endSound": "End sound",
   "endSoundSub": "Sound when timer ends",
+  "randomAnimalMode": "Random animal",
+  "randomAnimalModeSub": "Picks a random unlocked animal each time you start the timer",
   "settingsInfo": "INFORMATION",
   "rateApp": "Rate the app",
   "privacyPolicy": "Privacy Policy",

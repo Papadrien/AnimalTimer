@@ -27,6 +27,8 @@
   "ambientSoundSub": "Música durante la cuenta regresiva",
   "endSound": "Sonido final",
   "endSoundSub": "Sonido cuando termina el temporizador",
+  "randomAnimalMode": "Animal aleatorio",
+  "randomAnimalModeSub": "Elige un animal desbloqueado al azar cada vez que inicias el temporizador",
   "settingsInfo": "INFORMACIÓN",
   "rateApp": "Calificar la app",
   "privacyPolicy": "Política de privacidad",

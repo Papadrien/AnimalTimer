@@ -38,12 +38,14 @@ class _PonyAnimatedDisplayState extends State<PonyAnimatedDisplay>
   static const double _tailAngle = 0.18; // ~10 degrees up/down
 
   // Head pivot: bottom-center of head, where neck meets body
-  static const double _headPivotX = 0.38;
-  static const double _headPivotY = 0.55;
+  // (recalibré pour les nouveaux assets)
+  static const double _headPivotX = 0.45;
+  static const double _headPivotY = 0.50;
 
-  // Tail pivot: base of the tail (left side), where it attaches to the body
-  static const double _tailPivotX = 0.699;
-  static const double _tailPivotY = 0.680;
+  // Tail pivot: base of the tail (top), where it attaches to the body
+  // (recalibré pour les nouveaux assets)
+  static const double _tailPivotX = 0.70;
+  static const double _tailPivotY = 0.50;
 
   @override
   void initState() {

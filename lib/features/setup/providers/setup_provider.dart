@@ -1,8 +1,10 @@
+import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/models/timer_preset.dart';
 import '../../../data/models/animal_model.dart';
 import '../../../data/repositories/animal_repository.dart';
 import '../../../core/services/storage_service.dart';
+import '../../../core/services/gamification_service.dart';
 
 class SetupState {
   final int hours;
@@ -37,8 +39,9 @@ class SetupState {
 class SetupNotifier extends StateNotifier<SetupState> {
   final AnimalRepository _animalRepo;
   final StorageService _storage;
+  final GamificationService _gamification;
 
-  SetupNotifier(this._animalRepo, this._storage)
+  SetupNotifier(this._animalRepo, this._storage, this._gamification)
       : super(_initialState(_animalRepo, _storage));
 
   /// Construit l'état initial directement (sans setState après le build).
@@ -69,6 +72,24 @@ class SetupNotifier extends StateNotifier<SetupState> {
     final animal = _animalRepo.getById(id);
     state = state.copyWith(selectedAnimal: animal);
     _storage.saveLastAnimalId(id);
+  }
+
+  /// Sélectionne un animal aléatoire parmi ceux débloqués par l'utilisateur.
+  /// Utilisé par le mode "animal aléatoire" au lancement du minuteur.
+  /// Si un seul animal (ou aucun) est débloqué, ne change rien.
+  void selectRandomUnlockedAnimal() {
+    final unlocked = _animalRepo
+        .getAll()
+        .where((a) => _gamification.isUnlocked(a.id))
+        .toList();
+    if (unlocked.length <= 1) return;
+    final candidates = unlocked
+        .where((a) => a.id != state.selectedAnimal.id)
+        .toList();
+    final pool = candidates.isNotEmpty ? candidates : unlocked;
+    final animal = pool[Random().nextInt(pool.length)];
+    state = state.copyWith(selectedAnimal: animal);
+    _storage.saveLastAnimalId(animal.id);
   }
 
   void loadPreset(TimerPreset preset) {
@@ -102,5 +123,6 @@ final setupProvider = StateNotifierProvider<SetupNotifier, SetupState>((ref) {
   return SetupNotifier(
     ref.read(animalRepoProvider),
     ref.read(storageServiceProvider),
+    ref.read(gamificationServiceProvider),
   );
 });

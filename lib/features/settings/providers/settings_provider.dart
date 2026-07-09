@@ -24,6 +24,11 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
     _storage.saveSettings(state);
   }
 
+  void toggleRandomAnimalMode() {
+    state = state.copyWith(randomAnimalMode: !state.randomAnimalMode);
+    _storage.saveSettings(state);
+  }
+
   void setVolume(double v) {
     state = state.copyWith(volume: v);
     _storage.saveSettings(state);

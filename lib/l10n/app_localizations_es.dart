@@ -90,6 +90,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get endSoundSub => 'Sonido cuando termina el temporizador';
 
   @override
+  String get randomAnimalMode => 'Animal aleatorio';
+
+  @override
+  String get randomAnimalModeSub =>
+      'Elige un animal desbloqueado al azar cada vez que inicias el temporizador';
+
+  @override
   String get settingsInfo => 'INFORMACIÓN';
 
   @override

@@ -90,6 +90,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get endSoundSub => 'Son quand le minuteur est terminé';
 
   @override
+  String get randomAnimalMode => 'Animal aléatoire';
+
+  @override
+  String get randomAnimalModeSub =>
+      'Choisit au hasard un animal débloqué à chaque lancement du minuteur';
+
+  @override
   String get settingsInfo => 'INFORMATIONS';
 
   @override
