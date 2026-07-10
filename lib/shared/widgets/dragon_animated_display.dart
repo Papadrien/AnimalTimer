@@ -36,7 +36,7 @@ class _DragonAnimatedDisplayState extends State<DragonAnimatedDisplay>
 
   // Rotation angles (radians)
   static const double _headAngle = 0.10; // ~6 degrees left/right
-  static const double _wingAngle = 0.16; // ~9 degrees up/down
+  static const double _wingAngle = 0.22; // ~12.6 degrees up/down
 
   // Head pivot: jonction cou/corps, bas de la tête légèrement décalé
   // vers le corps (droite de l'asset tête).
