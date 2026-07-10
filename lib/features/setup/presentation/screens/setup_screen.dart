@@ -16,6 +16,7 @@ import '../../../../shared/widgets/fire_particles_overlay.dart';
 import '../../../timer/presentation/screens/timer_screen.dart';
 import '../../../settings/presentation/screens/settings_sheet.dart';
 import '../../providers/setup_provider.dart';
+import '../../../../core/services/analytics_service.dart';
 import '../widgets/time_picker_card.dart';
 import '../widgets/animal_selector.dart';
 import '../widgets/recents_list.dart';
@@ -108,6 +109,10 @@ class SetupScreen extends ConsumerWidget {
                     if (!setup.isValid) { HapticFeedback.heavyImpact(); return; }
                     HapticFeedback.mediumImpact();
                     ref.read(setupProvider.notifier).saveCurrentAsRecent();
+                    AnalyticsService.logTimerStarted(
+                      animalId: setup.selectedAnimal.id,
+                      durationSeconds: setup.duration.inSeconds,
+                    );
                     Navigator.of(context).push(PageRouteBuilder(
                       pageBuilder: (_, __, ___) => const TimerScreen(),
                       transitionsBuilder: (_, anim, __, child) => FadeTransition(
