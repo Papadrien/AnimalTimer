@@ -85,7 +85,7 @@ class SettingsSheet extends ConsumerWidget {
                 label: context.l10n.rateApp,
                 icon: Icons.star_outline,
                 onTap: () async {
-                  const url = 'https://play.google.com/store/apps/details?id=com.papadrien.animaltimer';
+                  const url = 'https://play.google.com/store/apps/details?id=fr.junade.animaltimer';
                   final uri = Uri.parse(url);
                   if (await canLaunchUrl(uri)) {
                     await launchUrl(uri, mode: LaunchMode.externalApplication);
