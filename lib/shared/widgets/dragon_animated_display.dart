@@ -44,13 +44,15 @@ class _DragonAnimatedDisplayState extends State<DragonAnimatedDisplay>
   static const double _headPivotY = 0.49;
 
   // Aile droite (petite aile, côté loin, partiellement cachée) :
-  // point d'ancrage au centre-bas de l'image (50% de la largeur, tout en bas).
-  static const double _rightWingPivotX = 0.5;
+  // point d'ancrage décalé vers la droite par rapport au centre du canvas
+  // (ajusté suite au retour visuel : trop à gauche avant).
+  static const double _rightWingPivotX = 0.65;
   static const double _rightWingPivotY = 1.0;
 
   // Aile gauche (grande aile visible) :
-  // point d'ancrage tout en bas à gauche de l'image.
-  static const double _leftWingPivotX = 0.0;
+  // point d'ancrage décalé vers la gauche, hors du bord du canvas
+  // (ajusté suite au retour visuel : trop à droite avant).
+  static const double _leftWingPivotX = -0.15;
   static const double _leftWingPivotY = 1.0;
 
   @override
