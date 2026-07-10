@@ -552,6 +552,12 @@ abstract class AppLocalizations {
   /// **'Sheep'**
   String get animalSheep;
 
+  /// No description provided for @animalDragon.
+  ///
+  /// In en, this message translates to:
+  /// **'Dragon'**
+  String get animalDragon;
+
   /// No description provided for @cancelConfirmTitle.
   ///
   /// In en, this message translates to:

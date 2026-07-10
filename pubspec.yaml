@@ -43,6 +43,7 @@ flutter:
     - assets/images/turtle/
     - assets/images/giraffe/
     - assets/images/sheep/
+    - assets/images/dragon/
     - assets/audio/
 
   fonts:

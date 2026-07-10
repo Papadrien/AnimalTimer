@@ -110,6 +110,7 @@
   "animalTurtle": "Turtle",
   "animalGiraffe": "Giraffe",
   "animalSheep": "Sheep",
+  "animalDragon": "Dragon",
   "cancelConfirmTitle": "Cancel the timer?",
   "cancelConfirmBody": "The timer will be stopped and you will return to the home screen.",
   "continueTimer": "Continue"

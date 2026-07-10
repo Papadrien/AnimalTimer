@@ -146,4 +146,18 @@ class AppGradients {
     colors: [Color(0xFFFFF5F2), Color(0xFFF5C9BC), Color(0xFFEDA28A)],
     stops: [0.0, 0.5, 1.0],
   );
+
+  // Dragon — violet profond #3E0898 (thème sombre, texte blanc, fond uni)
+  static const LinearGradient dragonSetup = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFF3E0898), Color(0xFF3E0898), Color(0xFF3E0898)],
+    stops: [0.0, 0.5, 1.0],
+  );
+  static const LinearGradient dragonTimer = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFF3E0898), Color(0xFF3E0898), Color(0xFF3E0898)],
+    stops: [0.0, 0.5, 1.0],
+  );
 }

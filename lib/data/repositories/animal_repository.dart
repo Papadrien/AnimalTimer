@@ -126,6 +126,19 @@ class AnimalRepository {
       primaryColor: AppColors.sheepPrimary,
       secondaryColor: AppColors.sheepSecondary,
     ),
+    AnimalModel(
+      id: 'dragon',
+      name: 'Dragon',
+      emoji: '\u{1F409}',
+      imageAsset: 'assets/images/dragon.png',
+      ambientAudioPath: '',
+      endSoundPath: '',
+      setupGradient: AppGradients.dragonSetup,
+      timerGradient: AppGradients.dragonTimer,
+      primaryColor: AppColors.dragonPrimary,
+      secondaryColor: AppColors.dragonSecondary,
+      isDarkTheme: true,
+    ),
   ];
 
   AnimalModel getById(String id) {

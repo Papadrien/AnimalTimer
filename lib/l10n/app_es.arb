@@ -110,6 +110,7 @@
   "animalTurtle": "Tortuga",
   "animalGiraffe": "Jirafa",
   "animalSheep": "Oveja",
+  "animalDragon": "Dragón",
   "cancelConfirmTitle": "¿Cancelar el temporizador?",
   "cancelConfirmBody": "El temporizador se detendrá y volverás a la pantalla de inicio.",
   "continueTimer": "Continuar"

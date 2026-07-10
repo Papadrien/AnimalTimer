@@ -256,6 +256,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get animalSheep => 'Oveja';
 
   @override
+  String get animalDragon => 'Dragón';
+
+  @override
   String get cancelConfirmTitle => '¿Cancelar el temporizador?';
 
   @override

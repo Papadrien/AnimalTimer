@@ -110,6 +110,7 @@
   "animalTurtle": "Tartaruga",
   "animalGiraffe": "Giraffa",
   "animalSheep": "Pecora",
+  "animalDragon": "Drago",
   "cancelConfirmTitle": "Annullare il timer?",
   "cancelConfirmBody": "Il timer verrà interrotto e tornerai alla schermata principale.",
   "continueTimer": "Continua"

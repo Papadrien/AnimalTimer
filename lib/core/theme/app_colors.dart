@@ -56,6 +56,8 @@ class AppColors {
   static const Color giraffeSecondary = Color(0xFFE09040);  // orange girafe foncé
   static const Color sheepPrimary     = Color(0xFFEDA28A);  // rose mouton
   static const Color sheepSecondary   = Color(0xFFD47D63);  // rose mouton foncé
+  static const Color dragonPrimary    = Color(0xFF3E0898);  // violet dragon
+  static const Color dragonSecondary  = Color(0xFF2A0668);  // violet dragon foncé
 
 
   // ── Recents card colors ──

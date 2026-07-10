@@ -255,6 +255,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get animalSheep => 'Mouton';
 
   @override
+  String get animalDragon => 'Dragon';
+
+  @override
   String get cancelConfirmTitle => 'Annuler le minuteur ?';
 
   @override
