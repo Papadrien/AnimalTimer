@@ -238,7 +238,7 @@ class _Toggle extends StatelessWidget {
               HapticFeedback.selectionClick();
               onChanged(v);
             },
-            activeColor: AppColors.toggleActive,
+            activeThumbColor: AppColors.toggleActive,
             activeTrackColor: AppColors.toggleActive.withValues(alpha: 0.3),
             inactiveThumbColor: AppColors.pencilFaint,
             inactiveTrackColor: AppColors.pencilFaint.withValues(alpha: 0.2),

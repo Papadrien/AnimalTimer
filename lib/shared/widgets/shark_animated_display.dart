@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vector_math/vector_math_64.dart' show Vector3;
 
 /// Affichage animé du requin.
 ///
@@ -141,7 +142,7 @@ class _SharkAnimatedDisplayState extends State<SharkAnimatedDisplay>
               builder: (_, child) => Transform(
                 alignment: const Alignment(-0.426, 0.224),
                 transform: Matrix4.identity()
-                  ..scale(_rightFinScaleX.value, _rightFinScaleY.value, 1.0),
+                  ..scaleByVector3(Vector3(_rightFinScaleX.value, _rightFinScaleY.value, 1.0)),
                 child: child,
               ),
               child: Image.asset(
@@ -159,7 +160,7 @@ class _SharkAnimatedDisplayState extends State<SharkAnimatedDisplay>
               builder: (_, child) => Transform(
                 alignment: const Alignment(0.472, 0.070),
                 transform: Matrix4.identity()
-                  ..scale(_tailScaleX.value, _tailScaleY.value, 1.0),
+                  ..scaleByVector3(Vector3(_tailScaleX.value, _tailScaleY.value, 1.0)),
                 child: child,
               ),
               child: Image.asset(
@@ -185,7 +186,7 @@ class _SharkAnimatedDisplayState extends State<SharkAnimatedDisplay>
               builder: (_, child) => Transform(
                 alignment: const Alignment(0.068, 0.072),
                 transform: Matrix4.identity()
-                  ..scale(_leftFinScaleX.value, _leftFinScaleY.value, 1.0),
+                  ..scaleByVector3(Vector3(_leftFinScaleX.value, _leftFinScaleY.value, 1.0)),
                 child: child,
               ),
               child: Image.asset(
