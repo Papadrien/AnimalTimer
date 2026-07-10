@@ -265,4 +265,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get continueTimer => 'Continue';
+
+  @override
+  String get reviewPromptTitle => 'Enjoying AnimalTimer?';
+
+  @override
+  String get reviewPromptMessage => 'A quick review would really help us spread the word about the app!';
+
+  @override
+  String get reviewPromptRate => 'Leave a review';
+
+  @override
+  String get reviewPromptLater => 'Later';
 }

@@ -102,6 +102,30 @@ class StorageService {
   Future<void> savePremiumUnlocked(bool value) async {
     await _prefs.setBool(_premiumKey, value);
   }
+
+  // --- Demande d'avis (review prompt) ---
+  static const _completedTimersCountKey = 'completed_timers_count';
+  static const _reviewPromptShownKey = 'review_prompt_shown';
+
+  /// Nombre de minuteurs menés à terme (utilisé pour déclencher la demande d'avis).
+  int getCompletedTimersCount() =>
+      _prefs.getInt(_completedTimersCountKey) ?? 0;
+
+  /// Incrémente le compteur de minuteurs terminés et retourne la nouvelle valeur.
+  Future<int> incrementCompletedTimersCount() async {
+    final next = getCompletedTimersCount() + 1;
+    await _prefs.setInt(_completedTimersCountKey, next);
+    return next;
+  }
+
+  /// Vrai si la bottom sheet de demande d'avis a déjà été affichée une fois.
+  bool hasShownReviewPrompt() =>
+      _prefs.getBool(_reviewPromptShownKey) ?? false;
+
+  /// Marque la demande d'avis comme déjà affichée (ne plus jamais la remontrer).
+  Future<void> setReviewPromptShown() async {
+    await _prefs.setBool(_reviewPromptShownKey, true);
+  }
 }
 
 final sharedPrefsProvider = Provider<SharedPreferences>((ref) {

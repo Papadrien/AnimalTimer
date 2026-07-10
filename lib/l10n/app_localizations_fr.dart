@@ -266,4 +266,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get continueTimer => 'Continuer';
+
+  @override
+  String get reviewPromptTitle => 'Tu aimes AnimalTimer ?';
+
+  @override
+  String get reviewPromptMessage => 'Un petit avis nous aiderait beaucoup à faire connaître l\'appli !';
+
+  @override
+  String get reviewPromptRate => 'Laisser un avis';
+
+  @override
+  String get reviewPromptLater => 'Plus tard';
 }

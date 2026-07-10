@@ -113,5 +113,9 @@
   "animalDragon": "Dragon",
   "cancelConfirmTitle": "Annuler le minuteur ?",
   "cancelConfirmBody": "Le minuteur sera arrêté et tu reviendras à l'écran d'accueil.",
-  "continueTimer": "Continuer"
+  "continueTimer": "Continuer",
+  "reviewPromptTitle": "Tu aimes AnimalTimer ?",
+  "reviewPromptMessage": "Un petit avis nous aiderait beaucoup à faire connaître l'appli !",
+  "reviewPromptRate": "Laisser un avis",
+  "reviewPromptLater": "Plus tard"
 }

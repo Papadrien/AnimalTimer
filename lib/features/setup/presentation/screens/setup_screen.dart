@@ -13,20 +13,54 @@ import '../../../../shared/widgets/turtle_particles_overlay.dart';
 import '../../../../shared/widgets/giraffe_particles_overlay.dart';
 import '../../../../shared/widgets/wool_particles_overlay.dart';
 import '../../../../shared/widgets/fire_particles_overlay.dart';
+import '../../../../shared/widgets/review_prompt_sheet.dart';
 import '../../../timer/presentation/screens/timer_screen.dart';
 import '../../../settings/presentation/screens/settings_sheet.dart';
 import '../../providers/setup_provider.dart';
 import '../../../../core/services/analytics_service.dart';
+import '../../../../core/services/storage_service.dart';
+import '../../../../app.dart';
 import '../widgets/time_picker_card.dart';
 import '../widgets/animal_selector.dart';
 import '../widgets/recents_list.dart';
 import '../widgets/start_button.dart';
 
-class SetupScreen extends ConsumerWidget {
+class SetupScreen extends ConsumerStatefulWidget {
   const SetupScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SetupScreen> createState() => _SetupScreenState();
+}
+
+class _SetupScreenState extends ConsumerState<SetupScreen> with RouteAware {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  /// Appelé quand on revient sur cet écran (ex: après un minuteur terminé).
+  @override
+  void didPopNext() => _maybeShowReviewPrompt();
+
+  Future<void> _maybeShowReviewPrompt() async {
+    final storage = ref.read(storageServiceProvider);
+    if (storage.hasShownReviewPrompt()) return;
+    if (storage.getCompletedTimersCount() < 3) return;
+    await storage.setReviewPromptShown();
+    if (mounted) {
+      ReviewPromptSheet.show(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final setup = ref.watch(setupProvider);
     final bottomPad = MediaQuery.of(context).padding.bottom;
     final animalId = setup.selectedAnimal.id;

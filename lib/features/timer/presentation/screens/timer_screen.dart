@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/services/timer_service.dart';
 import '../../../../core/services/audio_service.dart';
 import '../../../../core/services/analytics_service.dart';
+import '../../../../core/services/storage_service.dart';
 import '../../../../shared/widgets/gradient_background.dart';
 import '../../../../shared/widgets/animal_display.dart';
 import '../../../../shared/widgets/image_button.dart';
@@ -103,6 +104,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
           animalId: setup.selectedAnimal.id,
           durationSeconds: setup.duration.inSeconds,
         );
+        ref.read(storageServiceProvider).incrementCompletedTimersCount();
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
             pageBuilder: (_, __, ___) => const FinishScreen(),
