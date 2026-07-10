@@ -27,6 +27,8 @@
   "ambientSoundSub": "Musique pendant le décompte",
   "endSound": "Son de fin",
   "endSoundSub": "Son quand le minuteur est terminé",
+  "randomAnimalMode": "Animal aléatoire",
+  "randomAnimalModeSub": "Choisit au hasard un animal débloqué à chaque lancement du minuteur",
   "settingsInfo": "INFORMATIONS",
   "rateApp": "Laisser un avis",
   "privacyPolicy": "Politique de confidentialité",
@@ -108,6 +110,7 @@
   "animalTurtle": "Tortue",
   "animalGiraffe": "Girafe",
   "animalSheep": "Mouton",
+  "animalDragon": "Dragon",
   "cancelConfirmTitle": "Annuler le minuteur ?",
   "cancelConfirmBody": "Le minuteur sera arrêté et tu reviendras à l'écran d'accueil.",
   "continueTimer": "Continuer"

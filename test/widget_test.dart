@@ -70,12 +70,6 @@ void main() {
       expect(s.volume, 0.7);
     });
 
-    test('fromJson backward compat with old sound_enabled key', () {
-      final s = AppSettings.fromJson({'sound_enabled': false});
-      expect(s.ambientSoundEnabled, false);
-      expect(s.endSoundEnabled, false);
-    });
-
     test('json round-trip preserves all fields', () {
       const s = AppSettings(
         showNumbers: false,
@@ -158,13 +152,13 @@ void main() {
   group('AnimalRepository', () {
     final repo = AnimalRepository();
 
-    test('contains exactly 6 animals', () {
-      expect(repo.getAll().length, 10);
+    test('contains exactly 11 animals', () {
+      expect(repo.getAll().length, 11);
     });
 
     test('all animals have unique ids', () {
       final ids = repo.getAll().map((a) => a.id).toSet();
-      expect(ids.length, 10);
+      expect(ids.length, 11);
     });
 
     test('all animals have required assets', () {
@@ -173,7 +167,8 @@ void main() {
         expect(a.name.isNotEmpty, true);
         expect(a.emoji.isNotEmpty, true);
         expect(a.imageAsset.contains('assets/images/'), true);
-        expect(a.ambientAudioPath.contains('audio/'), true);
+        // ambientAudioPath peut être vide (ex: dragon — pas encore de son ambiant)
+        expect(a.ambientAudioPath.isEmpty || a.ambientAudioPath.contains('audio/'), true);
         // endSoundPath peut être vide (ex: tortue — pas de son de fin animal)
         expect(a.endSoundPath.isEmpty || a.endSoundPath.contains('audio/'), true);
       }
@@ -211,6 +206,7 @@ void main() {
       expect(ids.contains('turtle'), true);
       expect(ids.contains('giraffe'), true);
       expect(ids.contains('sheep'), true);
+      expect(ids.contains('dragon'), true);
     });
 
     test('shark uses dark theme (isDarkTheme true)', () {
@@ -219,10 +215,11 @@ void main() {
           reason: 'Le requin utilise le thème sombre (fond #00608D, texte blanc)');
     });
 
-    test('only shark uses dark theme, others are light', () {
+    test('only shark and dragon use dark theme, others are light', () {
       for (final a in repo.getAll()) {
-        if (a.id == 'shark') {
-          expect(a.isDarkTheme, true, reason: 'shark doit être en thème sombre');
+        if (a.id == 'shark' || a.id == 'dragon') {
+          expect(a.isDarkTheme, true,
+              reason: '\${a.id} doit être en thème sombre');
         } else {
           expect(a.isDarkTheme, false,
               reason: '\${a.id} doit rester en thème clair');

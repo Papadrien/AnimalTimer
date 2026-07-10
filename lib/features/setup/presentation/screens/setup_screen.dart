@@ -12,6 +12,7 @@ import '../../../../shared/widgets/straw_particles_overlay.dart';
 import '../../../../shared/widgets/turtle_particles_overlay.dart';
 import '../../../../shared/widgets/giraffe_particles_overlay.dart';
 import '../../../../shared/widgets/wool_particles_overlay.dart';
+import '../../../../shared/widgets/fire_particles_overlay.dart';
 import '../../../timer/presentation/screens/timer_screen.dart';
 import '../../../settings/presentation/screens/settings_sheet.dart';
 import '../../providers/setup_provider.dart';
@@ -54,6 +55,7 @@ class SetupScreen extends ConsumerWidget {
             if (animalId == 'turtle') const TurtleParticlesOverlay(),
             if (animalId == 'giraffe') const GiraffeParticlesOverlay(),
             if (animalId == 'sheep') const WoolParticlesOverlay(),
+            if (animalId == 'dragon') const FireParticlesOverlay(),
             SingleChildScrollView(
               padding: EdgeInsets.only(
                   left: 24, right: 24, bottom: bottomPad + 24),

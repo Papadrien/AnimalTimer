@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-/// Barre de progression circulaire — arc épais vert sur fond sombre
-/// avec deux anneaux (temps restant = arc vert, temps écoulé = arc gris).
+/// Barre de progression circulaire — arc épais coloré sur fond sombre
+/// avec deux anneaux (temps restant = arc coloré, temps écoulé = arc gris).
 /// Conforme à la maquette.
 class RadialProgress extends StatelessWidget {
   final double progress; // 1.0 = full, 0.0 = empty
@@ -36,6 +36,11 @@ class _CircularProgressPainter extends CustomPainter {
   final Color primaryColor;
   final Color secondaryColor;
 
+  static const _yellowPrimary = Color(0xFFFFD43B);
+  static const _yellowSecondary = Color(0xFFFFE066);
+  static const _redPrimary = Color(0xFFE53935);
+  static const _redSecondary = Color(0xFFFF6B6B);
+
   _CircularProgressPainter({
     required this.progress,
     required this.primaryColor,
@@ -47,6 +52,7 @@ class _CircularProgressPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 16;
     const strokeW = 27.0; // +50% (was 18.0)
+    final colors = _progressColors(progress);
 
     // ── Background track (grey) — transparence réduite de 50% ──
     final bgPaint = Paint()
@@ -66,7 +72,7 @@ class _CircularProgressPainter extends CustomPainter {
 
     // ── Graduations retirées ──
 
-    // ── Progress arc (green, elapsed = colored portion) ──
+    // ── Progress arc (remaining = colored portion) ──
     if (progress > 0.001) {
       final sweepAngle = progress * 2 * pi;
       final progressPaint = Paint()
@@ -76,7 +82,7 @@ class _CircularProgressPainter extends CustomPainter {
         ..shader = SweepGradient(
           startAngle: -pi / 2,
           endAngle: -pi / 2 + sweepAngle,
-          colors: [secondaryColor, primaryColor, secondaryColor],
+          colors: [colors.secondary, colors.primary, colors.secondary],
           stops: const [0.0, 0.5, 1.0],
           transform: const GradientRotation(-pi / 2),
         ).createShader(Rect.fromCircle(center: center, radius: radius));
@@ -96,14 +102,54 @@ class _CircularProgressPainter extends CustomPainter {
         center.dy + radius * sin(endAngle),
       );
       final glowPaint = Paint()
-        ..color = primaryColor.withValues(alpha: 0.4)
+        ..color = colors.primary.withValues(alpha: 0.4)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
       canvas.drawCircle(dotCenter, strokeW / 2 + 4, glowPaint);
-      final dotPaint = Paint()..color = primaryColor;
+      final dotPaint = Paint()..color = colors.primary;
       canvas.drawCircle(dotCenter, strokeW / 2 - 2, dotPaint);
     }
   }
 
+  _ProgressColors _progressColors(double value) {
+    final remaining = value.clamp(0.0, 1.0);
+
+    if (remaining <= 0.10) {
+      return const _ProgressColors(_redPrimary, _redSecondary);
+    }
+
+    if (remaining < 0.12) {
+      final t = (0.12 - remaining) / 0.02;
+      return _ProgressColors(
+        Color.lerp(_yellowPrimary, _redPrimary, t)!,
+        Color.lerp(_yellowSecondary, _redSecondary, t)!,
+      );
+    }
+
+    if (remaining <= 0.33) {
+      return const _ProgressColors(_yellowPrimary, _yellowSecondary);
+    }
+
+    if (remaining < 0.35) {
+      final t = (0.35 - remaining) / 0.02;
+      return _ProgressColors(
+        Color.lerp(primaryColor, _yellowPrimary, t)!,
+        Color.lerp(secondaryColor, _yellowSecondary, t)!,
+      );
+    }
+
+    return _ProgressColors(primaryColor, secondaryColor);
+  }
+
   @override
-  bool shouldRepaint(_CircularProgressPainter old) => old.progress != progress;
+  bool shouldRepaint(_CircularProgressPainter old) =>
+      old.progress != progress ||
+      old.primaryColor != primaryColor ||
+      old.secondaryColor != secondaryColor;
+}
+
+class _ProgressColors {
+  final Color primary;
+  final Color secondary;
+
+  const _ProgressColors(this.primary, this.secondary);
 }

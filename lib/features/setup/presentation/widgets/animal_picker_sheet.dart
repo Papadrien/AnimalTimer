@@ -1,20 +1,19 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/utils/localization_helper.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../data/models/animal_model.dart';
-import '../../../../data/repositories/animal_repository.dart';
+
 import '../../../../core/services/ad_service.dart';
 import '../../../../core/services/gamification_service.dart';
 import '../../../../core/services/purchase_service.dart';
-import '../../../../shared/widgets/image_button.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/localization_helper.dart';
+import '../../../../data/models/animal_model.dart';
+import '../../providers/setup_provider.dart';
+import 'animal_picker_content.dart';
+import 'animal_picker_dialogs.dart';
+import 'animal_picker_header.dart';
 
-/// Bottom sheet affichant les animaux disponibles dans une grille.
-/// Les animaux verrouillés affichent une icône ▶ et nécessitent
-/// le visionnage d'une pub Rewarded pour être débloqués.
-/// Un bouton "Tout débloquer" permet l'achat in-app (1,99 €).
+/// Bottom sheet used to pick, unlock, or purchase animals.
 class AnimalPickerSheet extends ConsumerStatefulWidget {
   final String selectedAnimalId;
   final ValueChanged<String> onAnimalSelected;
@@ -33,29 +32,16 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
   @override
   void initState() {
     super.initState();
-    final gamif = ref.read(gamificationServiceProvider);
-    if (gamif.hasLockedAnimals()) {
-      // Pré-charger une pub
-      ref.read(adServiceProvider).loadAd();
-      // Initialiser le service d'achat
-      ref.read(purchaseServiceProvider).initialize();
-    }
+    _prepareUnlockServices();
   }
 
   @override
   Widget build(BuildContext context) {
-    const animals = AnimalRepository.animals;
-    final bottomPad = MediaQuery.of(context).padding.bottom;
-    final topPad = MediaQuery.of(context).padding.top;
-    final screenHeight = MediaQuery.of(context).size.height;
-    // On laisse au minimum la hauteur de la status bar + 24dp de marge
-    // pour que la sheet ne remonte jamais sous le notch.
-    const double sheetTopMargin = 50.0;
-    final maxSheetHeight = screenHeight - topPad - sheetTopMargin;
+    final mediaQuery = MediaQuery.of(context);
+    final maxSheetHeight = _maxSheetHeight(mediaQuery);
     final gamif = ref.watch(gamificationServiceProvider);
-    final hasLocked = gamif.hasLockedAnimals();
     final purchaseService = ref.watch(purchaseServiceProvider);
-    final shouldShowUnlockButton = hasLocked || !purchaseService.isPremium;
+    final hasLockedAnimals = gamif.hasLockedAnimals();
 
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: maxSheetHeight),
@@ -67,132 +53,19 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // ── Header fixe ──
-            const SizedBox(height: 12),
-            Container(
-              width: 40, height: 4,
-              decoration: BoxDecoration(
-                color: AppColors.pencilFaint,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              context.l10n.chooseAnimal,
-              style: const TextStyle(
-                fontFamily: 'Nunito',
-                fontSize: 22,
-                fontWeight: FontWeight.w900,
-                color: AppColors.pencilDark,
-              ),
-            ),
-            const SizedBox(height: 20),
-            // ── Contenu scrollable ──
+            const AnimalPickerHeader(),
             Flexible(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(
-                  left: 24, right: 24, bottom: bottomPad + 20),
-                child: Column(
-                  children: [
-                    // ── Bouton "Tout débloquer" au-dessus de la liste ──
-                    if (shouldShowUnlockButton) ...[
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: ValueListenableBuilder<String>(
-                          valueListenable:
-                              ref.read(purchaseServiceProvider).localizedPriceNotifier,
-                          builder: (context, price, _) {
-                            final label = price == '…'
-                                ? context.l10n.unlockAllButton
-                                : context.l10n.unlockAllButtonWithPrice(price);
-                            return ImageButton(
-                              text: label,
-                              showLabel: true,
-                              backgroundAsset: ImageButton.blueBg,
-                              onPressed: _showPurchaseConfirmation,
-                              height: 64,
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                        childAspectRatio: 1.0,
-                      ),
-                      itemCount: animals.length,
-                      itemBuilder: (context, index) {
-                        final animal = animals[index];
-                        final isSelected = animal.id == widget.selectedAnimalId;
-                        final isLocked = !gamif.isUnlocked(animal.id);
-                        final daysRemaining = gamif.getDaysRemaining(animal.id);
-                        return _AnimalCard(
-                          animal: animal,
-                          isSelected: isSelected,
-                          isLocked: isLocked,
-                          daysRemaining: daysRemaining,
-                          onTap: () {
-                            HapticFeedback.selectionClick();
-                            if (isLocked) {
-                              _showUnlockDialog(context, animal);
-                            } else {
-                              widget.onAnimalSelected(animal.id);
-                              Navigator.of(context).pop();
-                            }
-                          },
-                        );
-                      },
-                    ),
-
-                    if (kDebugMode && hasLocked) ...[
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 40,
-                        child: OutlinedButton(
-                          onPressed: () async {
-                            HapticFeedback.mediumImpact();
-                            final messenger = ScaffoldMessenger.of(context);
-                            await ref
-                                .read(gamificationServiceProvider)
-                                .unlockAllAnimals();
-                            if (mounted) {
-                              setState(() {});
-                              messenger.showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      'DEBUG: Tous les animaux débloqués !'),
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
-                            }
-                          },
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: Colors.red,
-                            side: const BorderSide(color: Colors.red),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: const Text(
-                            '🐛 [DEBUG] Simuler achat',
-                            style: TextStyle(
-                              fontFamily: 'Nunito',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
+              child: AnimalPickerContent(
+                bottomPadding: mediaQuery.padding.bottom,
+                selectedAnimalId: widget.selectedAnimalId,
+                showUnlockAllButton:
+                    hasLockedAnimals || !purchaseService.isPremium,
+                showDebugUnlockButton: hasLockedAnimals,
+                onUnlockAllPressed: _showPurchaseConfirmation,
+                onRandomAnimalPressed: _selectRandomAnimal,
+                onLockedAnimalPressed: _showUnlockDialog,
+                onUnlockedAnimalPressed: _selectAnimal,
+                onDebugUnlockAllPressed: _debugUnlockAllAnimals,
               ),
             ),
           ],
@@ -201,85 +74,39 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
     );
   }
 
-  /// Lance l'achat in-app "Tout débloquer".
-  /// Affiche un dialogue d'information avant l'achat.
+  double _maxSheetHeight(MediaQueryData mediaQuery) {
+    const sheetTopMargin = 50.0;
+    return mediaQuery.size.height - mediaQuery.padding.top - sheetTopMargin;
+  }
+
+  void _prepareUnlockServices() {
+    final gamif = ref.read(gamificationServiceProvider);
+    if (!gamif.hasLockedAnimals()) return;
+
+    ref.read(adServiceProvider).loadAd();
+    ref.read(purchaseServiceProvider).initialize();
+  }
+
+  void _selectAnimal(AnimalModel animal) {
+    widget.onAnimalSelected(animal.id);
+    Navigator.of(context).pop();
+  }
+
+  /// Choisit un animal débloqué au hasard (via setupProvider) et ferme la
+  /// bottom sheet. Déclenché par la card "Animal aléatoire".
+  void _selectRandomAnimal() {
+    ref.read(setupProvider.notifier).selectRandomUnlockedAnimal();
+    Navigator.of(context).pop();
+  }
+
   void _showPurchaseConfirmation() {
     HapticFeedback.mediumImpact();
     final price = ref.read(purchaseServiceProvider).localizedPrice;
-    showDialog(
+
+    showPurchaseConfirmationDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(
-          context.l10n.purchaseDialogTitle,
-          style: const TextStyle(
-            fontFamily: 'Nunito',
-            fontWeight: FontWeight.w900,
-            color: AppColors.pencilDark,
-          ),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              context.l10n.purchaseDialogBody,
-              style: const TextStyle(
-                fontFamily: 'Nunito',
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.pencilDark,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              context.l10n.purchaseDialogOneTime,
-              style: TextStyle(
-                fontFamily: 'Nunito',
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: AppColors.pencilFaint.withValues(alpha: 0.7),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              HapticFeedback.selectionClick();
-              Navigator.of(ctx).pop();
-            },
-            child: Text(
-              context.l10n.cancel,
-              style: const TextStyle(
-                fontFamily: 'Nunito',
-                fontWeight: FontWeight.w700,
-                color: AppColors.pencilLight,
-              ),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              HapticFeedback.mediumImpact();
-              Navigator.of(ctx).pop();
-              _handlePurchase();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.accentBlue,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)),
-            ),
-            child: Text(
-              context.l10n.purchaseDialogBuy(price),
-              style: const TextStyle(
-                fontFamily: 'Nunito',
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-          ),
-        ],
-      ),
+      price: price,
+      onBuyPressed: _handlePurchase,
     );
   }
 
@@ -298,18 +125,16 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
       return;
     }
 
-    // Enregistrer le callback pour quand l'achat est validé
     purchaseService.onPurchaseCompleted = () {
-      if (mounted) {
-        setState(() {}); // Rafraîchir la grille
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.l10n.unlockAllSuccess),
-            duration: const Duration(seconds: 3),
-            backgroundColor: AppColors.accentGreen,
-          ),
-        );
-      }
+      if (!mounted) return;
+      setState(() {});
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.unlockAllSuccess),
+          duration: const Duration(seconds: 3),
+          backgroundColor: AppColors.accentGreen,
+        ),
+      );
     };
 
     final launched = await purchaseService.purchaseUnlockAll();
@@ -323,72 +148,14 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
     }
   }
 
-  /// Affiche un dialogue proposant de regarder une pub pour débloquer l'animal.
-  void _showUnlockDialog(BuildContext context, AnimalModel animal) {
-    final animalName = localizedAnimalName(context, animal.id);
-    showDialog(
+  void _showUnlockDialog(AnimalModel animal) {
+    showRewardedUnlockDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(
-          context.l10n.rewardedAdTitle,
-          style: const TextStyle(
-            fontFamily: 'Nunito',
-            fontWeight: FontWeight.w900,
-            color: AppColors.pencilDark,
-          ),
-        ),
-        content: Text(
-          context.l10n.watchAdToUnlock(animalName),
-          style: const TextStyle(
-            fontFamily: 'Nunito',
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: AppColors.pencilDark,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              HapticFeedback.selectionClick();
-              Navigator.of(ctx).pop();
-            },
-            child: Text(
-              context.l10n.cancel,
-              style: const TextStyle(
-                fontFamily: 'Nunito',
-                fontWeight: FontWeight.w700,
-                color: AppColors.pencilLight,
-              ),
-            ),
-          ),
-          ElevatedButton.icon(
-            onPressed: () {
-              HapticFeedback.lightImpact();
-              Navigator.of(ctx).pop();
-              _watchAdAndUnlock(animal);
-            },
-            icon: const Icon(Icons.play_arrow_rounded, size: 20),
-            label: Text(
-              context.l10n.watchAd,
-              style: const TextStyle(
-                fontFamily: 'Nunito',
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.accentGreen,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)),
-            ),
-          ),
-        ],
-      ),
+      animal: animal,
+      onWatchAdPressed: () => _watchAdAndUnlock(animal),
     );
   }
 
-  /// Lance la pub Rewarded puis débloque l'animal.
   Future<void> _watchAdAndUnlock(AnimalModel animal) async {
     final adService = ref.read(adServiceProvider);
     final gamif = ref.read(gamificationServiceProvider);
@@ -409,174 +176,37 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
     await adService.showRewardedAd(
       onReward: () async {
         await gamif.unlockAnimal(animal.id);
-        if (mounted) {
-          widget.onAnimalSelected(animal.id);
-          if (mounted) {
-            Navigator.of(context).pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(context.l10n.animalUnlocked(
-                  localizedAnimalName(context, animal.id))),
-                duration: const Duration(seconds: 2),
-                backgroundColor: AppColors.accentGreen,
+        if (!mounted) return;
+
+        widget.onAnimalSelected(animal.id);
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              context.l10n.animalUnlocked(
+                localizedAnimalName(context, animal.id),
               ),
-            );
-          }
-        }
+            ),
+            duration: const Duration(seconds: 2),
+            backgroundColor: AppColors.accentGreen,
+          ),
+        );
       },
     );
   }
-}
 
-/// Carte individuelle d'un animal dans la grille.
-class _AnimalCard extends StatelessWidget {
-  final AnimalModel animal;
-  final bool isSelected;
-  final bool isLocked;
-  final int? daysRemaining;
-  final VoidCallback onTap;
+  Future<void> _debugUnlockAllAnimals() async {
+    HapticFeedback.mediumImpact();
+    final messenger = ScaffoldMessenger.of(context);
 
-  const _AnimalCard({
-    required this.animal,
-    required this.isSelected,
-    required this.isLocked,
-    this.daysRemaining,
-    required this.onTap,
-  });
+    await ref.read(gamificationServiceProvider).unlockAllAnimals();
+    if (!mounted) return;
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        decoration: BoxDecoration(
-          color: animal.primaryColor.withValues(alpha: isLocked ? 0.15 : 0.35),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isSelected
-                ? AppColors.accentGreen
-                : AppColors.pencilDark,
-            width: isSelected ? 3.5 : 2.5,
-          ),
-        ),
-        child: Stack(
-          children: [
-            // Animal image centered
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Opacity(
-                  opacity: isLocked ? 0.4 : 1.0,
-                  child: Image.asset(
-                    animal.imageAsset,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-            ),
-            // Animal name at bottom center
-            Positioned(
-              left: 0, right: 0, bottom: 10,
-              child: Text(
-                localizedAnimalName(context, animal.id),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Nunito',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                  color: isLocked
-                      ? AppColors.pencilDark.withValues(alpha: 0.4)
-                      : AppColors.pencilDark,
-                ),
-              ),
-            ),
-            // Lock / Ad badge if locked — caméra vidéo + label AD/PUB
-            if (isLocked)
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.75),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.videocam_rounded,
-                        color: Colors.white,
-                        size: 26,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        localizedAdBadgeLabel(context),
-                        style: const TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 13,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white,
-                          height: 1.1,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            // Check badge if selected
-            if (isSelected && !isLocked)
-              Positioned(
-                right: 8, bottom: 8,
-                child: Container(
-                  width: 28, height: 28,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.accentGreen,
-                    border: Border.all(
-                      color: Colors.white, width: 2),
-                  ),
-                  child: const Icon(
-                    Icons.check,
-                    color: Colors.white,
-                    size: 16,
-                  ),
-                ),
-              ),
-            // Days remaining badge (ad-unlocked animals)
-            if (daysRemaining != null && !isLocked)
-              Positioned(
-                right: 6, top: 6,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.accentOrange,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: Colors.white, width: 1.5),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.timer_outlined,
-                        color: Colors.white, size: 12),
-                      const SizedBox(width: 2),
-                      Text(
-                        '${daysRemaining}j',
-                        style: const TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 11,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-          ],
-        ),
+    setState(() {});
+    messenger.showSnackBar(
+      const SnackBar(
+        content: Text('DEBUG: Tous les animaux debloques !'),
+        duration: Duration(seconds: 2),
       ),
     );
   }

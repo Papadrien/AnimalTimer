@@ -96,7 +96,7 @@ class AnimalRepository {
       emoji: '\u{1F422}',
       imageAsset: 'assets/images/turtle.png',
       ambientAudioPath: 'audio/ambient_turtle_128.mp3',
-      endSoundPath: '',
+      endSoundPath: 'audio/end_turtle.mp3',
       setupGradient: AppGradients.turtleSetup,
       timerGradient: AppGradients.turtleTimer,
       primaryColor: AppColors.turtlePrimary,
@@ -125,6 +125,19 @@ class AnimalRepository {
       timerGradient: AppGradients.sheepTimer,
       primaryColor: AppColors.sheepPrimary,
       secondaryColor: AppColors.sheepSecondary,
+    ),
+    AnimalModel(
+      id: 'dragon',
+      name: 'Dragon',
+      emoji: '\u{1F409}',
+      imageAsset: 'assets/images/dragon.png',
+      ambientAudioPath: 'audio/ambient_dragon_128.mp3',
+      endSoundPath: 'audio/end_dragon.mp3',
+      setupGradient: AppGradients.dragonSetup,
+      timerGradient: AppGradients.dragonTimer,
+      primaryColor: AppColors.dragonPrimary,
+      secondaryColor: AppColors.dragonSecondary,
+      isDarkTheme: true,
     ),
   ];
 

@@ -1,0 +1,117 @@
+{
+  "@@locale": "it",
+  "appName": "AnimalTimer",
+  "animalDog": "Cane",
+  "animalCat": "Gatto",
+  "animalCrocodile": "Coccodrillo",
+  "animalPony": "Pony",
+  "animalChicken": "Pulcino",
+  "chooseAnimal": "Scegli il tuo animale",
+  "start": "Avvia",
+  "hours": "Ore",
+  "minutes": "Minuti",
+  "seconds": "Secondi",
+  "recentTimers": "TIMER RECENTI",
+  "cancel": "Annulla",
+  "resume": "Riprendi",
+  "pause": "Pausa",
+  "hourUnit": "h ",
+  "minuteUnit": "m ",
+  "secondUnit": "s",
+  "finished": "Tempo scaduto!",
+  "stop": "Stop",
+  "ok": "OK",
+  "settingsTimer": "TIMER",
+  "showNumbers": "Mostra i numeri",
+  "ambientSound": "Suono del timer",
+  "ambientSoundSub": "Musica durante il conto alla rovescia",
+  "endSound": "Suono finale",
+  "endSoundSub": "Suono alla fine del timer",
+  "randomAnimalMode": "Animale casuale",
+  "randomAnimalModeSub": "Sceglie a caso un animale sbloccato a ogni avvio del timer",
+  "settingsInfo": "INFORMAZIONI",
+  "rateApp": "Valuta l'app",
+  "privacyPolicy": "Informativa sulla privacy",
+  "restorePurchases": "Ripristina acquisti",
+  "searchingPurchases": "Ricerca degli acquisti in corso...",
+  "policyIntro": "Introduzione",
+  "policyIntroContent": "AnimalTimer è un'applicazione di timer visivo pensata per i bambini. La tutela della privacy è la nostra priorità assoluta.",
+  "policyData": "Dati raccolti",
+  "policyDataContent": "AnimalTimer non raccoglie né conserva direttamente dati personali.\n\nTuttavia, l'app utilizza servizi di terze parti (come Google AdMob) che possono raccogliere alcune informazioni tecniche, tra cui:\n• indirizzo IP\n• tipo di dispositivo\n• dati di utilizzo anonimi\n\nQuesti dati vengono usati esclusivamente per garantire il corretto funzionamento dell'app e per mostrare pubblicità adatte ai bambini.",
+  "policyAds": "Pubblicità",
+  "policyAdsContent": "L'app può mostrare annunci tramite Google AdMob per sbloccare contenuti (ad esempio, nuovi animali).\n\nQuesti annunci sono configurati per:\n• essere adatti ai bambini\n• rispettare il COPPA (Children's Online Privacy Protection Act)\n• non utilizzare pubblicità comportamentale o personalizzata",
+  "policyIAP": "Acquisti in-app",
+  "policyIAPContent": "L'app offre un acquisto opzionale una tantum per sbloccare tutti gli animali.\n\nI pagamenti sono gestiti in modo sicuro da Google Play o dall'App Store e sono protetti dal controllo genitori.",
+  "policyCOPPA": "Conformità COPPA",
+  "policyCOPPAContent": "AnimalTimer rispetta il COPPA. L'app non raccoglie consapevolmente dati personali di bambini di età inferiore ai 13 anni.",
+  "policyContact": "Contatti",
+  "policyContactContent": "Per qualsiasi domanda su questa Informativa sulla privacy:\npapadrien.prepa@gmail.com",
+  "policyThirdParty": "Servizi di terze parti",
+  "policyThirdPartyContent": "L'app utilizza i seguenti servizi:\n• Google AdMob (pubblicità)\n\nPer saperne di più:\nhttps://policies.google.com/privacy",
+  "policyGDPR": "Diritti dell'utente (GDPR)",
+  "policyGDPRContent": "In base al Regolamento generale sulla protezione dei dati (GDPR), hai i seguenti diritti:\n• Diritto di accesso\n• Diritto di rettifica\n• Diritto alla cancellazione\n• Diritto di limitazione del trattamento\n\nPer esercitare i tuoi diritti:\npapadrien.prepa@gmail.com",
+  "policyUpdate": "Ultimo aggiornamento",
+  "policyUpdateContent": "Ultimo aggiornamento: aprile 2026",
+  "rewardedAdTitle": "Video premiato",
+  "watchAdToUnlock": "Guarda un video pubblicitario per sbloccare {animalName}",
+  "@watchAdToUnlock": {
+    "placeholders": {
+      "animalName": {
+        "type": "String"
+      }
+    }
+  },
+  "watchAd": "Guarda",
+  "adLoading": "Caricamento video…",
+  "animalUnlocked": "{animalName} è stato sbloccato! 🎉",
+  "@animalUnlocked": {
+    "placeholders": {
+      "animalName": {
+        "type": "String"
+      }
+    }
+  },
+  "unlockAllButton": "Sblocca tutto",
+  "unlockAllButtonWithPrice": "Sblocca tutto – {price}",
+  "@unlockAllButtonWithPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "adBadgeLabel": "PUB",
+  "unlockAllSuccess": "Tutti gli animali sono stati sbloccati! 🎉",
+  "purchaseError": "Acquisto non riuscito. Riprova.",
+  "restoreSuccess": "Acquisti ripristinati!",
+  "restoreEmpty": "Nessun acquisto trovato.",
+  "storeNotAvailable": "Store non disponibile. Controlla la tua connessione.",
+  "purchaseDialogTitle": "Sblocca tutto",
+  "purchaseDialogBody": "Sblocca tutti gli animali attuali e futuri, per sempre!",
+  "purchaseDialogOneTime": "Acquisto una tantum, nessun abbonamento.",
+  "purchaseDialogBuy": "Acquista — {price}",
+  "@purchaseDialogBuy": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "unlockAnimalTitle": "Sblocca {animalName}",
+  "@unlockAnimalTitle": {
+    "placeholders": {
+      "animalName": {
+        "type": "String"
+      }
+    }
+  },
+  "animalShark": "Squalo",
+  "animalUnicorn": "Unicorno",
+  "animalTurtle": "Tartaruga",
+  "animalGiraffe": "Giraffa",
+  "animalSheep": "Pecora",
+  "animalDragon": "Drago",
+  "cancelConfirmTitle": "Annullare il timer?",
+  "cancelConfirmBody": "Il timer verrà interrotto e tornerai alla schermata principale.",
+  "continueTimer": "Continua"
+}
