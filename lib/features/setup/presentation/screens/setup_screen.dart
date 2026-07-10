@@ -15,7 +15,6 @@ import '../../../../shared/widgets/wool_particles_overlay.dart';
 import '../../../timer/presentation/screens/timer_screen.dart';
 import '../../../settings/presentation/screens/settings_sheet.dart';
 import '../../providers/setup_provider.dart';
-import '../../../settings/providers/settings_provider.dart';
 import '../widgets/time_picker_card.dart';
 import '../widgets/animal_selector.dart';
 import '../widgets/recents_list.dart';
@@ -106,9 +105,6 @@ class SetupScreen extends ConsumerWidget {
                   StartButton(onPressed: () {
                     if (!setup.isValid) { HapticFeedback.heavyImpact(); return; }
                     HapticFeedback.mediumImpact();
-                    if (ref.read(settingsProvider).randomAnimalMode) {
-                      ref.read(setupProvider.notifier).selectRandomUnlockedAnimal();
-                    }
                     ref.read(setupProvider.notifier).saveCurrentAsRecent();
                     Navigator.of(context).push(PageRouteBuilder(
                       pageBuilder: (_, __, ___) => const TimerScreen(),

@@ -8,6 +8,7 @@ import '../../../../core/services/purchase_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/localization_helper.dart';
 import '../../../../data/models/animal_model.dart';
+import '../../providers/setup_provider.dart';
 import 'animal_picker_content.dart';
 import 'animal_picker_dialogs.dart';
 import 'animal_picker_header.dart';
@@ -61,6 +62,7 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
                     hasLockedAnimals || !purchaseService.isPremium,
                 showDebugUnlockButton: hasLockedAnimals,
                 onUnlockAllPressed: _showPurchaseConfirmation,
+                onRandomAnimalPressed: _selectRandomAnimal,
                 onLockedAnimalPressed: _showUnlockDialog,
                 onUnlockedAnimalPressed: _selectAnimal,
                 onDebugUnlockAllPressed: _debugUnlockAllAnimals,
@@ -87,6 +89,13 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
 
   void _selectAnimal(AnimalModel animal) {
     widget.onAnimalSelected(animal.id);
+    Navigator.of(context).pop();
+  }
+
+  /// Choisit un animal débloqué au hasard (via setupProvider) et ferme la
+  /// bottom sheet. Déclenché par la card "Animal aléatoire".
+  void _selectRandomAnimal() {
+    ref.read(setupProvider.notifier).selectRandomUnlockedAnimal();
     Navigator.of(context).pop();
   }
 

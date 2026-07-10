@@ -11,6 +11,7 @@ class AnimalPickerContent extends StatelessWidget {
   final bool showUnlockAllButton;
   final bool showDebugUnlockButton;
   final VoidCallback onUnlockAllPressed;
+  final VoidCallback onRandomAnimalPressed;
   final ValueChanged<AnimalModel> onLockedAnimalPressed;
   final ValueChanged<AnimalModel> onUnlockedAnimalPressed;
   final VoidCallback onDebugUnlockAllPressed;
@@ -22,6 +23,7 @@ class AnimalPickerContent extends StatelessWidget {
     required this.showUnlockAllButton,
     required this.showDebugUnlockButton,
     required this.onUnlockAllPressed,
+    required this.onRandomAnimalPressed,
     required this.onLockedAnimalPressed,
     required this.onUnlockedAnimalPressed,
     required this.onDebugUnlockAllPressed,
@@ -45,6 +47,7 @@ class AnimalPickerContent extends StatelessWidget {
           ],
           AnimalPickerGrid(
             selectedAnimalId: selectedAnimalId,
+            onRandomTap: onRandomAnimalPressed,
             onLockedAnimalTap: onLockedAnimalPressed,
             onUnlockedAnimalTap: onUnlockedAnimalPressed,
           ),

@@ -70,13 +70,6 @@ class SettingsSheet extends ConsumerWidget {
                 value: settings.endSoundEnabled,
                 onChanged: (_) => ref.read(settingsProvider.notifier).toggleEndSound(),
               ),
-              _Toggle(
-                label: context.l10n.randomAnimalMode,
-                icon: Icons.shuffle_rounded,
-                subtitle: context.l10n.randomAnimalModeSub,
-                value: settings.randomAnimalMode,
-                onChanged: (_) => ref.read(settingsProvider.notifier).toggleRandomAnimalMode(),
-              ),
               const SizedBox(height: 20),
 
               Container(

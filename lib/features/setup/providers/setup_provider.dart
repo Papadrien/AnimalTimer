@@ -75,7 +75,7 @@ class SetupNotifier extends StateNotifier<SetupState> {
   }
 
   /// Sélectionne un animal aléatoire parmi ceux débloqués par l'utilisateur.
-  /// Utilisé par le mode "animal aléatoire" au lancement du minuteur.
+  /// Déclenché par la card "Aléatoire" dans la bottom sheet de sélection.
   /// Si un seul animal (ou aucun) est débloqué, ne change rien.
   void selectRandomUnlockedAnimal() {
     final unlocked = _animalRepo
