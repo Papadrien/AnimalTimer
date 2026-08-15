@@ -266,4 +266,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get continueTimer => 'Continuer';
+
+  @override
+  String get animalSwitchHint => 'Touche ici pour changer d\'animal ! Tu peux même en débloquer temporairement en regardant une pub.';
 }

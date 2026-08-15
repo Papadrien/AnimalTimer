@@ -265,4 +265,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get continueTimer => 'Continue';
+
+  @override
+  String get animalSwitchHint => 'Tap here to change animal! You can even unlock new ones temporarily by watching an ad.';
 }

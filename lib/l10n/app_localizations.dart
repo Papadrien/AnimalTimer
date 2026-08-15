@@ -575,6 +575,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Continue'**
   String get continueTimer;
+
+  /// No description provided for @animalSwitchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap here to change animal! You can even unlock new ones temporarily by watching an ad.'**
+  String get animalSwitchHint;
 }
 
 class _AppLocalizationsDelegate

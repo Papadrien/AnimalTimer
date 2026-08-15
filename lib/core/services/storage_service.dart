@@ -102,6 +102,19 @@ class StorageService {
   Future<void> savePremiumUnlocked(bool value) async {
     await _prefs.setBool(_premiumKey, value);
   }
+
+  // --- Onboarding : bulle d'aide sur le bouton de changement d'animal ---
+  static const _animalSwitchHintSeenKey = 'has_seen_animal_switch_tooltip';
+
+  /// Vérifie si la bulle d'aide sur le changement d'animal a déjà été vue.
+  bool hasSeenAnimalSwitchTooltip() =>
+      _prefs.getBool(_animalSwitchHintSeenKey) ?? false;
+
+  /// Marque la bulle d'aide sur le changement d'animal comme vue, pour ne
+  /// plus jamais l'afficher.
+  Future<void> markAnimalSwitchTooltipSeen() async {
+    await _prefs.setBool(_animalSwitchHintSeenKey, true);
+  }
 }
 
 final sharedPrefsProvider = Provider<SharedPreferences>((ref) {

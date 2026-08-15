@@ -1,19 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/services/storage_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/animal_display.dart';
 import '../../providers/setup_provider.dart';
 import 'animal_picker_sheet.dart';
+import 'animal_switch_hint_bubble.dart';
 
 /// Grand animal centré avec un badge "changer" en bas à droite.
 /// Tap = ouvre la bottom sheet de sélection d'animal.
 /// Pour le chat : animation multi-layer jouée une seule fois (2s).
-class AnimalSelector extends ConsumerWidget {
+///
+/// Au tout premier lancement de l'appli, une bulle d'aide invite
+/// l'utilisateur à toucher ce bouton. Elle disparaît définitivement dès
+/// qu'il interagit avec le bouton (ou dès qu'il en a vu une fois).
+class AnimalSelector extends ConsumerStatefulWidget {
   const AnimalSelector({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AnimalSelector> createState() => _AnimalSelectorState();
+}
+
+class _AnimalSelectorState extends ConsumerState<AnimalSelector> {
+  late bool _showHint =
+      !ref.read(storageServiceProvider).hasSeenAnimalSwitchTooltip();
+
+  void _dismissHint() {
+    if (!_showHint) return;
+    setState(() => _showHint = false);
+    ref.read(storageServiceProvider).markAnimalSwitchTooltipSeen();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final animal = ref.watch(setupProvider).selectedAnimal;
     final isDark = animal.isDarkTheme;
 
@@ -28,6 +48,7 @@ class AnimalSelector extends ConsumerWidget {
     return GestureDetector(
       onTap: () {
         HapticFeedback.selectionClick();
+        _dismissHint();
         _showAnimalPicker(context, ref);
       },
       child: SizedBox(
@@ -80,6 +101,13 @@ class AnimalSelector extends ConsumerWidget {
                   color: badgeIconColor, size: 22),
               ),
             ),
+            // Bulle d'aide "premier lancement" pointant vers le badge
+            if (_showHint)
+              const Positioned(
+                right: -20,
+                bottom: 56,
+                child: AnimalSwitchHintBubble(),
+              ),
           ],
         ),
       ),

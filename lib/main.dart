@@ -21,7 +21,7 @@ void main() async {
     statusBarIconBrightness: Brightness.dark,
   ));
 
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await SystemChrome.setPreferredOrientations(_preferredOrientations());
 
   final prefs = await SharedPreferences.getInstance();
 
@@ -37,4 +37,30 @@ void main() async {
       child: const AnimalTimerApp(),
     ),
   );
+}
+
+/// Détermine les orientations autorisées selon le type d'appareil.
+///
+/// Sur téléphone, l'appli reste verrouillée en portrait (design pensé pour
+/// les enfants, boutons larges en bas d'écran). Sur tablette, on autorise
+/// aussi le paysage, orientation naturelle sur ce format d'écran.
+///
+/// La détection se base sur la taille physique de l'écran (plus petit côté
+/// en pixels logiques) : un seuil de 600dp est le repère standard Android
+/// pour distinguer téléphone et tablette, et couvre aussi les iPad (dont le
+/// plus petit côté dépasse toujours 600dp, contrairement aux iPhone).
+List<DeviceOrientation> _preferredOrientations() {
+  final view = WidgetsBinding.instance.platformDispatcher.views.first;
+  final logicalSize = view.physicalSize / view.devicePixelRatio;
+  final isTablet = logicalSize.shortestSide >= 600;
+
+  if (isTablet) {
+    return const [
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ];
+  }
+  return const [DeviceOrientation.portraitUp];
 }

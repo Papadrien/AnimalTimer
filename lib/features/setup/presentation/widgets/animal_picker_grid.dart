@@ -27,42 +27,52 @@ class AnimalPickerGrid extends ConsumerWidget {
     const animals = AnimalRepository.animals;
     final gamif = ref.watch(gamificationServiceProvider);
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: 1.0,
-      ),
-      // +1 pour la card "Animal aléatoire" en première position
-      itemCount: animals.length + 1,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return RandomAnimalPickerCard(
-            onTap: () {
-              HapticFeedback.selectionClick();
-              onRandomTap();
-            },
-          );
-        }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // 2 colonnes sur mobile, davantage sur tablette pour éviter des
+        // cartes énormes : une colonne toutes les ~180px de largeur
+        // disponible, avec un minimum de 2 et un maximum de 4.
+        final crossAxisCount =
+            (constraints.maxWidth / 180).floor().clamp(2, 4);
 
-        final animal = animals[index - 1];
-        final isLocked = !gamif.isUnlocked(animal.id);
-
-        return AnimalPickerCard(
-          animal: animal,
-          isSelected: animal.id == selectedAnimalId,
-          isLocked: isLocked,
-          daysRemaining: gamif.getDaysRemaining(animal.id),
-          onTap: () {
-            HapticFeedback.selectionClick();
-            if (isLocked) {
-              onLockedAnimalTap(animal);
-            } else {
-              onUnlockedAnimalTap(animal);
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 1.0,
+          ),
+          // +1 pour la card "Animal aléatoire" en première position
+          itemCount: animals.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return RandomAnimalPickerCard(
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  onRandomTap();
+                },
+              );
             }
+
+            final animal = animals[index - 1];
+            final isLocked = !gamif.isUnlocked(animal.id);
+
+            return AnimalPickerCard(
+              animal: animal,
+              isSelected: animal.id == selectedAnimalId,
+              isLocked: isLocked,
+              daysRemaining: gamif.getDaysRemaining(animal.id),
+              onTap: () {
+                HapticFeedback.selectionClick();
+                if (isLocked) {
+                  onLockedAnimalTap(animal);
+                } else {
+                  onUnlockedAnimalTap(animal);
+                }
+              },
+            );
           },
         );
       },

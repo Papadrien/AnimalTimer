@@ -45,30 +45,37 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
 
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: maxSheetHeight),
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const AnimalPickerHeader(),
-            Flexible(
-              child: AnimalPickerContent(
-                bottomPadding: mediaQuery.padding.bottom,
-                selectedAnimalId: widget.selectedAnimalId,
-                showUnlockAllButton:
-                    hasLockedAnimals || !purchaseService.isPremium,
-                showDebugUnlockButton: hasLockedAnimals,
-                onUnlockAllPressed: _showPurchaseConfirmation,
-                onRandomAnimalPressed: _selectRandomAnimal,
-                onLockedAnimalPressed: _showUnlockDialog,
-                onUnlockedAnimalPressed: _selectAnimal,
-                onDebugUnlockAllPressed: _debugUnlockAllAnimals,
-              ),
+      child: Center(
+        // Largeur plafonnée pour rester confortable sur tablette : la
+        // sheet ne s'étire plus sur toute la largeur de l'écran.
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 560),
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
             ),
-          ],
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const AnimalPickerHeader(),
+                Flexible(
+                  child: AnimalPickerContent(
+                    bottomPadding: mediaQuery.padding.bottom,
+                    selectedAnimalId: widget.selectedAnimalId,
+                    showUnlockAllButton:
+                        hasLockedAnimals || !purchaseService.isPremium,
+                    showDebugUnlockButton: hasLockedAnimals,
+                    onUnlockAllPressed: _showPurchaseConfirmation,
+                    onRandomAnimalPressed: _selectRandomAnimal,
+                    onLockedAnimalPressed: _showUnlockDialog,
+                    onUnlockedAnimalPressed: _selectAnimal,
+                    onDebugUnlockAllPressed: _debugUnlockAllAnimals,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

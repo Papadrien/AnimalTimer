@@ -113,5 +113,6 @@
   "animalDragon": "Drago",
   "cancelConfirmTitle": "Annullare il timer?",
   "cancelConfirmBody": "Il timer verrà interrotto e tornerai alla schermata principale.",
-  "continueTimer": "Continua"
+  "continueTimer": "Continua",
+  "animalSwitchHint": "Tocca qui per cambiare animale! Puoi anche sbloccarne di nuovi temporaneamente guardando una pubblicità."
 }
