@@ -103,28 +103,17 @@ class StorageService {
     await _prefs.setBool(_premiumKey, value);
   }
 
-  // --- Demande d'avis (review prompt) ---
-  static const _completedTimersCountKey = 'completed_timers_count';
-  static const _reviewPromptShownKey = 'review_prompt_shown';
+  // --- Onboarding : bulle d'aide sur le bouton de changement d'animal ---
+  static const _animalSwitchHintSeenKey = 'has_seen_animal_switch_tooltip';
 
-  /// Nombre de minuteurs menés à terme (utilisé pour déclencher la demande d'avis).
-  int getCompletedTimersCount() =>
-      _prefs.getInt(_completedTimersCountKey) ?? 0;
+  /// Vérifie si la bulle d'aide sur le changement d'animal a déjà été vue.
+  bool hasSeenAnimalSwitchTooltip() =>
+      _prefs.getBool(_animalSwitchHintSeenKey) ?? false;
 
-  /// Incrémente le compteur de minuteurs terminés et retourne la nouvelle valeur.
-  Future<int> incrementCompletedTimersCount() async {
-    final next = getCompletedTimersCount() + 1;
-    await _prefs.setInt(_completedTimersCountKey, next);
-    return next;
-  }
-
-  /// Vrai si la bottom sheet de demande d'avis a déjà été affichée une fois.
-  bool hasShownReviewPrompt() =>
-      _prefs.getBool(_reviewPromptShownKey) ?? false;
-
-  /// Marque la demande d'avis comme déjà affichée (ne plus jamais la remontrer).
-  Future<void> setReviewPromptShown() async {
-    await _prefs.setBool(_reviewPromptShownKey, true);
+  /// Marque la bulle d'aide sur le changement d'animal comme vue, pour ne
+  /// plus jamais l'afficher.
+  Future<void> markAnimalSwitchTooltipSeen() async {
+    await _prefs.setBool(_animalSwitchHintSeenKey, true);
   }
 }
 

@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../../../core/utils/localization_helper.dart';
 import 'package:flutter/services.dart';
@@ -5,8 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/services/timer_service.dart';
 import '../../../../core/services/audio_service.dart';
-import '../../../../core/services/analytics_service.dart';
-import '../../../../core/services/storage_service.dart';
 import '../../../../shared/widgets/gradient_background.dart';
 import '../../../../shared/widgets/animal_display.dart';
 import '../../../../shared/widgets/image_button.dart';
@@ -80,8 +79,16 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
     final setup = ref.watch(setupProvider);
     final settings = ref.watch(settingsProvider);
     final animal = setup.selectedAnimal;
-    final screenW = MediaQuery.of(context).size.width;
-    final circleSize = screenW * 0.78;
+    final screenSize = MediaQuery.of(context).size;
+    // Le cercle occupe 78% de la largeur sur mobile, mais on le plafonne
+    // pour éviter qu'il ne devienne démesuré sur tablette (où la largeur
+    // d'écran est bien plus grande que ce dont on a besoin visuellement).
+    // On le contraint aussi par la hauteur disponible pour rester à l'aise
+    // en paysage.
+    final circleSize = math.min(
+      screenSize.width * 0.78,
+      math.min(screenSize.height * 0.42, 380.0),
+    );
     final isPaused = ts.status == TimerStatus.paused;
     final isCrocodile = animal.id == 'crocodile';
     final isCat = animal.id == 'cat';
@@ -100,11 +107,6 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
           prev?.status != TimerStatus.finished) {
         HapticFeedback.heavyImpact();
         ref.read(audioServiceProvider).stopAmbient();
-        AnalyticsService.logTimerCompleted(
-          animalId: setup.selectedAnimal.id,
-          durationSeconds: setup.duration.inSeconds,
-        );
-        ref.read(storageServiceProvider).incrementCompletedTimersCount();
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
             pageBuilder: (_, __, ___) => const FinishScreen(),
@@ -141,133 +143,143 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
             if (isGiraffe) const GiraffeParticlesOverlay(),
             if (isSheep) const WoolParticlesOverlay(),
             if (isDragon) const FireParticlesOverlay(),
-            Column(
-              children: [
-                const SizedBox(height: 8),
-                // Top row: sound toggle
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          HapticFeedback.selectionClick();
-                          final audio = ref.read(audioServiceProvider);
-                          final wasOn = settings.ambientSoundEnabled;
-                          ref.read(settingsProvider.notifier).toggleAmbientSound();
-                          if (wasOn) {
-                            audio.stopAmbient();
-                          } else {
-                            if (ts.status == TimerStatus.running) {
-                              audio.playAmbient(animal.ambientAudioPath,
-                                  volume: settings.volume * 0.5);
-                            }
-                          }
-                        },
-                        child: Container(
-                          width: 44, height: 44,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.paperLight.withValues(alpha: 0.6),
-                            border: Border.all(
-                              color: AppColors.pencilDark, width: 2.5),
+            // Contenu principal centré et plafonné en largeur pour rester
+            // confortable sur tablette (au lieu de s'étirer sur toute la
+            // largeur de l'écran).
+            Positioned.fill(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 500),
+                  child: Column(
+                  children: [
+                    const SizedBox(height: 8),
+                    // Top row: sound toggle
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              HapticFeedback.selectionClick();
+                              final audio = ref.read(audioServiceProvider);
+                              final wasOn = settings.ambientSoundEnabled;
+                              ref.read(settingsProvider.notifier).toggleAmbientSound();
+                              if (wasOn) {
+                                audio.stopAmbient();
+                              } else {
+                                if (ts.status == TimerStatus.running) {
+                                  audio.playAmbient(animal.ambientAudioPath,
+                                      volume: settings.volume * 0.5);
+                                }
+                              }
+                            },
+                            child: Container(
+                              width: 44, height: 44,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.paperLight.withValues(alpha: 0.6),
+                                border: Border.all(
+                                  color: AppColors.pencilDark, width: 2.5),
+                              ),
+                              child: Icon(
+                                settings.ambientSoundEnabled
+                                    ? Icons.volume_up_rounded
+                                    : Icons.volume_off_rounded,
+                                color: settings.ambientSoundEnabled
+                                    ? AppColors.pencilDark
+                                    : AppColors.accentRed,
+                                size: 22,
+                              ),
+                            ),
                           ),
-                          child: Icon(
-                            settings.ambientSoundEnabled
-                                ? Icons.volume_up_rounded
-                                : Icons.volume_off_rounded,
-                            color: settings.ambientSoundEnabled
-                                ? AppColors.pencilDark
-                                : AppColors.accentRed,
-                            size: 22,
-                          ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
+                    const Spacer(),
+                    // Central circle
+                    SizedBox(
+                      width: circleSize,
+                      height: circleSize,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          RadialProgress(
+                            progress: ts.progress,
+                            primaryColor: AppColors.accentGreen,
+                            secondaryColor: AppColors.accentGreenLight,
+                            size: circleSize,
+                          ),
+                          if (settings.showNumbers)
+                            Positioned(
+                              top: circleSize * 0.18,
+                              child: TimerDisplay(remaining: ts.remaining),
+                            ),
+                          if (settings.showNumbers)
+                            Positioned(
+                              bottom: circleSize * 0.12,
+                              child: AnimalDisplay(
+                                animal: animal,
+                                size: circleSize * 0.48,
+                                animate: ts.status == TimerStatus.running,
+                              ),
+                            )
+                          else
+                            AnimalDisplay(
+                              animal: animal,
+                              size: circleSize * 0.48,
+                              animate: ts.status == TimerStatus.running,
+                            ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    // Bottom: Cancel + Pause/Resume
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ImageButton(
+                              text: context.l10n.cancel,
+                              icon: Icons.arrow_back_rounded,
+                              backgroundAsset: ImageButton.redBg,
+                              height: 80,
+                              bounce: true,
+                              onPressed: _showCancelConfirmDialog,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: ImageButton(
+                              text: isPaused ? context.l10n.resume : context.l10n.pause,
+                              icon: isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                              backgroundAsset: isPaused
+                                  ? ImageButton.greenBg
+                                  : ImageButton.orangeBg,
+                              height: 80,
+                              bounce: true,
+                              onPressed: () {
+                                final notifier = ref.read(timerServiceProvider.notifier);
+                                final audio = ref.read(audioServiceProvider);
+                                if (ts.status == TimerStatus.running) {
+                                  notifier.pause();
+                                  if (settings.ambientSoundEnabled) audio.pauseAmbient();
+                                } else if (ts.status == TimerStatus.paused) {
+                                  notifier.resume();
+                                  if (settings.ambientSoundEnabled) audio.resumeAmbient();
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).padding.bottom + 32),
+                  ],
                   ),
                 ),
-                const Spacer(),
-                // Central circle
-                SizedBox(
-                  width: circleSize,
-                  height: circleSize,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      RadialProgress(
-                        progress: ts.progress,
-                        primaryColor: AppColors.accentGreen,
-                        secondaryColor: AppColors.accentGreenLight,
-                        size: circleSize,
-                      ),
-                      if (settings.showNumbers)
-                        Positioned(
-                          top: circleSize * 0.18,
-                          child: TimerDisplay(remaining: ts.remaining),
-                        ),
-                      if (settings.showNumbers)
-                        Positioned(
-                          bottom: circleSize * 0.12,
-                          child: AnimalDisplay(
-                            animal: animal,
-                            size: circleSize * 0.48,
-                            animate: ts.status == TimerStatus.running,
-                          ),
-                        )
-                      else
-                        AnimalDisplay(
-                          animal: animal,
-                          size: circleSize * 0.48,
-                          animate: ts.status == TimerStatus.running,
-                        ),
-                    ],
-                  ),
-                ),
-                const Spacer(),
-                // Bottom: Cancel + Pause/Resume
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: ImageButton(
-                          text: context.l10n.cancel,
-                          icon: Icons.arrow_back_rounded,
-                          backgroundAsset: ImageButton.redBg,
-                          height: 80,
-                          bounce: true,
-                          onPressed: _showCancelConfirmDialog,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: ImageButton(
-                          text: isPaused ? context.l10n.resume : context.l10n.pause,
-                          icon: isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded,
-                          backgroundAsset: isPaused
-                              ? ImageButton.greenBg
-                              : ImageButton.orangeBg,
-                          height: 80,
-                          bounce: true,
-                          onPressed: () {
-                            final notifier = ref.read(timerServiceProvider.notifier);
-                            final audio = ref.read(audioServiceProvider);
-                            if (ts.status == TimerStatus.running) {
-                              notifier.pause();
-                              if (settings.ambientSoundEnabled) audio.pauseAmbient();
-                            } else if (ts.status == TimerStatus.paused) {
-                              notifier.resume();
-                              if (settings.ambientSoundEnabled) audio.resumeAmbient();
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: MediaQuery.of(context).padding.bottom + 32),
-              ],
+              ),
             ),
           ],
         ),

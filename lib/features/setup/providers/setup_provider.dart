@@ -41,8 +41,17 @@ class SetupNotifier extends StateNotifier<SetupState> {
   final StorageService _storage;
   final GamificationService _gamification;
 
+  /// Animal de secours toujours débloqué, utilisé quand l'animal
+  /// sélectionné n'est plus disponible (ex. déblocage par pub expiré).
+  static const _fallbackAnimalId = 'crocodile';
+
   SetupNotifier(this._animalRepo, this._storage, this._gamification)
-      : super(_initialState(_animalRepo, _storage));
+      : super(_initialState(_animalRepo, _storage)) {
+    // Au démarrage, si le dernier animal utilisé n'est plus débloqué
+    // (déblocage temporaire par pub expiré entre-temps), on retombe sur
+    // le crocodile plutôt que de garder un animal verrouillé sélectionné.
+    validateSelectedAnimal();
+  }
 
   /// Construit l'état initial directement (sans setState après le build).
   static SetupState _initialState(
@@ -74,6 +83,21 @@ class SetupNotifier extends StateNotifier<SetupState> {
     _storage.saveLastAnimalId(id);
   }
 
+  /// Vérifie que l'animal actuellement sélectionné est toujours débloqué.
+  /// Si le temps accordé par le visionnage d'une pub a expiré (et que
+  /// l'animal n'est ni gratuit, ni débloqué en premium), on revient
+  /// automatiquement sur le crocodile.
+  ///
+  /// À appeler : au démarrage de l'appli, au retour au premier plan, et
+  /// juste avant de lancer un minuteur — pour ne jamais démarrer avec un
+  /// animal qui n'est plus disponible.
+  void validateSelectedAnimal() {
+    if (_gamification.isUnlocked(state.selectedAnimal.id)) return;
+    final fallback = _animalRepo.getById(_fallbackAnimalId);
+    state = state.copyWith(selectedAnimal: fallback);
+    _storage.saveLastAnimalId(fallback.id);
+  }
+
   /// Sélectionne un animal aléatoire parmi ceux débloqués par l'utilisateur.
   /// Déclenché par la card "Aléatoire" dans la bottom sheet de sélection.
   /// Si un seul animal (ou aucun) est débloqué, ne change rien.
@@ -93,13 +117,20 @@ class SetupNotifier extends StateNotifier<SetupState> {
   }
 
   void loadPreset(TimerPreset preset) {
-    final animal = _animalRepo.getById(preset.animalId);
+    final presetAnimal = _animalRepo.getById(preset.animalId);
+    // Si l'animal du preset n'est plus débloqué (pub expirée depuis), on
+    // retombe sur le crocodile plutôt que de resélectionner un animal
+    // verrouillé.
+    final isLocked = !_gamification.isUnlocked(presetAnimal.id);
+    final animal =
+        isLocked ? _animalRepo.getById(_fallbackAnimalId) : presetAnimal;
     state = state.copyWith(
       hours: preset.duration.inHours,
       minutes: preset.duration.inMinutes.remainder(60),
       seconds: preset.duration.inSeconds.remainder(60),
       selectedAnimal: animal,
     );
+    if (isLocked) _storage.saveLastAnimalId(animal.id);
   }
 
   /// Sauvegarder le timer actuel comme "recent" quand on lance le timer

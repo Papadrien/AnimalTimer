@@ -107,15 +107,22 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
               bottom: 32 + MediaQuery.of(context).padding.bottom,
               left: 0,
               right: 0,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 60),
-                child: ImageButton(
-                  text: context.l10n.stop,
-                  icon: Icons.home_rounded,
-                  backgroundAsset: ImageButton.greenBg,
-                  onPressed: _goHome,
-                  height: 80,
-                  bounce: true,
+              child: Center(
+                child: ConstrainedBox(
+                  // Plafonné pour éviter un bouton démesurément large et
+                  // plat sur tablette.
+                  constraints: const BoxConstraints(maxWidth: 440),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 60),
+                    child: ImageButton(
+                      text: context.l10n.stop,
+                      icon: Icons.home_rounded,
+                      backgroundAsset: ImageButton.greenBg,
+                      onPressed: _goHome,
+                      height: 80,
+                      bounce: true,
+                    ),
+                  ),
                 ),
               ),
             ),

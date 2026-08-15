@@ -114,8 +114,5 @@
   "cancelConfirmTitle": "¿Cancelar el temporizador?",
   "cancelConfirmBody": "El temporizador se detendrá y volverás a la pantalla de inicio.",
   "continueTimer": "Continuar",
-  "reviewPromptTitle": "¿Te gusta AnimalTimer?",
-  "reviewPromptMessage": "¡Una pequeña reseña nos ayudaría mucho a dar a conocer la app!",
-  "reviewPromptRate": "Dejar una reseña",
-  "reviewPromptLater": "Más tarde"
+  "animalSwitchHint": "¡Toca aquí para cambiar de animal! Incluso puedes desbloquear otros temporalmente viendo un anuncio."
 }

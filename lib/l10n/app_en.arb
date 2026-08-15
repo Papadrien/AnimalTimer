@@ -114,8 +114,5 @@
   "cancelConfirmTitle": "Cancel the timer?",
   "cancelConfirmBody": "The timer will be stopped and you will return to the home screen.",
   "continueTimer": "Continue",
-  "reviewPromptTitle": "Enjoying AnimalTimer?",
-  "reviewPromptMessage": "A quick review would really help us spread the word about the app!",
-  "reviewPromptRate": "Leave a review",
-  "reviewPromptLater": "Later"
+  "animalSwitchHint": "Tap here to change animal! You can even unlock new ones temporarily by watching an ad."
 }

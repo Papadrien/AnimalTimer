@@ -45,7 +45,21 @@ class PurchaseService {
   Future<void> initialize() async {
     // Étape 1 : créer le stream une seule fois
     if (!_initialized) {
-      _available = await _iap.isAvailable();
+      // Timeout de sécurité : si le store met trop de temps à répondre
+      // (ou ne répond jamais, ex. incompatibilité de version du SDK
+      // Billing), on ne bloque pas indéfiniment le splash screen.
+      try {
+        _available = await _iap.isAvailable().timeout(
+          const Duration(seconds: 5),
+          onTimeout: () {
+            debugPrint('[PurchaseService] isAvailable() timeout');
+            return false;
+          },
+        );
+      } catch (e) {
+        debugPrint('[PurchaseService] isAvailable() error: \$e');
+        _available = false;
+      }
       if (!_available) {
         debugPrint('[PurchaseService] Store not available');
         return;
@@ -65,7 +79,13 @@ class PurchaseService {
     // Étape 2 : charger le produit (retenté si pas encore trouvé)
     if (_product != null) return;
 
-    final response = await _iap.queryProductDetails({unlockAllId});
+    final response = await _iap.queryProductDetails({unlockAllId}).timeout(
+      const Duration(seconds: 5),
+      onTimeout: () => ProductDetailsResponse(
+        productDetails: [],
+        notFoundIDs: [unlockAllId],
+      ),
+    );
     if (response.productDetails.isNotEmpty) {
       _product = response.productDetails.first;
       localizedPriceNotifier.value = _product!.price;

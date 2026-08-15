@@ -114,8 +114,5 @@
   "cancelConfirmTitle": "Annullare il timer?",
   "cancelConfirmBody": "Il timer verrà interrotto e tornerai alla schermata principale.",
   "continueTimer": "Continua",
-  "reviewPromptTitle": "Ti piace AnimalTimer?",
-  "reviewPromptMessage": "Una piccola recensione ci aiuterebbe molto a far conoscere l'app!",
-  "reviewPromptRate": "Lascia una recensione",
-  "reviewPromptLater": "Più tardi"
+  "animalSwitchHint": "Tocca qui per cambiare animale! Puoi anche sbloccarne di nuovi temporaneamente guardando una pubblicità."
 }

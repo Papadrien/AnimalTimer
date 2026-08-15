@@ -13,13 +13,9 @@ import '../../../../shared/widgets/turtle_particles_overlay.dart';
 import '../../../../shared/widgets/giraffe_particles_overlay.dart';
 import '../../../../shared/widgets/wool_particles_overlay.dart';
 import '../../../../shared/widgets/fire_particles_overlay.dart';
-import '../../../../shared/widgets/review_prompt_sheet.dart';
 import '../../../timer/presentation/screens/timer_screen.dart';
 import '../../../settings/presentation/screens/settings_sheet.dart';
 import '../../providers/setup_provider.dart';
-import '../../../../core/services/analytics_service.dart';
-import '../../../../core/services/storage_service.dart';
-import '../../../../app.dart';
 import '../widgets/time_picker_card.dart';
 import '../widgets/animal_selector.dart';
 import '../widgets/recents_list.dart';
@@ -32,30 +28,27 @@ class SetupScreen extends ConsumerStatefulWidget {
   ConsumerState<SetupScreen> createState() => _SetupScreenState();
 }
 
-class _SetupScreenState extends ConsumerState<SetupScreen> with RouteAware {
+class _SetupScreenState extends ConsumerState<SetupScreen>
+    with WidgetsBindingObserver {
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    routeObserver.unsubscribe(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-  /// Appelé quand on revient sur cet écran (ex: après un minuteur terminé).
   @override
-  void didPopNext() => _maybeShowReviewPrompt();
-
-  Future<void> _maybeShowReviewPrompt() async {
-    final storage = ref.read(storageServiceProvider);
-    if (storage.hasShownReviewPrompt()) return;
-    if (storage.getCompletedTimersCount() < 3) return;
-    await storage.setReviewPromptShown();
-    if (mounted) {
-      ReviewPromptSheet.show(context);
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Au retour au premier plan, un animal débloqué temporairement par pub
+    // a pu expirer entre-temps : on revérifie et on retombe sur le
+    // crocodile si besoin.
+    if (state == AppLifecycleState.resumed) {
+      ref.read(setupProvider.notifier).validateSelectedAnimal();
     }
   }
 
@@ -94,74 +87,83 @@ class _SetupScreenState extends ConsumerState<SetupScreen> with RouteAware {
             SingleChildScrollView(
               padding: EdgeInsets.only(
                   left: 24, right: 24, bottom: bottomPad + 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(height: 8),
-                  // Top row: title + settings gear
-                  Row(
+              // Largeur plafonnée et centrée : évite que le bouton
+              // "Démarrer" ou la carte du minuteur ne s'étirent sur toute
+              // la largeur de l'écran sur tablette.
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 500),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Expanded(
-                        child: AnimatedDefaultTextStyle(
-                          duration: const Duration(milliseconds: 300),
-                          style: TextStyle(
-                            fontFamily: 'Nunito',
-                            fontSize: 28,
-                            fontWeight: FontWeight.w900,
-                            color: textColor,
-                            letterSpacing: 0.5,
+                      const SizedBox(height: 8),
+                      // Top row: title + settings gear
+                      Row(
+                        children: [
+                          Expanded(
+                            child: AnimatedDefaultTextStyle(
+                              duration: const Duration(milliseconds: 300),
+                              style: TextStyle(
+                                fontFamily: 'Nunito',
+                                fontSize: 28,
+                                fontWeight: FontWeight.w900,
+                                color: textColor,
+                                letterSpacing: 0.5,
+                              ),
+                              child: Text(context.l10n.appName),
+                            ),
                           ),
-                          child: Text(context.l10n.appName),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          HapticFeedback.selectionClick();
-                          _showSettings(context);
-                        },
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          width: 44, height: 44,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: gearBg,
-                            border: Border.all(
-                                color: iconColor, width: 2.5),
+                          GestureDetector(
+                            onTap: () {
+                              HapticFeedback.selectionClick();
+                              _showSettings(context);
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              width: 44, height: 44,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: gearBg,
+                                border: Border.all(
+                                    color: iconColor, width: 2.5),
+                              ),
+                              child: Icon(Icons.settings,
+                                  color: iconColor, size: 22),
+                            ),
                           ),
-                          child: Icon(Icons.settings,
-                              color: iconColor, size: 22),
-                        ),
+                        ],
                       ),
+                      const SizedBox(height: 8),
+                      const Center(child: AnimalSelector()),
+                      const SizedBox(height: 28),
+                      TimePickerCard(isDark: isDark),
+                      const SizedBox(height: 24),
+                      StartButton(onPressed: () {
+                        if (!setup.isValid) { HapticFeedback.heavyImpact(); return; }
+                        HapticFeedback.mediumImpact();
+                        // Dernière vérification avant de lancer : si l'animal
+                        // s'est verrouillé entre-temps (pub expirée), on
+                        // retombe sur le crocodile plutôt que de démarrer
+                        // avec un animal indisponible.
+                        ref.read(setupProvider.notifier).validateSelectedAnimal();
+                        ref.read(setupProvider.notifier).saveCurrentAsRecent();
+                        Navigator.of(context).push(PageRouteBuilder(
+                          pageBuilder: (_, __, ___) => const TimerScreen(),
+                          transitionsBuilder: (_, anim, __, child) => FadeTransition(
+                            opacity: anim,
+                            child: ScaleTransition(
+                              scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                                  CurvedAnimation(parent: anim, curve: Curves.easeOutCubic)),
+                              child: child)),
+                          transitionDuration: const Duration(milliseconds: 400),
+                        ));
+                      }),
+                      const SizedBox(height: 32),
+                      RecentsSection(isDark: isDark),
+                      const SizedBox(height: 20),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  const Center(child: AnimalSelector()),
-                  const SizedBox(height: 28),
-                  TimePickerCard(isDark: isDark),
-                  const SizedBox(height: 24),
-                  StartButton(onPressed: () {
-                    if (!setup.isValid) { HapticFeedback.heavyImpact(); return; }
-                    HapticFeedback.mediumImpact();
-                    ref.read(setupProvider.notifier).saveCurrentAsRecent();
-                    AnalyticsService.logTimerStarted(
-                      animalId: setup.selectedAnimal.id,
-                      durationSeconds: setup.duration.inSeconds,
-                    );
-                    Navigator.of(context).push(PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => const TimerScreen(),
-                      transitionsBuilder: (_, anim, __, child) => FadeTransition(
-                        opacity: anim,
-                        child: ScaleTransition(
-                          scale: Tween<double>(begin: 0.95, end: 1.0).animate(
-                              CurvedAnimation(parent: anim, curve: Curves.easeOutCubic)),
-                          child: child)),
-                      transitionDuration: const Duration(milliseconds: 400),
-                    ));
-                  }),
-                  const SizedBox(height: 32),
-                  RecentsSection(isDark: isDark),
-                  const SizedBox(height: 20),
-                ],
+                ),
               ),
             ),
           ],

@@ -268,14 +268,5 @@ class AppLocalizationsFr extends AppLocalizations {
   String get continueTimer => 'Continuer';
 
   @override
-  String get reviewPromptTitle => 'Tu aimes AnimalTimer ?';
-
-  @override
-  String get reviewPromptMessage => 'Un petit avis nous aiderait beaucoup à faire connaître l\'appli !';
-
-  @override
-  String get reviewPromptRate => 'Laisser un avis';
-
-  @override
-  String get reviewPromptLater => 'Plus tard';
+  String get animalSwitchHint => 'Touche ici pour changer d\'animal ! Tu peux même en débloquer temporairement en regardant une pub.';
 }

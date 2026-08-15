@@ -576,29 +576,11 @@ abstract class AppLocalizations {
   /// **'Continue'**
   String get continueTimer;
 
-  /// No description provided for @reviewPromptTitle.
+  /// No description provided for @animalSwitchHint.
   ///
   /// In en, this message translates to:
-  /// **'Enjoying AnimalTimer?'**
-  String get reviewPromptTitle;
-
-  /// No description provided for @reviewPromptMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'A quick review would really help us spread the word about the app!'**
-  String get reviewPromptMessage;
-
-  /// No description provided for @reviewPromptRate.
-  ///
-  /// In en, this message translates to:
-  /// **'Leave a review'**
-  String get reviewPromptRate;
-
-  /// No description provided for @reviewPromptLater.
-  ///
-  /// In en, this message translates to:
-  /// **'Later'**
-  String get reviewPromptLater;
+  /// **'Tap here to change animal! You can even unlock new ones temporarily by watching an ad.'**
+  String get animalSwitchHint;
 }
 
 class _AppLocalizationsDelegate

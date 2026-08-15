@@ -23,137 +23,144 @@ class SettingsSheet extends ConsumerWidget {
         minChildSize: 0.3,
         maxChildSize: 0.8,
         builder: (_, controller) {
-        return Container(
-          decoration: BoxDecoration(
-            color: AppColors.sheetBg,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 20,
-                offset: const Offset(0, -4),
+        return Center(
+          // Largeur plafonnée pour rester confortable sur tablette : le
+          // panneau de réglages ne s'étire plus sur toute la largeur.
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 560),
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.sheetBg,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 20,
+                    offset: const Offset(0, -4),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: ListView(
-            controller: controller,
-            padding: const EdgeInsets.all(24),
-            children: [
-              Center(child: Container(
-                width: 40, height: 4,
-                decoration: BoxDecoration(
-                  color: AppColors.pencilFaint.withValues(alpha: 0.4),
-                  borderRadius: BorderRadius.circular(2)),
-              )),
-              const SizedBox(height: 20),
+              child: ListView(
+                controller: controller,
+                padding: const EdgeInsets.all(24),
+                children: [
+                  Center(child: Container(
+                    width: 40, height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.pencilFaint.withValues(alpha: 0.4),
+                      borderRadius: BorderRadius.circular(2)),
+                  )),
+                  const SizedBox(height: 20),
 
-              // MINUTEUR
-              Text(context.l10n.settingsTimer, style: AppTextStyles.settingSectionTitle),
-              const SizedBox(height: 16),
-              _Toggle(
-                label: context.l10n.showNumbers,
-                icon: Icons.numbers_rounded,
-                value: settings.showNumbers,
-                onChanged: (_) => ref.read(settingsProvider.notifier).toggleShowNumbers(),
-              ),
-              _Toggle(
-                label: context.l10n.ambientSound,
-                icon: Icons.music_note_rounded,
-                subtitle: context.l10n.ambientSoundSub,
-                value: settings.ambientSoundEnabled,
-                onChanged: (_) => ref.read(settingsProvider.notifier).toggleAmbientSound(),
-              ),
-              _Toggle(
-                label: context.l10n.endSound,
-                icon: Icons.notifications_active_rounded,
-                subtitle: context.l10n.endSoundSub,
-                value: settings.endSoundEnabled,
-                onChanged: (_) => ref.read(settingsProvider.notifier).toggleEndSound(),
-              ),
-              const SizedBox(height: 20),
+                  // MINUTEUR
+                  Text(context.l10n.settingsTimer, style: AppTextStyles.settingSectionTitle),
+                  const SizedBox(height: 16),
+                  _Toggle(
+                    label: context.l10n.showNumbers,
+                    icon: Icons.numbers_rounded,
+                    value: settings.showNumbers,
+                    onChanged: (_) => ref.read(settingsProvider.notifier).toggleShowNumbers(),
+                  ),
+                  _Toggle(
+                    label: context.l10n.ambientSound,
+                    icon: Icons.music_note_rounded,
+                    subtitle: context.l10n.ambientSoundSub,
+                    value: settings.ambientSoundEnabled,
+                    onChanged: (_) => ref.read(settingsProvider.notifier).toggleAmbientSound(),
+                  ),
+                  _Toggle(
+                    label: context.l10n.endSound,
+                    icon: Icons.notifications_active_rounded,
+                    subtitle: context.l10n.endSoundSub,
+                    value: settings.endSoundEnabled,
+                    onChanged: (_) => ref.read(settingsProvider.notifier).toggleEndSound(),
+                  ),
+                  const SizedBox(height: 20),
 
-              Container(
-                height: 1,
-                color: AppColors.pencilFaint.withValues(alpha: 0.2),
-              ),
-              const SizedBox(height: 20),
+                  Container(
+                    height: 1,
+                    color: AppColors.pencilFaint.withValues(alpha: 0.2),
+                  ),
+                  const SizedBox(height: 20),
 
-              // INFORMATIONS
-              Text(context.l10n.settingsInfo, style: AppTextStyles.settingSectionTitle),
-              const SizedBox(height: 16),
-              _NavItem(
-                label: context.l10n.rateApp,
-                icon: Icons.star_outline,
-                onTap: () async {
-                  const url = 'https://play.google.com/store/apps/details?id=fr.junade.animaltimer';
-                  final uri = Uri.parse(url);
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(uri, mode: LaunchMode.externalApplication);
-                  }
-                },
-              ),
-              _NavItem(
-                label: context.l10n.privacyPolicy,
-                icon: Icons.privacy_tip_outlined,
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => const _PrivacyPolicyScreen(),
-                    ),
-                  );
-                },
-              ),
-              _NavItem(
-                label: context.l10n.restorePurchases,
-                icon: Icons.restore_rounded,
-                onTap: () async {
-                  final purchaseService = ref.read(purchaseServiceProvider);
-                  final messenger = ScaffoldMessenger.of(context);
-                  final searchingText = context.l10n.searchingPurchases;
-                  final successText = context.l10n.restoreSuccess;
-                  // S'assurer que le service est initialisé
-                  await purchaseService.initialize();
-                  messenger.showSnackBar(
-                    SnackBar(
-                      content: Text(searchingText),
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                  purchaseService.onPurchaseCompleted = () {
-                    messenger.showSnackBar(
-                      SnackBar(
-                        content: Text(successText),
-                        duration: const Duration(seconds: 2),
-                        backgroundColor: AppColors.accentGreen,
-                      ),
-                    );
-                  };
-                  await purchaseService.restorePurchases();
-                },
-              ),
-              const SizedBox(height: 24),
+                  // INFORMATIONS
+                  Text(context.l10n.settingsInfo, style: AppTextStyles.settingSectionTitle),
+                  const SizedBox(height: 16),
+                  _NavItem(
+                    label: context.l10n.rateApp,
+                    icon: Icons.star_outline,
+                    onTap: () async {
+                      const url = 'https://play.google.com/store/apps/details?id=com.papadrien.animaltimer';
+                      final uri = Uri.parse(url);
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(uri, mode: LaunchMode.externalApplication);
+                      }
+                    },
+                  ),
+                  _NavItem(
+                    label: context.l10n.privacyPolicy,
+                    icon: Icons.privacy_tip_outlined,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (ctx) => const _PrivacyPolicyScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  _NavItem(
+                    label: context.l10n.restorePurchases,
+                    icon: Icons.restore_rounded,
+                    onTap: () async {
+                      final purchaseService = ref.read(purchaseServiceProvider);
+                      final messenger = ScaffoldMessenger.of(context);
+                      final searchingText = context.l10n.searchingPurchases;
+                      final successText = context.l10n.restoreSuccess;
+                      // S'assurer que le service est initialisé
+                      await purchaseService.initialize();
+                      messenger.showSnackBar(
+                        SnackBar(
+                          content: Text(searchingText),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                      purchaseService.onPurchaseCompleted = () {
+                        messenger.showSnackBar(
+                          SnackBar(
+                            content: Text(successText),
+                            duration: const Duration(seconds: 2),
+                            backgroundColor: AppColors.accentGreen,
+                          ),
+                        );
+                      };
+                      await purchaseService.restorePurchases();
+                    },
+                  ),
+                  const SizedBox(height: 24),
 
-              FutureBuilder<PackageInfo>(
-                future: PackageInfo.fromPlatform(),
-                builder: (context, snapshot) {
-                  final version = snapshot.hasData
-                      ? 'Version 1.0.${snapshot.data!.buildNumber}'
-                      : '';
-                  return Center(
-                    child: Text(
-                      version,
-                      style: TextStyle(
-                        fontFamily: 'Nunito',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.pencilFaint.withValues(alpha: 0.4),
-                      ),
-                    ),
-                  );
-                },
+                  FutureBuilder<PackageInfo>(
+                    future: PackageInfo.fromPlatform(),
+                    builder: (context, snapshot) {
+                      final version = snapshot.hasData
+                          ? 'Version 1.0.${snapshot.data!.buildNumber}'
+                          : '';
+                      return Center(
+                        child: Text(
+                          version,
+                          style: TextStyle(
+                            fontFamily: 'Nunito',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.pencilFaint.withValues(alpha: 0.4),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                ],
               ),
-              const SizedBox(height: 8),
-            ],
+            ),
           ),
         );
       },
