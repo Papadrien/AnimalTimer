@@ -35,7 +35,7 @@ android {
     }
     defaultConfig {
         applicationId "fr.junade.animaltimer"
-        minSdk 21
+        minSdkVersion flutter.minSdkVersion
         targetSdk 36
         versionCode flutterVersionCode
         versionName flutterVersionName
@@ -69,6 +69,8 @@ android {
 dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
     implementation 'androidx.core:core-splashscreen:1.0.1'
+    // Force Google Play Billing to version 9 minimum (overrides 8.0.0 from in_app_purchase_android)
+    implementation 'com.android.billingclient:billing:9.1.0'
 }
 
 flutter { source '../..' }
