@@ -57,7 +57,7 @@ class PurchaseService {
           },
         );
       } catch (e) {
-        debugPrint('[PurchaseService] isAvailable() error: \$e');
+        debugPrint('[PurchaseService] isAvailable() error: $e');
         _available = false;
       }
       if (!_available) {
@@ -69,7 +69,7 @@ class PurchaseService {
         _onPurchaseUpdate,
         onDone: () => _subscription?.cancel(),
         onError: (error) {
-          debugPrint('[PurchaseService] Purchase stream error: \$error');
+          debugPrint('[PurchaseService] Purchase stream error: $error');
         },
       );
 
@@ -89,11 +89,11 @@ class PurchaseService {
     if (response.productDetails.isNotEmpty) {
       _product = response.productDetails.first;
       localizedPriceNotifier.value = _product!.price;
-      debugPrint('[PurchaseService] Product loaded: \${_product!.price}');
+      debugPrint('[PurchaseService] Product loaded: ${_product!.price}');
     } else {
       debugPrint('[PurchaseService] Product not found on store');
       if (response.error != null) {
-        debugPrint('[PurchaseService] Error: \${response.error}');
+        debugPrint('[PurchaseService] Error: ${response.error}');
       }
     }
   }
@@ -106,7 +106,7 @@ class PurchaseService {
     try {
       return await _iap.buyNonConsumable(purchaseParam: purchaseParam);
     } catch (e) {
-      debugPrint('[PurchaseService] Purchase error: \$e');
+      debugPrint('[PurchaseService] Purchase error: $e');
       return false;
     }
   }
@@ -136,7 +136,7 @@ class PurchaseService {
         onPurchaseCompleted?.call();
         break;
       case PurchaseStatus.error:
-        debugPrint('[PurchaseService] Purchase error: \${purchase.error}');
+        debugPrint('[PurchaseService] Purchase error: ${purchase.error}');
         break;
       case PurchaseStatus.pending:
         debugPrint('[PurchaseService] Purchase pending...');
