@@ -35,7 +35,7 @@ android {
     }
     defaultConfig {
         applicationId "fr.junade.animaltimer"
-        minSdkVersion 23
+        minSdkVersion flutter.minSdkVersion
         targetSdk 36
         versionCode flutterVersionCode
         versionName flutterVersionName
@@ -69,15 +69,6 @@ android {
 dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
     implementation 'androidx.core:core-splashscreen:1.0.1'
-    // ⚠️ Ne PAS forcer billingclient ici : in_app_purchase_android (0.5.0+2)
-    // est compilé contre l'API Billing 8.0.0. Un forçage vers 9.x crée un
-    // décalage binaire (le plugin appelle des méthodes dont le contrat a
-    // changé) → BillingClient.startConnection() ne rappelle jamais
-    // onBillingSetupFinished, et purchaseServiceProvider.initialize() reste
-    // bloqué pour toujours sur le splash screen, sans aucune exception.
-    // → Vérifier sur pub.dev si une version plus récente de
-    //   in_app_purchase_android embarque nativement Billing 9.x avant de
-    //   retenter ce forçage.
 }
 
 flutter { source '../..' }

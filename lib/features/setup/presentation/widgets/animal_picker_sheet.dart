@@ -176,7 +176,6 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
         ),
       );
       await adService.loadAd();
-      await Future.delayed(const Duration(seconds: 3));
       if (!adService.isAdReady || !mounted) return;
     }
 
