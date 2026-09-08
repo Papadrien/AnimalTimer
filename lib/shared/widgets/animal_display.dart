@@ -48,7 +48,7 @@ class _AnimalDisplayState extends State<AnimalDisplay>
   late Animation<double> _sway;
 
   /// IDs of animals that have custom multi-layer animations.
-  static const _animatedIds = {'cat', 'chicken', 'crocodile', 'dog', 'pony', 'shark', 'unicorn', 'turtle', 'giraffe', 'sheep', 'dragon'};
+  static const _animatedIds = {'cat', 'chicken', 'crocodile', 'dog', 'pony', 'shark', 'unicorn', 'turtle', 'giraffe', 'sheep', 'dragon', 'diplodocus'};
 
   /// Returns true if this animal has a custom multi-layer animation.
   bool get _hasCustomAnimation =>
