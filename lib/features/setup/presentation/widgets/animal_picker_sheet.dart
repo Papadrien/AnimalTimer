@@ -65,10 +65,13 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
                     selectedAnimalId: widget.selectedAnimalId,
                     showUnlockAllButton:
                         hasLockedAnimals || !purchaseService.isPremium,
+                    showUnlockAllByAdButton: hasLockedAnimals,
                     showDebugUnlockButton: hasLockedAnimals,
                     onUnlockAllPressed: _showPurchaseConfirmation,
+                    onUnlockAllByAdPressed: () => _showUnlockAllDialog(),
                     onRandomAnimalPressed: _selectRandomAnimal,
-                    onLockedAnimalPressed: _showUnlockDialog,
+                    onLockedAnimalPressed: (animal) =>
+                        _showUnlockAllDialog(selectAnimal: animal),
                     onUnlockedAnimalPressed: _selectAnimal,
                     onDebugUnlockAllPressed: _debugUnlockAllAnimals,
                   ),
@@ -155,15 +158,17 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
     }
   }
 
-  void _showUnlockDialog(AnimalModel animal) {
-    showRewardedUnlockDialog(
+  /// Affiche la popup de déblocage global par pub. Si [selectAnimal] est
+  /// fourni (tap sur un animal verrouillé), cet animal sera sélectionné et
+  /// la sheet fermée une fois le déblocage effectif.
+  void _showUnlockAllDialog({AnimalModel? selectAnimal}) {
+    showRewardedUnlockAllDialog(
       context: context,
-      animal: animal,
-      onWatchAdPressed: () => _watchAdAndUnlock(animal),
+      onWatchAdPressed: () => _watchAdAndUnlockAll(selectAnimal: selectAnimal),
     );
   }
 
-  Future<void> _watchAdAndUnlock(AnimalModel animal) async {
+  Future<void> _watchAdAndUnlockAll({AnimalModel? selectAnimal}) async {
     final adService = ref.read(adServiceProvider);
     final gamif = ref.read(gamificationServiceProvider);
 
@@ -181,18 +186,19 @@ class _AnimalPickerSheetState extends ConsumerState<AnimalPickerSheet> {
 
     await adService.showRewardedAd(
       onReward: () async {
-        await gamif.unlockAnimal(animal.id);
+        await gamif.unlockAllAnimalsByAd();
         if (!mounted) return;
 
-        widget.onAnimalSelected(animal.id);
-        Navigator.of(context).pop();
+        if (selectAnimal != null) {
+          widget.onAnimalSelected(selectAnimal.id);
+          Navigator.of(context).pop();
+        } else {
+          setState(() {});
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              context.l10n.animalUnlocked(
-                localizedAnimalName(context, animal.id),
-              ),
-            ),
+            content: Text(context.l10n.animalsUnlockedByAdSuccess),
             duration: const Duration(seconds: 2),
             backgroundColor: AppColors.accentGreen,
           ),

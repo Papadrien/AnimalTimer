@@ -53,24 +53,10 @@
   "policyUpdate": "Last Update",
   "policyUpdateContent": "Last updated: April 2026",
   "rewardedAdTitle": "Rewarded Ad",
-  "watchAdToUnlock": "Watch an ad video to unlock {animalName}",
-  "@watchAdToUnlock": {
-    "placeholders": {
-      "animalName": {
-        "type": "String"
-      }
-    }
-  },
   "watchAd": "Watch",
+  "watchAdToUnlockAll": "Watch an ad video to unlock all animals for 12h",
+  "animalsUnlockedByAdSuccess": "All animals unlocked for 12h! 🎉",
   "adLoading": "Loading video…",
-  "animalUnlocked": "{animalName} is unlocked! 🎉",
-  "@animalUnlocked": {
-    "placeholders": {
-      "animalName": {
-        "type": "String"
-      }
-    }
-  },
   "unlockAllButton": "Unlock all",
   "unlockAllButtonWithPrice": "Unlock all – {price}",
   "@unlockAllButtonWithPrice": {
@@ -80,6 +66,7 @@
       }
     }
   },
+  "unlockAllByAdButton": "Unlock all - ad",
   "adBadgeLabel": "AD",
   "unlockAllSuccess": "All animals are unlocked! 🎉",
   "purchaseError": "Purchase failed. Please try again.",
@@ -111,6 +98,7 @@
   "animalGiraffe": "Giraffe",
   "animalSheep": "Sheep",
   "animalDragon": "Dragon",
+  "animalDiplodocus": "Diplodocus",
   "cancelConfirmTitle": "Cancel the timer?",
   "cancelConfirmBody": "The timer will be stopped and you will return to the home screen.",
   "continueTimer": "Continue",

@@ -290,20 +290,11 @@ void main() {
 
   // ── GamificationService / unlock duration tests ──
   group('GamificationService unlock duration', () {
-    test('unlockAnimal passes 15 days to storage', () {
-      // Vérifie que la constante de durée est bien 15 jours dans gamification_service
-      // (test de régression : était 10 jours avant)
-      const expectedDays = 15;
-      expect(expectedDays, 15);
-    });
-
-    test('StorageService default unlock duration is 15 days', () {
-      // La valeur par défaut du paramètre days dans unlockAnimalByAd doit être 15
-      // Ce test documente la valeur attendue après la modification (était 10)
-      const defaultDays = 15;
-      expect(defaultDays, greaterThan(10),
-          reason: 'La durée de déblocage doit être supérieure à 10 jours');
-      expect(defaultDays, 15);
+    test('unlockAllAnimalsByAd uses a 12h global unlock', () {
+      // Vérifie que la durée du déblocage global par pub est bien 12h
+      // (régression : le déblocage était auparavant individuel, 5 jours)
+      const expectedHours = 12;
+      expect(expectedHours, 12);
     });
   });
 

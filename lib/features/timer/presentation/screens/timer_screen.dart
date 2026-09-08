@@ -16,6 +16,7 @@ import '../../../../shared/widgets/grass_particles_overlay.dart';
 import '../../../../shared/widgets/straw_particles_overlay.dart';
 import '../../../../shared/widgets/turtle_particles_overlay.dart';
 import '../../../../shared/widgets/giraffe_particles_overlay.dart';
+import '../../../../shared/widgets/diplodocus_particles_overlay.dart';
 import '../../../../shared/widgets/wool_particles_overlay.dart';
 import '../../../../shared/widgets/fire_particles_overlay.dart';
 import '../../../setup/providers/setup_provider.dart';
@@ -101,6 +102,12 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
     final isGiraffe = animal.id == 'giraffe';
     final isSheep = animal.id == 'sheep';
     final isDragon = animal.id == 'dragon';
+    final isDiplodocus = animal.id == 'diplodocus';
+    // Le dragon (ailes déployées) occupe une hauteur bien plus faible que
+    // les autres animaux dans son canvas (~51% vs ~75-84%), il paraît donc
+    // plus petit à taille de cercle égale : on compense avec +10%.
+    final animalSizeFactor = isDragon ? 1.10 : 1.0;
+    final isDark = animal.isDarkTheme;
 
     ref.listen<TimerState>(timerServiceProvider, (prev, next) {
       if (next.status == TimerStatus.finished &&
@@ -118,7 +125,13 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
       }
     });
 
-    return PopScope(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+      ),
+      child: PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) async {
         if (didPop) return;
@@ -143,6 +156,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
             if (isGiraffe) const GiraffeParticlesOverlay(),
             if (isSheep) const WoolParticlesOverlay(),
             if (isDragon) const FireParticlesOverlay(),
+            if (isDiplodocus) const DiplodocusParticlesOverlay(),
             // Contenu principal centré et plafonné en largeur pour rester
             // confortable sur tablette (au lieu de s'étirer sur toute la
             // largeur de l'écran).
@@ -220,14 +234,14 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
                               bottom: circleSize * 0.12,
                               child: AnimalDisplay(
                                 animal: animal,
-                                size: circleSize * 0.48,
+                                size: circleSize * 0.48 * animalSizeFactor,
                                 animate: ts.status == TimerStatus.running,
                               ),
                             )
                           else
                             AnimalDisplay(
                               animal: animal,
-                              size: circleSize * 0.48,
+                              size: circleSize * 0.48 * animalSizeFactor,
                               animate: ts.status == TimerStatus.running,
                             ),
                         ],
@@ -285,6 +299,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
         ),
       ),
     ),
+      ),
     );
   }
 

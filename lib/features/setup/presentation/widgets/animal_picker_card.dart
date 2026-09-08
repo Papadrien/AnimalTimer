@@ -8,7 +8,7 @@ class AnimalPickerCard extends StatelessWidget {
   final AnimalModel animal;
   final bool isSelected;
   final bool isLocked;
-  final int? daysRemaining;
+  final int? hoursRemaining;
   final VoidCallback onTap;
 
   const AnimalPickerCard({
@@ -16,7 +16,7 @@ class AnimalPickerCard extends StatelessWidget {
     required this.animal,
     required this.isSelected,
     required this.isLocked,
-    this.daysRemaining,
+    this.hoursRemaining,
     required this.onTap,
   });
 
@@ -67,8 +67,8 @@ class AnimalPickerCard extends StatelessWidget {
             ),
             if (isLocked) const _LockedAnimalBadge(),
             if (isSelected && !isLocked) const _SelectedAnimalBadge(),
-            if (daysRemaining != null && !isLocked)
-              _DaysRemainingBadge(daysRemaining: daysRemaining!),
+            if (hoursRemaining != null && !isLocked)
+              _HoursRemainingBadge(hoursRemaining: hoursRemaining!),
           ],
         ),
       ),
@@ -140,11 +140,11 @@ class _SelectedAnimalBadge extends StatelessWidget {
   }
 }
 
-class _DaysRemainingBadge extends StatelessWidget {
-  final int daysRemaining;
+class _HoursRemainingBadge extends StatelessWidget {
+  final int hoursRemaining;
 
-  const _DaysRemainingBadge({
-    required this.daysRemaining,
+  const _HoursRemainingBadge({
+    required this.hoursRemaining,
   });
 
   @override
@@ -169,7 +169,7 @@ class _DaysRemainingBadge extends StatelessWidget {
             ),
             const SizedBox(width: 2),
             Text(
-              '${daysRemaining}j',
+              '${hoursRemaining}h',
               style: const TextStyle(
                 fontFamily: 'Nunito',
                 fontSize: 11,

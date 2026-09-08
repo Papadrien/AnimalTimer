@@ -4,7 +4,8 @@ import 'storage_service.dart';
 
 /// Service de gestion du déblocage des animaux.
 /// Crocodile et Chat sont débloqués par défaut.
-/// Les autres nécessitent le visionnage d'une pub OU l'achat premium.
+/// Les autres nécessitent le visionnage d'une pub (déblocage global de 12h)
+/// OU l'achat premium (déblocage permanent).
 class GamificationService {
   final StorageService _storage;
   GamificationService(this._storage);
@@ -39,18 +40,19 @@ class GamificationService {
   /// Retourne true s'il reste des animaux verrouillés.
   bool hasLockedAnimals() => getLockedAnimalIds().isNotEmpty;
 
-  /// Débloque un animal pour 5 jours (après visionnage de pub).
-  Future<void> unlockAnimal(String animalId) async {
-    await _storage.unlockAnimalByAd(animalId, days: 5);
+  /// Débloque tous les animaux pour 12h (après visionnage de pub).
+  Future<void> unlockAllAnimalsByAd() async {
+    await _storage.unlockAllByAd(hours: 12);
   }
 
-  /// Retourne le nombre de jours restants pour un animal débloqué par pub.
-  /// Retourne null si gratuit, premium, ou jamais débloqué par pub.
-  int? getDaysRemaining(String animalId) {
+  /// Retourne le nombre d'heures restantes avant que cet animal ne se
+  /// reverrouille (déblocage global par pub).
+  /// Retourne null si gratuit, premium, ou pas débloqué par pub.
+  int? getHoursRemaining(String animalId) {
     if (isPremiumUnlocked()) return null; // Premium → permanent
     if (StorageService.defaultUnlocked.contains(animalId)) return null; // Gratuit
-    final days = _storage.getDaysRemaining(animalId);
-    return days > 0 ? days : null;
+    final hours = _storage.getHoursRemaining();
+    return hours > 0 ? hours : null;
   }
 }
 

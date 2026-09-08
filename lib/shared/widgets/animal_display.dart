@@ -11,6 +11,7 @@ import 'turtle_animated_display.dart';
 import 'giraffe_animated_display.dart';
 import 'sheep_animated_display.dart';
 import 'dragon_animated_display.dart';
+import 'diplodocus_animated_display.dart';
 
 /// Displays an animal image (PNG) with animation.
 ///
@@ -47,7 +48,7 @@ class _AnimalDisplayState extends State<AnimalDisplay>
   late Animation<double> _sway;
 
   /// IDs of animals that have custom multi-layer animations.
-  static const _animatedIds = {'cat', 'chicken', 'crocodile', 'dog', 'pony', 'shark', 'unicorn', 'turtle', 'giraffe', 'sheep', 'dragon'};
+  static const _animatedIds = {'cat', 'chicken', 'crocodile', 'dog', 'pony', 'shark', 'unicorn', 'turtle', 'giraffe', 'sheep', 'dragon', 'diplodocus'};
 
   /// Returns true if this animal has a custom multi-layer animation.
   bool get _hasCustomAnimation =>
@@ -187,6 +188,15 @@ class _AnimalDisplayState extends State<AnimalDisplay>
     // Dragon multi-layer animation
     if (id == 'dragon' && !widget.useStaticImage) {
       return DragonAnimatedDisplay(
+        size: widget.size,
+        animate: widget.animate,
+        playOnce: widget.playOnce,
+      );
+    }
+
+    // Diplodocus multi-layer animation
+    if (id == 'diplodocus' && !widget.useStaticImage) {
+      return DiplodocusAnimatedDisplay(
         size: widget.size,
         animate: widget.animate,
         playOnce: widget.playOnce,

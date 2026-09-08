@@ -420,29 +420,29 @@ abstract class AppLocalizations {
   /// **'Rewarded Ad'**
   String get rewardedAdTitle;
 
-  /// No description provided for @watchAdToUnlock.
-  ///
-  /// In en, this message translates to:
-  /// **'Watch an ad video to unlock {animalName}'**
-  String watchAdToUnlock(String animalName);
-
   /// No description provided for @watchAd.
   ///
   /// In en, this message translates to:
   /// **'Watch'**
   String get watchAd;
 
+  /// No description provided for @watchAdToUnlockAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch an ad video to unlock all animals for 12h'**
+  String get watchAdToUnlockAll;
+
+  /// No description provided for @animalsUnlockedByAdSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'All animals unlocked for 12h! 🎉'**
+  String get animalsUnlockedByAdSuccess;
+
   /// No description provided for @adLoading.
   ///
   /// In en, this message translates to:
   /// **'Loading video…'**
   String get adLoading;
-
-  /// No description provided for @animalUnlocked.
-  ///
-  /// In en, this message translates to:
-  /// **'{animalName} is unlocked! 🎉'**
-  String animalUnlocked(String animalName);
 
   /// No description provided for @unlockAllButton.
   ///
@@ -455,6 +455,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unlock all – {price}'**
   String unlockAllButtonWithPrice(String price);
+
+  /// No description provided for @unlockAllByAdButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock all - ad'**
+  String get unlockAllByAdButton;
 
   /// No description provided for @adBadgeLabel.
   ///
@@ -557,6 +563,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dragon'**
   String get animalDragon;
+
+  /// No description provided for @animalDiplodocus.
+  ///
+  /// In en, this message translates to:
+  /// **'Diplodocus'**
+  String get animalDiplodocus;
 
   /// No description provided for @cancelConfirmTitle.
   ///

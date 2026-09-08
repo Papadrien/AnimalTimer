@@ -9,8 +9,10 @@ class AnimalPickerContent extends StatelessWidget {
   final double bottomPadding;
   final String selectedAnimalId;
   final bool showUnlockAllButton;
+  final bool showUnlockAllByAdButton;
   final bool showDebugUnlockButton;
   final VoidCallback onUnlockAllPressed;
+  final VoidCallback onUnlockAllByAdPressed;
   final VoidCallback onRandomAnimalPressed;
   final ValueChanged<AnimalModel> onLockedAnimalPressed;
   final ValueChanged<AnimalModel> onUnlockedAnimalPressed;
@@ -21,8 +23,10 @@ class AnimalPickerContent extends StatelessWidget {
     required this.bottomPadding,
     required this.selectedAnimalId,
     required this.showUnlockAllButton,
+    required this.showUnlockAllByAdButton,
     required this.showDebugUnlockButton,
     required this.onUnlockAllPressed,
+    required this.onUnlockAllByAdPressed,
     required this.onRandomAnimalPressed,
     required this.onLockedAnimalPressed,
     required this.onUnlockedAnimalPressed,
@@ -41,8 +45,14 @@ class AnimalPickerContent extends StatelessWidget {
         children: [
           if (showUnlockAllButton) ...[
             Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.only(bottom: 8),
               child: UnlockAllAnimalsButton(onPressed: onUnlockAllPressed),
+            ),
+          ],
+          if (showUnlockAllByAdButton) ...[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: UnlockAllByAdButton(onPressed: onUnlockAllByAdPressed),
             ),
           ],
           AnimalPickerGrid(

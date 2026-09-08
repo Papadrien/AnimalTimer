@@ -63,7 +63,7 @@ class AnimalPickerGrid extends ConsumerWidget {
               animal: animal,
               isSelected: animal.id == selectedAnimalId,
               isLocked: isLocked,
-              daysRemaining: gamif.getDaysRemaining(animal.id),
+              hoursRemaining: gamif.getHoursRemaining(animal.id),
               onTap: () {
                 HapticFeedback.selectionClick();
                 if (isLocked) {

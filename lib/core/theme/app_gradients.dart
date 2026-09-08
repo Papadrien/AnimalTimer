@@ -160,4 +160,18 @@ class AppGradients {
     colors: [Color(0xFF3E0898), Color(0xFF3E0898), Color(0xFF3E0898)],
     stops: [0.0, 0.5, 1.0],
   );
+
+  // Diplodocus — vert #75CF8A en bas
+  static const LinearGradient diplodocusSetup = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFFF5F8F5), Color(0xFFB7D9BF), Color(0xFF75CF8A)],
+    stops: [0.0, 0.5, 1.0],
+  );
+  static const LinearGradient diplodocusTimer = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFFF5F8F5), Color(0xFFB7D9BF), Color(0xFF75CF8A)],
+    stops: [0.0, 0.5, 1.0],
+  );
 }

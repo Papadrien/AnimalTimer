@@ -53,24 +53,10 @@
   "policyUpdate": "Última actualización",
   "policyUpdateContent": "Última actualización: abril de 2026",
   "rewardedAdTitle": "Anuncio con recompensa",
-  "watchAdToUnlock": "Mira un video con anuncio para desbloquear {animalName}",
-  "@watchAdToUnlock": {
-    "placeholders": {
-      "animalName": {
-        "type": "String"
-      }
-    }
-  },
   "watchAd": "Ver",
+  "watchAdToUnlockAll": "Mira un video con anuncio para desbloquear todos los animales durante 12h",
+  "animalsUnlockedByAdSuccess": "¡Todos los animales desbloqueados durante 12h! 🎉",
   "adLoading": "Cargando video…",
-  "animalUnlocked": "¡Ya desbloqueaste {animalName}! 🎉",
-  "@animalUnlocked": {
-    "placeholders": {
-      "animalName": {
-        "type": "String"
-      }
-    }
-  },
   "unlockAllButton": "Desbloquear todo",
   "unlockAllButtonWithPrice": "Desbloquear todo – {price}",
   "@unlockAllButtonWithPrice": {
@@ -80,6 +66,7 @@
       }
     }
   },
+  "unlockAllByAdButton": "Desbloquear todo - anuncio",
   "adBadgeLabel": "ANUNCIO",
   "unlockAllSuccess": "¡Ya desbloqueaste todos los animales! 🎉",
   "purchaseError": "No se pudo completar la compra. Inténtalo de nuevo.",
@@ -111,6 +98,7 @@
   "animalGiraffe": "Jirafa",
   "animalSheep": "Oveja",
   "animalDragon": "Dragón",
+  "animalDiplodocus": "Diplodocus",
   "cancelConfirmTitle": "¿Cancelar el temporizador?",
   "cancelConfirmBody": "El temporizador se detendrá y volverás a la pantalla de inicio.",
   "continueTimer": "Continuar",

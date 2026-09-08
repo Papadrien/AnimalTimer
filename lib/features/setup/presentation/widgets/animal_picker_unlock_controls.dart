@@ -36,6 +36,26 @@ class UnlockAllAnimalsButton extends ConsumerWidget {
   }
 }
 
+class UnlockAllByAdButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const UnlockAllByAdButton({
+    super.key,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ImageButton(
+      text: context.l10n.unlockAllByAdButton,
+      showLabel: true,
+      backgroundAsset: ImageButton.greenBg,
+      onPressed: onPressed,
+      height: 64,
+    );
+  }
+}
+
 class DebugUnlockAllAnimalsButton extends StatelessWidget {
   final VoidCallback onPressed;
 

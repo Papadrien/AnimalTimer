@@ -177,20 +177,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get rewardedAdTitle => 'Video premiato';
 
   @override
-  String watchAdToUnlock(String animalName) {
-    return 'Guarda un video pubblicitario per sbloccare $animalName';
-  }
-
-  @override
   String get watchAd => 'Guarda';
 
   @override
-  String get adLoading => 'Caricamento video…';
+  String get watchAdToUnlockAll => 'Guarda un video pubblicitario per sbloccare tutti gli animali per 12h';
 
   @override
-  String animalUnlocked(String animalName) {
-    return '$animalName è stato sbloccato! 🎉';
-  }
+  String get animalsUnlockedByAdSuccess => 'Tutti gli animali sono sbloccati per 12h! 🎉';
+
+  @override
+  String get adLoading => 'Caricamento video…';
 
   @override
   String get unlockAllButton => 'Sblocca tutto';
@@ -199,6 +195,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String unlockAllButtonWithPrice(String price) {
     return 'Sblocca tutto – $price';
   }
+
+  @override
+  String get unlockAllByAdButton => 'Sblocca tutto - pub';
 
   @override
   String get adBadgeLabel => 'PUB';
@@ -256,6 +255,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get animalDragon => 'Drago';
+
+  @override
+  String get animalDiplodocus => 'Diplodocus';
 
   @override
   String get cancelConfirmTitle => 'Annullare il timer?';

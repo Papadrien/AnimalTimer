@@ -53,24 +53,10 @@
   "policyUpdate": "Mise à jour",
   "policyUpdateContent": "Dernière mise à jour : Avril 2026",
   "rewardedAdTitle": "Publicité récompensée",
-  "watchAdToUnlock": "Regarde une vidéo publicitaire pour débloquer {animalName}",
-  "@watchAdToUnlock": {
-    "placeholders": {
-      "animalName": {
-        "type": "String"
-      }
-    }
-  },
   "watchAd": "Regarder",
+  "watchAdToUnlockAll": "Regarde une vidéo publicitaire pour débloquer tous les animaux pendant 12h",
+  "animalsUnlockedByAdSuccess": "Tous les animaux sont débloqués pendant 12h ! 🎉",
   "adLoading": "Chargement de la vidéo…",
-  "animalUnlocked": "{animalName} est débloqué ! 🎉",
-  "@animalUnlocked": {
-    "placeholders": {
-      "animalName": {
-        "type": "String"
-      }
-    }
-  },
   "unlockAllButton": "Débloquer tout",
   "unlockAllButtonWithPrice": "Débloquer tout – {price}",
   "@unlockAllButtonWithPrice": {
@@ -80,6 +66,7 @@
       }
     }
   },
+  "unlockAllByAdButton": "Débloquer tout - pub",
   "adBadgeLabel": "PUB",
   "unlockAllSuccess": "Tous les animaux sont débloqués ! 🎉",
   "purchaseError": "L'achat a échoué. Réessaie.",
@@ -111,6 +98,7 @@
   "animalGiraffe": "Girafe",
   "animalSheep": "Mouton",
   "animalDragon": "Dragon",
+  "animalDiplodocus": "Diplodocus",
   "cancelConfirmTitle": "Annuler le minuteur ?",
   "cancelConfirmBody": "Le minuteur sera arrêté et tu reviendras à l'écran d'accueil.",
   "continueTimer": "Continuer",

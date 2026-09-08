@@ -53,24 +53,10 @@
   "policyUpdate": "Ultimo aggiornamento",
   "policyUpdateContent": "Ultimo aggiornamento: aprile 2026",
   "rewardedAdTitle": "Video premiato",
-  "watchAdToUnlock": "Guarda un video pubblicitario per sbloccare {animalName}",
-  "@watchAdToUnlock": {
-    "placeholders": {
-      "animalName": {
-        "type": "String"
-      }
-    }
-  },
   "watchAd": "Guarda",
+  "watchAdToUnlockAll": "Guarda un video pubblicitario per sbloccare tutti gli animali per 12h",
+  "animalsUnlockedByAdSuccess": "Tutti gli animali sono sbloccati per 12h! 🎉",
   "adLoading": "Caricamento video…",
-  "animalUnlocked": "{animalName} è stato sbloccato! 🎉",
-  "@animalUnlocked": {
-    "placeholders": {
-      "animalName": {
-        "type": "String"
-      }
-    }
-  },
   "unlockAllButton": "Sblocca tutto",
   "unlockAllButtonWithPrice": "Sblocca tutto – {price}",
   "@unlockAllButtonWithPrice": {
@@ -80,6 +66,7 @@
       }
     }
   },
+  "unlockAllByAdButton": "Sblocca tutto - pub",
   "adBadgeLabel": "PUB",
   "unlockAllSuccess": "Tutti gli animali sono stati sbloccati! 🎉",
   "purchaseError": "Acquisto non riuscito. Riprova.",
@@ -111,6 +98,7 @@
   "animalGiraffe": "Giraffa",
   "animalSheep": "Pecora",
   "animalDragon": "Drago",
+  "animalDiplodocus": "Diplodocus",
   "cancelConfirmTitle": "Annullare il timer?",
   "cancelConfirmBody": "Il timer verrà interrotto e tornerai alla schermata principale.",
   "continueTimer": "Continua",

@@ -58,6 +58,8 @@ class AppColors {
   static const Color sheepSecondary   = Color(0xFFD47D63);  // rose mouton foncé
   static const Color dragonPrimary    = Color(0xFF3E0898);  // violet dragon
   static const Color dragonSecondary  = Color(0xFF2A0668);  // violet dragon foncé
+  static const Color diplodocusPrimary   = Color(0xFF75CF8A);  // vert diplodocus
+  static const Color diplodocusSecondary = Color(0xFF39A352);  // vert diplodocus foncé
 
 
   // ── Recents card colors ──

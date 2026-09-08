@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../../core/utils/localization_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -73,7 +74,15 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
         ? Colors.white
         : AppColors.pencilDark;
 
-    return Scaffold(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness:
+            animal.isDarkTheme ? Brightness.light : Brightness.dark,
+        statusBarBrightness:
+            animal.isDarkTheme ? Brightness.dark : Brightness.light,
+      ),
+      child: Scaffold(
       backgroundColor: Colors.transparent,
       body: GradientBackground(
         gradient: animal.setupGradient,
@@ -130,6 +139,7 @@ class _FinishScreenState extends ConsumerState<FinishScreen>
               child: IgnorePointer(child: ConfettiOverlay())),
           ],
         ),
+      ),
       ),
     );
   }

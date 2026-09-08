@@ -11,6 +11,7 @@ import '../../../../shared/widgets/grass_particles_overlay.dart';
 import '../../../../shared/widgets/straw_particles_overlay.dart';
 import '../../../../shared/widgets/turtle_particles_overlay.dart';
 import '../../../../shared/widgets/giraffe_particles_overlay.dart';
+import '../../../../shared/widgets/diplodocus_particles_overlay.dart';
 import '../../../../shared/widgets/wool_particles_overlay.dart';
 import '../../../../shared/widgets/fire_particles_overlay.dart';
 import '../../../timer/presentation/screens/timer_screen.dart';
@@ -64,7 +65,13 @@ class _SetupScreenState extends ConsumerState<SetupScreen>
         ? Colors.white.withValues(alpha: 0.15)
         : AppColors.paperLight.withValues(alpha: 0.6);
 
-    return Scaffold(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+      ),
+      child: Scaffold(
       backgroundColor: Colors.transparent,
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -84,6 +91,7 @@ class _SetupScreenState extends ConsumerState<SetupScreen>
             if (animalId == 'giraffe') const GiraffeParticlesOverlay(),
             if (animalId == 'sheep') const WoolParticlesOverlay(),
             if (animalId == 'dragon') const FireParticlesOverlay(),
+            if (animalId == 'diplodocus') const DiplodocusParticlesOverlay(),
             SingleChildScrollView(
               padding: EdgeInsets.only(
                   left: 24, right: 24, bottom: bottomPad + 24),
@@ -168,6 +176,7 @@ class _SetupScreenState extends ConsumerState<SetupScreen>
             ),
           ],
         ),
+      ),
       ),
     );
   }

@@ -177,20 +177,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get rewardedAdTitle => 'Anuncio con recompensa';
 
   @override
-  String watchAdToUnlock(String animalName) {
-    return 'Mira un video con anuncio para desbloquear $animalName';
-  }
-
-  @override
   String get watchAd => 'Ver';
 
   @override
-  String get adLoading => 'Cargando video…';
+  String get watchAdToUnlockAll => 'Mira un video con anuncio para desbloquear todos los animales durante 12h';
 
   @override
-  String animalUnlocked(String animalName) {
-    return '¡Ya desbloqueaste $animalName! 🎉';
-  }
+  String get animalsUnlockedByAdSuccess => '¡Todos los animales desbloqueados durante 12h! 🎉';
+
+  @override
+  String get adLoading => 'Cargando video…';
 
   @override
   String get unlockAllButton => 'Desbloquear todo';
@@ -199,6 +195,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String unlockAllButtonWithPrice(String price) {
     return 'Desbloquear todo – $price';
   }
+
+  @override
+  String get unlockAllByAdButton => 'Desbloquear todo - anuncio';
 
   @override
   String get adBadgeLabel => 'ANUNCIO';
@@ -257,6 +256,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get animalDragon => 'Dragón';
+
+  @override
+  String get animalDiplodocus => 'Diplodocus';
 
   @override
   String get cancelConfirmTitle => '¿Cancelar el temporizador?';

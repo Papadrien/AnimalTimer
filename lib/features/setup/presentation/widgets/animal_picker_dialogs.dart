@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/localization_helper.dart';
-import '../../../../data/models/animal_model.dart';
 
 void showPurchaseConfirmationDialog({
   required BuildContext context,
@@ -88,13 +87,10 @@ void showPurchaseConfirmationDialog({
   );
 }
 
-void showRewardedUnlockDialog({
+void showRewardedUnlockAllDialog({
   required BuildContext context,
-  required AnimalModel animal,
   required VoidCallback onWatchAdPressed,
 }) {
-  final animalName = localizedAnimalName(context, animal.id);
-
   showDialog(
     context: context,
     builder: (ctx) => AlertDialog(
@@ -108,7 +104,7 @@ void showRewardedUnlockDialog({
         ),
       ),
       content: Text(
-        context.l10n.watchAdToUnlock(animalName),
+        context.l10n.watchAdToUnlockAll,
         style: const TextStyle(
           fontFamily: 'Nunito',
           fontSize: 16,
