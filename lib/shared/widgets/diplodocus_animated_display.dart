@@ -35,13 +35,12 @@ class _DiplodocusAnimatedDisplayState extends State<DiplodocusAnimatedDisplay>
 
   // Angles de rotation (radians)
   static const double _headAngle = 0.12; // ~7 degrés
-  static const double _tailAngle = 0.18; // ~10 degrés
+  static const double _tailAngle = 0.126; // ~10 degrés × 0.7 (amplitude réduite de 30%)
 
-  // Pivot tête : centre du cou — base du cou sur l'image 1024x1024,
-  // mesuré par extraction pixel-level (largeur du cou à la jonction
-  // avec le corps, ~(219, 402)/1024).
-  static const double _headPivotX = 0.214;
-  static const double _headPivotY = 0.393;
+  // Pivot tête : point rouge fourni par l'utilisateur sur l'image de
+  // référence (154.5, 383.1)/1024 — jonction menton/cou avec le corps.
+  static const double _headPivotX = 0.151;
+  static const double _headPivotY = 0.374;
 
   // Pivot queue : coin gauche de la queue (jonction avec le corps),
   // mesuré par extraction pixel-level (~(641, 755)/1024).
