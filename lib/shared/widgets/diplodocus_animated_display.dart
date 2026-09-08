@@ -38,14 +38,16 @@ class _DiplodocusAnimatedDisplayState extends State<DiplodocusAnimatedDisplay>
   static const double _tailAngle = 0.126; // ~10 degrés × 0.7 (amplitude réduite de 30%)
 
   // Pivot tête : point rouge fourni par l'utilisateur sur l'image de
-  // référence (154.5, 383.1)/1024 — jonction menton/cou avec le corps.
-  static const double _headPivotX = 0.151;
-  static const double _headPivotY = 0.374;
+  // référence (68.7, 298.3)/1024 — jonction menton/cou avec le corps,
+  // mesuré par extraction pixel-level sur diplodocus_head_2.jpg.
+  static const double _headPivotX = 0.067;
+  static const double _headPivotY = 0.291;
 
-  // Pivot queue : coin gauche de la queue (jonction avec le corps),
-  // mesuré par extraction pixel-level (~(641, 755)/1024).
-  static const double _tailPivotX = 0.626;
-  static const double _tailPivotY = 0.737;
+  // Pivot queue : point rouge fourni par l'utilisateur sur l'image de
+  // référence (715.2, 656.9)/1024 — jonction avec le corps,
+  // mesuré par extraction pixel-level sur diplodocus_tail_2.jpg.
+  static const double _tailPivotX = 0.699;
+  static const double _tailPivotY = 0.641;
 
   @override
   void initState() {
