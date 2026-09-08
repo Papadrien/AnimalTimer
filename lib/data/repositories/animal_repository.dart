@@ -139,20 +139,6 @@ class AnimalRepository {
       secondaryColor: AppColors.dragonSecondary,
       isDarkTheme: true,
     ),
-    AnimalModel(
-      id: 'diplodocus',
-      name: 'Diplodocus',
-      emoji: '\u{1F995}',
-      imageAsset: 'assets/images/diplodocus.png',
-      // TODO(audio): pas de piste dédiée fournie — réutilise temporairement
-      // celles de la tortue en attendant des sons dédiés au diplodocus.
-      ambientAudioPath: 'audio/ambient_turtle_128.mp3',
-      endSoundPath: 'audio/end_turtle.mp3',
-      setupGradient: AppGradients.diplodocusSetup,
-      timerGradient: AppGradients.diplodocusTimer,
-      primaryColor: AppColors.diplodocusPrimary,
-      secondaryColor: AppColors.diplodocusSecondary,
-    ),
   ];
 
   AnimalModel getById(String id) {
