@@ -152,13 +152,13 @@ void main() {
   group('AnimalRepository', () {
     final repo = AnimalRepository();
 
-    test('contains exactly 11 animals', () {
-      expect(repo.getAll().length, 11);
+    test('contains exactly 12 animals', () {
+      expect(repo.getAll().length, 12);
     });
 
     test('all animals have unique ids', () {
       final ids = repo.getAll().map((a) => a.id).toSet();
-      expect(ids.length, 11);
+      expect(ids.length, 12);
     });
 
     test('all animals have required assets', () {
