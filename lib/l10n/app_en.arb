@@ -99,6 +99,7 @@
   "animalSheep": "Sheep",
   "animalDragon": "Dragon",
   "animalDiplodocus": "Diplodocus",
+  "animalTrex": "T-Rex",
   "cancelConfirmTitle": "Cancel the timer?",
   "cancelConfirmBody": "The timer will be stopped and you will return to the home screen.",
   "continueTimer": "Continue",

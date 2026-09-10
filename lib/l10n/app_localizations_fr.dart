@@ -260,6 +260,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get animalDiplodocus => 'Diplodocus';
 
   @override
+  String get animalTrex => 'T-Rex';
+
+  @override
   String get cancelConfirmTitle => 'Annuler le minuteur ?';
 
   @override

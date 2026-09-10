@@ -174,4 +174,18 @@ class AppGradients {
     colors: [Color(0xFFF5F8F5), Color(0xFFB7D9BF), Color(0xFF75CF8A)],
     stops: [0.0, 0.5, 1.0],
   );
+
+  // T-Rex — brun #351506 en bas
+  static const LinearGradient trexSetup = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFFFCEBE4), Color(0xFFF2AD8C), Color(0xFF351506)],
+    stops: [0.0, 0.5, 1.0],
+  );
+  static const LinearGradient trexTimer = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFFFCEBE4), Color(0xFFF2AD8C), Color(0xFF351506)],
+    stops: [0.0, 0.5, 1.0],
+  );
 }

@@ -46,6 +46,7 @@ flutter:
     - assets/images/sheep/
     - assets/images/dragon/
     - assets/images/diplodocus/
+    - assets/images/trex/
     - assets/audio/
 
   fonts:

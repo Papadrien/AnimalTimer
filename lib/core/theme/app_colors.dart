@@ -61,6 +61,9 @@ class AppColors {
   static const Color diplodocusPrimary   = Color(0xFF75CF8A);  // vert diplodocus
   static const Color diplodocusSecondary = Color(0xFF39A352);  // vert diplodocus foncé
 
+  static const Color trexPrimary   = Color(0xFF351506);  // brun T-Rex
+  static const Color trexSecondary = Color(0xFF1B0B03);  // brun T-Rex foncé
+
 
   // ── Recents card colors ──
   static const Color recentBlue    = Color(0xFFBBDEFB);

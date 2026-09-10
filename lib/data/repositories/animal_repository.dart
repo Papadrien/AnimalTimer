@@ -144,14 +144,26 @@ class AnimalRepository {
       name: 'Diplodocus',
       emoji: '\u{1F995}',
       imageAsset: 'assets/images/diplodocus.png',
-      // TODO(audio): pas de piste dédiée fournie — réutilise temporairement
-      // celles de la tortue en attendant des sons dédiés au diplodocus.
-      ambientAudioPath: 'audio/ambient_turtle_128.mp3',
-      endSoundPath: 'audio/end_turtle.mp3',
+      ambientAudioPath: 'audio/ambient_diplodocus_128.mp3',
+      endSoundPath: 'audio/end_diplodocus.mp3',
       setupGradient: AppGradients.diplodocusSetup,
       timerGradient: AppGradients.diplodocusTimer,
       primaryColor: AppColors.diplodocusPrimary,
       secondaryColor: AppColors.diplodocusSecondary,
+    ),
+    AnimalModel(
+      id: 'trex',
+      name: 'T-Rex',
+      emoji: '\u{1F996}',
+      imageAsset: 'assets/images/trex.png',
+      // TODO(audio): pas de piste dédiée fournie — réutilise temporairement
+      // celles de la tortue en attendant des sons dédiés au T-Rex.
+      ambientAudioPath: 'audio/ambient_turtle_128.mp3',
+      endSoundPath: 'audio/end_turtle.mp3',
+      setupGradient: AppGradients.trexSetup,
+      timerGradient: AppGradients.trexTimer,
+      primaryColor: AppColors.trexPrimary,
+      secondaryColor: AppColors.trexSecondary,
     ),
   ];
 

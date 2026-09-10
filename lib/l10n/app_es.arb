@@ -99,6 +99,7 @@
   "animalSheep": "Oveja",
   "animalDragon": "Dragón",
   "animalDiplodocus": "Diplodocus",
+  "animalTrex": "T-Rex",
   "cancelConfirmTitle": "¿Cancelar el temporizador?",
   "cancelConfirmBody": "El temporizador se detendrá y volverás a la pantalla de inicio.",
   "continueTimer": "Continuar",

@@ -570,6 +570,12 @@ abstract class AppLocalizations {
   /// **'Diplodocus'**
   String get animalDiplodocus;
 
+  /// No description provided for @animalTrex.
+  ///
+  /// In en, this message translates to:
+  /// **'T-Rex'**
+  String get animalTrex;
+
   /// No description provided for @cancelConfirmTitle.
   ///
   /// In en, this message translates to:

@@ -259,6 +259,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get animalDiplodocus => 'Diplodocus';
 
   @override
+  String get animalTrex => 'T-Rex';
+
+  @override
   String get cancelConfirmTitle => 'Cancel the timer?';
 
   @override
