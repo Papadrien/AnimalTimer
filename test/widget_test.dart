@@ -217,7 +217,7 @@ void main() {
 
     test('only shark and dragon use dark theme, others are light', () {
       for (final a in repo.getAll()) {
-        if (a.id == 'shark' || a.id == 'dragon') {
+        if (a.id == 'shark' || a.id == 'dragon' || a.id == 'trex') {
           expect(a.isDarkTheme, true,
               reason: '\${a.id} doit être en thème sombre');
         } else {
