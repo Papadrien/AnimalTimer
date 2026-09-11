@@ -37,6 +37,11 @@ class _DiplodocusAnimatedDisplayState extends State<DiplodocusAnimatedDisplay>
   static const double _headAngle = 0.12; // ~7 degrés
   static const double _tailAngle = 0.126; // ~10 degrés × 0.7 (amplitude réduite de 30%)
 
+  // Décalage de la fourchette de rotation de la tête vers le bas :
+  // 20% de la distance totale (2 × _headAngle), pour une rotation
+  // plus marquée vers le bas et moins marquée vers le haut.
+  static const double _headAngleOffset = 0.4 * _headAngle; // 20% de (2 × _headAngle)
+
   // Pivot tête : point rouge fourni par l'utilisateur sur l'image de
   // référence (68.7, 298.3)/1024 — jonction menton/cou avec le corps,
   // mesuré par extraction pixel-level sur diplodocus_head_2.jpg.
@@ -133,10 +138,10 @@ class _DiplodocusAnimatedDisplayState extends State<DiplodocusAnimatedDisplay>
           headAngle = 0.0;
           tailAngle = 0.0;
         } else if (widget.playOnce) {
-          headAngle = _computeAngleOnce(t, _headAngle);
+          headAngle = _computeAngleOnce(t, _headAngle) + _headAngleOffset;
           tailAngle = _computeAngleOnce(t, _tailAngle);
         } else {
-          headAngle = _computeAngle(t, _headAngle);
+          headAngle = _computeAngle(t, _headAngle) + _headAngleOffset;
           tailAngle = _computeAngle(t, _tailAngle);
         }
 

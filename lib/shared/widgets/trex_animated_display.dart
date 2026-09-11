@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 /// diagonale bougent ensemble (comme une marche naturelle).
 ///
 /// Synchronisation :
-///   - bras gauche (loin, caché derrière le buste) + jambe droite (avant)
-///   - bras droit (proche, visible devant le buste) + jambe gauche (arrière,
-///     la grosse cuisse ronde)
+///   - bras gauche (désormais devant le buste) + jambe droite (désormais
+///     derrière le buste)
+///   - bras droit (désormais derrière le buste) + jambe gauche (la grosse
+///     cuisse ronde, désormais devant le buste)
 /// Ces deux paires sont en opposition de phase l'une par rapport à l'autre,
 /// comme des membres diagonaux qui avancent en alternance.
 ///
@@ -55,21 +56,20 @@ class _TrexAnimatedDisplayState extends State<TrexAnimatedDisplay>
   // les autres animaux). Mesurés par extraction pixel-level à la jonction
   // visible de chaque membre avec le corps.
 
-  // Bras droit (proche, devant le buste) : centre de l'épaule.
+  // Bras droit (désormais derrière le buste) : centre de l'épaule.
   static const double _rightArmPivotX = 0.339;
   static const double _rightArmPivotY = 0.554;
 
-  // Bras gauche (loin, partiellement caché derrière le bras droit) :
-  // centre de l'épaule.
+  // Bras gauche (désormais devant le buste) : centre de l'épaule.
   static const double _leftArmPivotX = 0.445;
   static const double _leftArmPivotY = 0.513;
 
-  // Jambe droite (avant) : centre du haut de la cuisse.
+  // Jambe droite (désormais derrière) : centre du haut de la cuisse.
   static const double _rightLegPivotX = 0.404;
   static const double _rightLegPivotY = 0.616;
 
-  // Jambe gauche (arrière, la grosse cuisse ronde) : centre du haut de
-  // la cuisse.
+  // Jambe gauche (la grosse cuisse ronde, désormais devant) : centre du
+  // haut de la cuisse.
   static const double _leftLegPivotX = 0.588;
   static const double _leftLegPivotY = 0.593;
 
@@ -182,25 +182,15 @@ class _TrexAnimatedDisplayState extends State<TrexAnimatedDisplay>
           height: size,
           child: Stack(
             children: [
-              // Layer 1 : Jambe gauche (arrière, derrière le corps)
+              // Layer 1 : Jambe droite (désormais derrière le corps)
               _buildRotatedLayer(
-                'assets/images/trex/trex_left_leg.png',
+                'assets/images/trex/trex_right_leg.png',
                 size,
-                leftLegAngle,
-                _leftLegPivotX,
-                _leftLegPivotY,
+                rightLegAngle,
+                _rightLegPivotX,
+                _rightLegPivotY,
               ),
-              // Layer 2 : Bras gauche (loin, derrière le corps)
-              _buildRotatedLayer(
-                'assets/images/trex/trex_left_arm.png',
-                size,
-                leftArmAngle,
-                _leftArmPivotX,
-                _leftArmPivotY,
-              ),
-              // Layer 3 : Corps (statique — tête, buste, queue)
-              _buildLayer('assets/images/trex/trex_body.png', size),
-              // Layer 4 : Bras droit (proche, devant le corps)
+              // Layer 2 : Bras droit (désormais derrière le corps)
               _buildRotatedLayer(
                 'assets/images/trex/trex_right_arm.png',
                 size,
@@ -208,13 +198,23 @@ class _TrexAnimatedDisplayState extends State<TrexAnimatedDisplay>
                 _rightArmPivotX,
                 _rightArmPivotY,
               ),
-              // Layer 5 : Jambe droite (avant, devant le corps)
+              // Layer 3 : Corps (statique — tête, buste, queue)
+              _buildLayer('assets/images/trex/trex_body.png', size),
+              // Layer 4 : Bras gauche (désormais devant le corps)
               _buildRotatedLayer(
-                'assets/images/trex/trex_right_leg.png',
+                'assets/images/trex/trex_left_arm.png',
                 size,
-                rightLegAngle,
-                _rightLegPivotX,
-                _rightLegPivotY,
+                leftArmAngle,
+                _leftArmPivotX,
+                _leftArmPivotY,
+              ),
+              // Layer 5 : Jambe gauche (désormais devant le corps)
+              _buildRotatedLayer(
+                'assets/images/trex/trex_left_leg.png',
+                size,
+                leftLegAngle,
+                _leftLegPivotX,
+                _leftLegPivotY,
               ),
             ],
           ),

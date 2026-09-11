@@ -164,6 +164,7 @@ class AnimalRepository {
       timerGradient: AppGradients.trexTimer,
       primaryColor: AppColors.trexPrimary,
       secondaryColor: AppColors.trexSecondary,
+      isDarkTheme: true,
     ),
   ];
 

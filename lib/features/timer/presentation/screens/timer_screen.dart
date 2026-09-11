@@ -19,6 +19,7 @@ import '../../../../shared/widgets/giraffe_particles_overlay.dart';
 import '../../../../shared/widgets/diplodocus_particles_overlay.dart';
 import '../../../../shared/widgets/wool_particles_overlay.dart';
 import '../../../../shared/widgets/fire_particles_overlay.dart';
+import '../../../../shared/widgets/trex_particles_overlay.dart';
 import '../../../setup/providers/setup_provider.dart';
 import '../../../settings/providers/settings_provider.dart';
 import '../widgets/radial_progress.dart';
@@ -103,6 +104,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
     final isSheep = animal.id == 'sheep';
     final isDragon = animal.id == 'dragon';
     final isDiplodocus = animal.id == 'diplodocus';
+    final isTrex = animal.id == 'trex';
     // Le dragon (ailes déployées) occupe une hauteur bien plus faible que
     // les autres animaux dans son canvas (~51% vs ~75-84%), il paraît donc
     // plus petit à taille de cercle égale : on compense avec +10%.
@@ -157,6 +159,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen>
             if (isSheep) const WoolParticlesOverlay(),
             if (isDragon) const FireParticlesOverlay(),
             if (isDiplodocus) const DiplodocusParticlesOverlay(),
+            if (isTrex) const TrexParticlesOverlay(),
             // Contenu principal centré et plafonné en largeur pour rester
             // confortable sur tablette (au lieu de s'étirer sur toute la
             // largeur de l'écran).
