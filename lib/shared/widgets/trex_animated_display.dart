@@ -71,7 +71,7 @@ class _TrexAnimatedDisplayState extends State<TrexAnimatedDisplay>
   // Jambe gauche (la grosse cuisse ronde, désormais devant) : centre du
   // haut de la cuisse.
   static const double _leftLegPivotX = 0.588;
-  static const double _leftLegPivotY = 0.593;
+  static const double _leftLegPivotY = 0.603;
 
   @override
   void initState() {

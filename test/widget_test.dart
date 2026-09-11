@@ -215,7 +215,7 @@ void main() {
           reason: 'Le requin utilise le thème sombre (fond #00608D, texte blanc)');
     });
 
-    test('only shark and dragon use dark theme, others are light', () {
+    test('only shark, dragon and T-Rex use dark theme, others are light', () {
       for (final a in repo.getAll()) {
         if (a.id == 'shark' || a.id == 'dragon' || a.id == 'trex') {
           expect(a.isDarkTheme, true,

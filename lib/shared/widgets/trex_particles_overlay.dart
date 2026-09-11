@@ -1,10 +1,11 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-/// Overlay T-Rex : frondes de fougère tombantes, sur le même principe que
-/// les feuilles du diplodocus, mais avec une silhouette de fougère
-/// (tige + folioles) et une palette vert sombre adaptée au thème foncé
-/// du T-Rex.
+/// Overlay T-Rex : braises rugissantes montant du bas vers le haut,
+/// sur le même principe que les flammes du dragon (FireParticlesOverlay :
+/// montée, scintillement, fondu en entrée/sortie), mais rendues comme de
+/// petites étincelles rondes avec halo flou plutôt que des silhouettes
+/// de flamme — un souffle plus sobre, comme s'il volait d'un rugissement.
 class TrexParticlesOverlay extends StatefulWidget {
   const TrexParticlesOverlay({super.key});
 
@@ -15,7 +16,8 @@ class TrexParticlesOverlay extends StatefulWidget {
 class _TrexParticlesOverlayState extends State<TrexParticlesOverlay>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late List<_FallingFrond> _fallingFronds;
+  late List<_Ember> _embers;
+  final Random _rng = Random(53);
 
   @override
   void initState() {
@@ -24,9 +26,7 @@ class _TrexParticlesOverlayState extends State<TrexParticlesOverlay>
       vsync: this,
       duration: const Duration(seconds: 10),
     )..repeat();
-
-    final rng = Random(96);
-    _fallingFronds = List.generate(16, (i) => _FallingFrond.random(rng, i, 16));
+    _embers = List.generate(26, (i) => _Ember.random(_rng, i, 26));
   }
 
   @override
@@ -40,10 +40,10 @@ class _TrexParticlesOverlayState extends State<TrexParticlesOverlay>
     return IgnorePointer(
       child: AnimatedBuilder(
         animation: _controller,
-        builder: (_, __) => CustomPaint(
-          painter: _TrexPainter(
-            fallingFronds: _fallingFronds,
-            progress:      _controller.value,
+        builder: (context, _) => CustomPaint(
+          painter: _EmberParticlesPainter(
+            embers: _embers,
+            progress: _controller.value,
           ),
           size: Size.infinite,
         ),
@@ -52,129 +52,108 @@ class _TrexParticlesOverlayState extends State<TrexParticlesOverlay>
   }
 }
 
-// ─── Couleurs (vert sombre, cohérent avec le thème foncé du T-Rex) ───
-const _frondColors = [
-  Color(0xFF1B4D2E),
-  Color(0xFF264D2A),
-  Color(0xFF2E5934),
-  Color(0xFF1F3D24),
-  Color(0xFF355E3B),
-  Color(0xFF14361B),
-];
-
-// ─── Fronde tombante ───
-class _FallingFrond {
+class _Ember {
   final double x;
+  final double speed;
   final double size;
+  final double opacity;
   final double phase;
-  final double driftX;
-  final double spinRate;
-  final double initAngle;
-  final Color  color;
+  final double drift;
+  final double flickerSpeed;
+  final int colorIndex;
 
-  const _FallingFrond({
-    required this.x, required this.size, required this.phase,
-    required this.driftX, required this.spinRate,
-    required this.initAngle, required this.color,
+  const _Ember({
+    required this.x,
+    required this.speed,
+    required this.size,
+    required this.opacity,
+    required this.phase,
+    required this.drift,
+    required this.flickerSpeed,
+    required this.colorIndex,
   });
 
-  factory _FallingFrond.random(Random rng, int index, int total) {
-    return _FallingFrond(
-      x:         rng.nextDouble(),
-      size:      7.0 + rng.nextDouble() * 9.0,
-      phase:     index / total.toDouble(),
-      driftX:    (rng.nextDouble() - 0.5) * 0.08,
-      spinRate:  (rng.nextDouble() - 0.5) * 1.0,
-      initAngle: rng.nextDouble() * pi * 2,
-      color:     _frondColors[rng.nextInt(_frondColors.length)],
+  factory _Ember.random(Random rng, int index, int total) {
+    return _Ember(
+      x: rng.nextDouble(),
+      speed: 0.55 + rng.nextDouble() * 0.55,
+      size: 2.5 + rng.nextDouble() * 3.0,
+      opacity: 0.45 + rng.nextDouble() * 0.4,
+      phase: index / total + rng.nextDouble() * 0.02,
+      drift: 0.015 + rng.nextDouble() * 0.03,
+      flickerSpeed: 3.0 + rng.nextDouble() * 3.0,
+      colorIndex: rng.nextInt(3),
     );
   }
 }
 
-// ─── Painter ───
-class _TrexPainter extends CustomPainter {
-  final List<_FallingFrond> fallingFronds;
+class _EmberParticlesPainter extends CustomPainter {
+  final List<_Ember> embers;
   final double progress;
 
-  const _TrexPainter({
-    required this.fallingFronds,
-    required this.progress,
-  });
+  const _EmberParticlesPainter({required this.embers, required this.progress});
 
-  static const double _startY = 0.03;
+  static const _emberColors = [
+    Color(0xFFFF5A1F), // orange-rouge braise
+    Color(0xFFFF7A1A), // orange vif
+    Color(0xFFFFB300), // ambre
+  ];
 
   @override
   void paint(Canvas canvas, Size size) {
-    for (final f in fallingFronds) {
-      _drawFallingFrond(canvas, size, f);
+    for (final e in embers) {
+      final t = (progress + e.phase) % 1.0;
+
+      // Trajectoire verticale : monte du bas (1.1) vers le haut (-0.1),
+      // toujours hors écran à l'apparition et à la disparition.
+      final normY = 1.1 - t * 1.2;
+      final y = normY * size.height;
+
+      final x = (e.x + sin(t * pi * 2 + e.phase * pi * 2) * e.drift) *
+          size.width;
+
+      final fade = _fadeAlpha(t, fadeIn: 0.15, fadeOut: 0.15);
+      final flicker = 0.75 + 0.25 * sin(t * pi * e.flickerSpeed);
+      final alpha = (e.opacity * flicker * fade).clamp(0.0, 0.65);
+      if (alpha <= 0.01) continue;
+
+      // La braise rapetisse légèrement en montant, comme si elle s'éteignait.
+      final emberSize = e.size * (1.0 - 0.3 * t);
+
+      _drawEmber(canvas, Offset(x, y), emberSize, alpha, e.colorIndex);
     }
   }
 
-  void _drawFallingFrond(Canvas canvas, Size size, _FallingFrond f) {
-    final t = (progress + f.phase) % 1.0;
-
-    final rawAlpha     = sin(t * pi) * 0.60;
-    final fadeInLinear = (t / 0.25).clamp(0.0, 1.0);
-    final fadeIn       = fadeInLinear * fadeInLinear;
-    final alpha        = (rawAlpha * fadeIn).clamp(0.0, 0.60);
-    if (alpha <= 0.01) return;
-
-    final fall = t * t;
-    final y    = (_startY + fall * (1.05 - _startY)) * size.height;
-    final x    = (f.x + sin(t * pi * 2) * f.driftX) * size.width;
-    final rot  = f.initAngle + t * f.spinRate * pi * 2 + sin(t * pi * 3) * 0.20;
-
-    _paintFrond(canvas, Offset(x, y), f.color, f.size, rot, alpha);
+  double _fadeAlpha(double t, {required double fadeIn, required double fadeOut}) {
+    if (t < fadeIn) return t / fadeIn;
+    if (t > 1.0 - fadeOut) return (1.0 - t) / fadeOut;
+    return 1.0;
   }
 
-  /// Fronde de fougère : une tige centrale avec des folioles alternées de
-  /// part et d'autre, contrairement à la simple feuille ovale.
-  void _paintFrond(Canvas canvas, Offset center, Color color, double size,
-      double angle, double alpha) {
-    canvas.save();
-    canvas.translate(center.dx, center.dy);
-    canvas.rotate(angle);
+  /// Point lumineux rond avec halo flou, plutôt qu'une silhouette de flamme.
+  void _drawEmber(Canvas canvas, Offset center, double size, double alpha, int colorIndex) {
+    final color = _emberColors[colorIndex];
+    const innerColor = Color(0xFFFFE066); // coeur jaune, comme la flamme du dragon
 
-    final stemPaint = Paint()
-      ..color = color.withValues(alpha: alpha)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size * 0.09
-      ..strokeCap = StrokeCap.round;
+    // Halo doux, plus large que la particule elle-même.
+    final halo = Paint()
+      ..color = color.withValues(alpha: alpha * 0.35)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+    canvas.drawCircle(center, size * 2.2, halo);
 
-    // Tige centrale.
-    canvas.drawLine(
-      Offset(0, -size * 1.1), Offset(0, size * 1.1), stemPaint,
-    );
-
-    // Folioles : petites feuilles alternées le long de la tige.
-    final leafletPaint = Paint()
+    // Corps de la braise.
+    final fill = Paint()
       ..color = color.withValues(alpha: alpha)
       ..style = PaintingStyle.fill;
+    canvas.drawCircle(center, size, fill);
 
-    const leafletCount = 4;
-    for (int i = 0; i < leafletCount; i++) {
-      final t = (i + 1) / (leafletCount + 1);
-      final ly = -size * 1.1 + t * size * 2.2;
-      final side = i.isEven ? 1.0 : -1.0;
-      final leafletLength = size * (0.55 - t * 0.15);
-
-      canvas.save();
-      canvas.translate(0, ly);
-      canvas.rotate(side * 0.55);
-      canvas.drawOval(
-        Rect.fromCenter(
-          center: Offset(leafletLength * 0.5, 0),
-          width: leafletLength,
-          height: size * 0.28,
-        ),
-        leafletPaint,
-      );
-      canvas.restore();
-    }
-
-    canvas.restore();
+    // Coeur clair au centre, pour l'effet de point lumineux.
+    final innerFill = Paint()
+      ..color = innerColor.withValues(alpha: alpha * 0.85)
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(center, size * 0.45, innerFill);
   }
 
   @override
-  bool shouldRepaint(_TrexPainter old) => old.progress != progress;
+  bool shouldRepaint(_EmberParticlesPainter old) => old.progress != progress;
 }
