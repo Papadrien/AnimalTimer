@@ -156,10 +156,8 @@ class AnimalRepository {
       name: 'T-Rex',
       emoji: '\u{1F996}',
       imageAsset: 'assets/images/trex.png',
-      // TODO(audio): pas de piste dédiée fournie — réutilise temporairement
-      // celles de la tortue en attendant des sons dédiés au T-Rex.
-      ambientAudioPath: 'audio/ambient_turtle_128.mp3',
-      endSoundPath: 'audio/end_turtle.mp3',
+      ambientAudioPath: 'audio/ambient_trex_128.mp3',
+      endSoundPath: 'audio/end_trex.mp3',
       setupGradient: AppGradients.trexSetup,
       timerGradient: AppGradients.trexTimer,
       primaryColor: AppColors.trexPrimary,
